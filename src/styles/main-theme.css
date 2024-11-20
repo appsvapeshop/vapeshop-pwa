@@ -1,0 +1,21 @@
+:root {
+  --primary-font-color: #3d3733;
+  --second-font-color: #ececec;
+
+  --primary-color: #a4ca49;
+  --secondary-color: #575352;
+
+  --background-color: #ececec;
+  --navigation-color: #f7f7f7;
+  --active-icon-color: #cccccc;
+  --inactive-icon-color: #2f2a27;
+
+  --input-color: rgba(0, 0, 0, 0.1);
+  --pulse-loading-color: rgba(219, 219, 219, 0.5);
+}
+
+body,
+#root {
+  color: var(--primary-font-color);
+  background-color: var(--background-color);
+}

@@ -1,0 +1,74 @@
+{
+  "name": "vape-shop",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^6.1.5",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^17.0.45",
+    "@types/react": "^18.3.9",
+    "@types/react-dom": "^18.3.0",
+    "firebase": "^10.14.1",
+    "framer-motion": "^11.9.0",
+    "js-sha1": "^0.7.0",
+    "mobile-device-detect": "^0.4.3",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.3.0",
+    "react-ios-pwa-prompt": "^2.0.6",
+    "react-qr-reader": "^3.0.0-beta-1",
+    "react-router-dom": "^6.26.2",
+    "react-scripts": "5.0.1",
+    "react-spinners": "^0.14.1",
+    "react-toastify": "^10.0.5",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4",
+    "workbox-background-sync": "^6.6.0",
+    "workbox-broadcast-update": "^6.6.0",
+    "workbox-cacheable-response": "^6.6.0",
+    "workbox-core": "^6.6.0",
+    "workbox-expiration": "^6.6.0",
+    "workbox-google-analytics": "^6.6.1",
+    "workbox-navigation-preload": "^6.6.0",
+    "workbox-precaching": "^6.6.0",
+    "workbox-range-requests": "^6.6.0",
+    "workbox-routing": "^6.6.0",
+    "workbox-strategies": "^6.6.0",
+    "workbox-streams": "^6.6.0"
+  },
+  "scripts": {
+    "format": "prettier --write .",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-private-property-in-object": "^7.24.7",
+    "@types/qrcode": "^1.5.5"
+  }
+}

@@ -1,0 +1,6 @@
+export { FaCartShopping as Cart } from 'react-icons/fa6'
+export { FaNewspaper as Newspaper } from 'react-icons/fa6'
+export { FaHome as Home } from 'react-icons/fa'
+export { FaList as Coupons } from 'react-icons/fa'
+export { FaCreditCard as Card } from 'react-icons/fa'
+export { BsQrCodeScan as QR } from 'react-icons/bs'

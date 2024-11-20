@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.product-container {
+  width: 85%;
+}
+
+.container:has(> .empty-cart) {
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-cart {
+  font-size: 1.5rem;
+  font-weight: 500;
+  opacity: 0.5;
+}
+
+.summary {
+  margin-top: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-weight: 500;
+  text-align: end;
+}
+
+.qr-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.qr-container img {
+  width: 80%;
+}

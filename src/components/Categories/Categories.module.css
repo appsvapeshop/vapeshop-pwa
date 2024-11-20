@@ -1,0 +1,20 @@
+.container {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 160px);
+  justify-content: center;
+  gap: 2rem;
+}
+
+.container:has(.no-category) {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.no-category {
+  font-size: 1.5rem;
+  font-weight: 500;
+  opacity: 0.5;
+}

@@ -1,0 +1,16 @@
+.container {
+  height: 150px;
+  border-radius: 20px;
+  background-color: var(--pulse-loading-color);
+  animation: pulse 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
