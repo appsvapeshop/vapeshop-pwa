@@ -13,14 +13,6 @@
   gap: 2rem;
 }
 
-.input {
-  width: 55%;
-}
-
-.input > div {
-  border-radius: 20px;
-}
-
 .buttons {
   width: 100%;
   padding: 0 1rem;
