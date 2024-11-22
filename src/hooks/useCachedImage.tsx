@@ -9,7 +9,7 @@ const useCachedImage = (url: string, cacheProperties: ImageCacheProperties | und
 
   useEffect(() => {
     const loadImage = async () => {
-      if (cacheProperties === undefined) return
+      if (cacheProperties === undefined || url === undefined) return
 
       const cache = await caches.open(cacheProperties.cacheStorageName)
       const imageHash = sha1(url)

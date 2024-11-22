@@ -16,6 +16,8 @@ const ImagePicker: FC<Props> = ({ imageUrl, cacheStorageName, onChange }) => {
 
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length === 1) {
+      console.log(123)
+
       setChangedData(event.target.files[0])
       onChange(event.target.files[0])
     }
@@ -25,11 +27,11 @@ const ImagePicker: FC<Props> = ({ imageUrl, cacheStorageName, onChange }) => {
     <div className={classes.container}>
       <input ref={ref} type="file" accept="image/*" onChange={onImageChange} hidden />
 
-      {!!imageUrl ? (
+      {!!imageUrl || !!changedData ? (
         <TappedComponent styles={{ height: '100%' }} onClick={() => ref.current!.click()}>
           <LazyImage
             containerStyles={{ height: '100%' }}
-            url={!!changedData ? URL.createObjectURL(changedData) : imageUrl}
+            url={!!changedData ? URL.createObjectURL(changedData) : imageUrl!}
             cacheProperties={!!changedData ? undefined : { cacheStorageName: cacheStorageName }}
           />
         </TappedComponent>
