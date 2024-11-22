@@ -29,6 +29,7 @@ import { toast } from 'react-toastify'
 const ManageProduct = () => {
   const { productId } = useParams()
   const imageRef = useRef<HTMLInputElement>(null)
+  const [isDeleting, setIsDeleting] = useState()
   const [isSaving, setIsSaving] = useState(false)
   const [imageData, setImageData] = useState<Blob>()
   const [isLoading, setIsLoading] = useState(true)
@@ -270,22 +271,24 @@ const ManageProduct = () => {
                 />
               }
             />
-            <Button
-              containerStyle={{
-                margin: '2rem 0',
-                position: 'sticky',
-                bottom: '6rem',
-                display: 'flex',
-                justifyContent: 'center'
-              }}
-              styles={{
-                width: '80%',
-                height: '2.5rem'
-              }}
-              onClick={save}
-            >
-              {isSaving ? <PulseLoader size=".6rem" color="var(--primary-font-color)" /> : 'Zapisz'}
-            </Button>
+
+            <div className={classes['buttons']}>
+              <Button onClick={save}>
+                {isSaving ? (
+                  <PulseLoader size=".6rem" color="var(--primary-font-color)" />
+                ) : (
+                  'Zapisz'
+                )}
+              </Button>
+
+              <Button onClick={save} colorVariant="error">
+                {isDeleting ? (
+                  <PulseLoader size=".6rem" color="var(--primary-font-color)" />
+                ) : (
+                  'Usuń'
+                )}
+              </Button>
+            </div>
           </>
         )}
       </div>

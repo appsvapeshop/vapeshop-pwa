@@ -25,3 +25,14 @@
   height: 160px;
   width: 50%;
 }
+
+.buttons {
+  width: 100%;
+  padding: 0 1rem;
+  margin: 1rem 0;
+  position: sticky;
+  bottom: 6rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}

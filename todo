@@ -1,28 +1,18 @@
-// UPDATE: Splash screen (ekran powitalny) - zanim załaduje się użytkownik (nie bedzie sytuacji ze najpierw wyświetli sie Home, a później Login page)
-// UPDATE: Framer Motion - naprawiony exit animation
-// UPDATE: Image Cache Storage
-// UPDATE: Firestore offline data
-// UPDATE: Po kliknieciu w punkty zaktualizuja sie
-// UPDATE: Dodano kategorie i mozliwosc ustawienia ich wylacznie dla coupon / newspaper
-// UPDATE: Optymalizacja danych w QR (Products summary)
-// UPDATE: Przebudowane historia klienta / strona wyszukiwania klienta
-// UPDATE: Co w przypadku jesli klient dodal produkt do koszyka, a w momencie realizacji kwota zostala zmieniona / produkt zostal usuniety => MODAL z informacja o niezgadzajacych sie kwotach
-// UPDATE: Toast offline / online mode
-
-// TODO: Install button na profilu
-// TODO: Dodac pickliste w koszyku do wyboru ilosci produktu
-// TODO: Link do potwierdzenia rejstracji / custom mail
+// TODO: Usuwanie kategorii / produktów
 // TODO: Dodać password policy
 // TODO: Dodać walidacje przy tworzeniu hasła (check lista np: minimum znakow, znak specjalny)
+// TODO: Dodac pickliste w koszyku do wyboru ilosci produktu
+// TODO: Install button na profilu
+// TODO: Link do potwierdzenia rejstracji / custom mail
 // TODO: Password remider
-// TODO: Dodać news details
 // TODO: W koszyku dodać przycisk wyczysc w jednej linii z "przejdz do platnosci"
 // TODO: W finalize dorobic sekcje z punktami klienta i suma wszystkich punktow
-// TODO: Usuwanie kategorii / produktów
-// TODO: modyfikacja brandingu
-// TODO: internacjonalizacja
 // TODO: dorobic wyszukiwarke produktow
 // TODO: pinned / reorder => news / products
+// TODO: koszyk informacja o nieaktualnych kwotach ( czerwony text)
+// TODO: Dodać news details
+// TODO: modyfikacja brandingu
+// TODO: internacjonalizacja
 
 
 // TECH: Redux offline
@@ -38,3 +28,5 @@
 // TECH: wyeksportować wybiernie zdjec do nowego komponentu => image picker
 // TECH: do wszystkich manage products/news/categories (do komponentów ktore obsługuja pojedynczy rekord) mozna przekazac dane zamiast jes jeszcze raz zaciagac
 
+// BUG: category "olejki" size == 0, actual size == 1
+// BUG: product image not from cache
