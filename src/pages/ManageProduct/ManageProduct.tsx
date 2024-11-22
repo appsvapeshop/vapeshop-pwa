@@ -273,7 +273,7 @@ const ManageProduct = () => {
             />
 
             <div className={classes['buttons']}>
-              <Button onClick={save}>
+              <Button onClick={save} colorVariant='primary'>
                 {isSaving ? (
                   <PulseLoader size=".6rem" color="var(--primary-font-color)" />
                 ) : (
