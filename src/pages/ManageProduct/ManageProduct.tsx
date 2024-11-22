@@ -1,19 +1,16 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import classes from './ManageProduct.module.css'
 import { AnimatedPage } from '../Cart/cartComponents'
 import { Product as ProductType } from '../../types/Product'
 import { getProductsById } from '../../utils/productsHelper'
-import { Skeleton } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import Button from '../../components/ui/Button/Button'
 import PulseLoader from 'react-spinners/PulseLoader'
-import AddCard from '../../components/ui/AddCard/AddCard'
-import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
-import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
-import LazyImage from '../../components/ui/LazyImage/LazyImage'
 import { getCategories } from '../../utils/categoriesUtils'
 import { Category as CategoryType } from '../../types/Category'
+import ManageProductSkeleton from './ManageProductSkeleton'
+import ImagePicker from '../../components/ui/ImagePicker/ImagePicker'
 import {
   Checkbox,
   FormControlLabel,
@@ -28,12 +25,10 @@ import { toast } from 'react-toastify'
 
 const ManageProduct = () => {
   const { productId } = useParams()
-  const imageRef = useRef<HTMLInputElement>(null)
   const [isDeleting, setIsDeleting] = useState()
   const [isSaving, setIsSaving] = useState(false)
-  const [imageData, setImageData] = useState<Blob>()
   const [isLoading, setIsLoading] = useState(true)
-  const [imageChanged, setImageChanged] = useState(false)
+  const [changedImage, setChangedImage] = useState<Blob>()
   const [product, setProduct] = useState<ProductType>()
   const [categories, setCategories] = useState<CategoryType[]>()
 
@@ -64,8 +59,8 @@ const ManageProduct = () => {
   const save = async () => {
     setIsSaving(true)
     try {
-      if (imageChanged) {
-        const dataUrl = await uploadFile(imageData!, `products/${Date.now()}`)
+      if (!!changedImage) {
+        const dataUrl = await uploadFile(changedImage, `products/${Date.now()}`)
         await upsertProduct({ ...product, img: dataUrl } as ProductType)
       } else {
         await upsertProduct(product!)
@@ -80,47 +75,18 @@ const ManageProduct = () => {
     setIsSaving(false)
   }
 
-  const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files?.length === 1) {
-      setImageData(event.target.files[0])
-      setImageChanged(true)
-    }
-  }
-
   return (
     <AnimatedPage>
       <div className={classes.container}>
-        {isLoading && (
-          <div className={classes.skeletons}>
-            <Skeleton variant="rounded" height={160} />
-            {[...Array(3)].map((_element, index) => (
-              <InputSkeleton key={index} />
-            ))}
-          </div>
-        )}
+        {isLoading && <ManageProductSkeleton />}
 
         {!isLoading && (
           <>
-            <div className={classes.image}>
-              <input ref={imageRef} type="file" accept="image/*" onChange={onImageChange} hidden />
-
-              {!!product?.img || !!imageData ? (
-                <TappedComponent
-                  styles={{ height: '100%' }}
-                  onClick={() => imageRef.current?.click()}
-                >
-                  <LazyImage
-                    containerStyles={{ height: '100%' }}
-                    url={imageChanged ? URL.createObjectURL(imageData!) : product!.img}
-                    cacheProperties={
-                      imageChanged ? undefined : { cacheStorageName: 'products-image' }
-                    }
-                  />
-                </TappedComponent>
-              ) : (
-                <AddCard onClick={() => imageRef.current?.click()} />
-              )}
-            </div>
+            <ImagePicker
+              onChange={(imageData) => setChangedImage(imageData)}
+              cacheStorageName="products-image"
+              imageUrl={product?.img}
+            />
 
             <TextField
               className={classes.input}
@@ -273,7 +239,7 @@ const ManageProduct = () => {
             />
 
             <div className={classes['buttons']}>
-              <Button onClick={save} colorVariant='primary'>
+              <Button onClick={save} colorVariant="primary">
                 {isSaving ? (
                   <PulseLoader size=".6rem" color="var(--primary-font-color)" />
                 ) : (
