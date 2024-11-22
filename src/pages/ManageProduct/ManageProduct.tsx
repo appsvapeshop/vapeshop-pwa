@@ -1,18 +1,18 @@
 import * as Types from './types'
-import * as Components from './components'
 import { toast } from 'react-toastify'
+import * as Components from './components'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import classes from './ManageProduct.module.css'
+import { useParams, useNavigate } from 'react-router-dom'
 import ManageProductSkeleton from './ManageProductSkeleton'
-import { uploadFile, getCategories, getProductsById, upsertProduct } from './utils'
+import { uploadFile, getCategories, getProductsById, upsertProduct, deleteProduct } from './utils'
 
 const ManageProduct = () => {
+  const navigate = useNavigate()
   const { productId } = useParams()
 
-  const [isSaving, setIsSaving] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [isDeleting, setIsDeleting] = useState(false)
+  const [isButtonLoading, setIsButtonLoading] = useState(false)
 
   const [changedImage, setChangedImage] = useState<Blob>()
   const [product, setProduct] = useState<Types.ProductType>()
@@ -43,7 +43,8 @@ const ManageProduct = () => {
   }, [productId])
 
   const save = async () => {
-    setIsSaving(true)
+    setIsButtonLoading(true)
+    toast.dismiss()
     try {
       if (!!changedImage) {
         const dataUrl = await uploadFile(changedImage, `products/${Date.now()}`)
@@ -51,14 +52,28 @@ const ManageProduct = () => {
       } else {
         await upsertProduct(product!)
       }
-      toast.dismiss()
       toast.success('Zapisano')
     } catch (error) {
-      toast.dismiss()
       toast.error('Coś poszło nie tak')
     }
 
-    setIsSaving(false)
+    setIsButtonLoading(false)
+  }
+
+  const remove = async () => {
+    setIsButtonLoading(true)
+    toast.dismiss()
+    deleteProduct(product!.id)
+      .then(() => {
+        toast.success('Produkt usunięty')
+        navigate('/admin/panel/manageProducts')
+      })
+      .catch(() => {
+        toast.error('Coś poszło nie tak')
+      })
+      .finally(() => {
+        setIsButtonLoading(false)
+      })
   }
 
   return (
@@ -125,7 +140,7 @@ const ManageProduct = () => {
 
             <Components.TextField
               label="Cena"
-              value={product?.points}
+              value={product?.price}
               type="number"
               slotProps={{ input: { endAdornment: 'zł' } }}
               onChange={(event) =>
@@ -137,7 +152,7 @@ const ManageProduct = () => {
 
             <Components.TextField
               label="Cena promocyjna"
-              value={product?.points}
+              value={product?.promoPrice}
               type="number"
               slotProps={{ input: { endAdornment: 'zł' } }}
               onChange={(event) =>
@@ -149,7 +164,7 @@ const ManageProduct = () => {
 
             <Components.TextField
               label="Cena mieszana"
-              value={product?.points}
+              value={product?.mixedPrice}
               type="number"
               slotProps={{ input: { endAdornment: 'zł' } }}
               onChange={(event) =>
@@ -180,21 +195,31 @@ const ManageProduct = () => {
             />
 
             <div className={classes['buttons']}>
-              <Components.Button onClick={save} colorVariant="primary">
-                {isSaving ? (
+              <Components.Button
+                onClick={save}
+                colorVariant="primary"
+                styles={{ height: '2.5rem' }}
+              >
+                {isButtonLoading ? (
                   <Components.PulseLoader size=".6rem" color="var(--primary-font-color)" />
                 ) : (
                   'Zapisz'
                 )}
               </Components.Button>
 
-              <Components.Button onClick={save} colorVariant="error">
-                {isDeleting ? (
-                  <Components.PulseLoader size=".6rem" color="var(--primary-font-color)" />
-                ) : (
-                  'Usuń'
-                )}
-              </Components.Button>
+              {productId !== 'new' && (
+                <Components.Button
+                  onClick={remove}
+                  colorVariant="error"
+                  styles={{ height: '2.5rem' }}
+                >
+                  {isButtonLoading ? (
+                    <Components.PulseLoader size=".6rem" color="var(--primary-font-color)" />
+                  ) : (
+                    'Usuń'
+                  )}
+                </Components.Button>
+              )}
             </div>
           </>
         )}
