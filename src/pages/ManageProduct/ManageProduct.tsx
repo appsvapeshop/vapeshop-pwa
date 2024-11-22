@@ -53,6 +53,7 @@ const ManageProduct = () => {
         await upsertProduct(product!)
       }
       toast.success('Zapisano')
+      navigate('/admin/panel/manageProducts')
     } catch (error) {
       toast.error('Coś poszło nie tak')
     }
