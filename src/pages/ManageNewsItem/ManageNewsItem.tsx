@@ -10,6 +10,7 @@ import { uploadFile } from '../../utils/filesUploader'
 import Button from '../../components/ui/Button/Button'
 import { useParams, useNavigate } from 'react-router-dom'
 import AddCard from '../../components/ui/AddCard/AddCard'
+import ValidationError from '../../exceptions/ValidationError'
 import LazyImage from '../../components/ui/LazyImage/LazyImage'
 import { getNewsById, upsertNews, deleteNews } from '../../utils/newsHelper'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
@@ -59,7 +60,22 @@ const ManageNewsItem = () => {
     setIsButtonLoading(false)
   }
 
-  const remove = async () => {}
+  const remove = async () => {
+    setIsButtonLoading(true)
+    toast.dismiss()
+
+    deleteNews(news!)
+      .then(() => {
+        toast.success('Wiadomość usunięta')
+        navigate('/admin/panel/manageNews')
+      })
+      .catch((error) => {
+          toast.error('Coś poszło nie tak')
+      })
+      .finally(() => {
+        setIsButtonLoading(false)
+      })
+  }
 
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length === 1) {
