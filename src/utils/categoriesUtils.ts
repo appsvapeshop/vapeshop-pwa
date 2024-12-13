@@ -1,6 +1,6 @@
 import { firestore } from '../configs/firebaseConfig'
 import { Category as CategoryType } from '../types/Category'
-import { getDocs, collection, doc, getDoc, updateDoc } from 'firebase/firestore'
+import { getDocs, collection, doc, getDoc, updateDoc, addDoc } from 'firebase/firestore'
 
 export const getCategories = async (): Promise<CategoryType[]> => {
   const categoriesCollections = collection(firestore, 'productCategories')
@@ -21,9 +21,13 @@ export const getCategory = async (categoryId: string): Promise<CategoryType> => 
   }
 }
 
-export const updateCategory = async (category: CategoryType) => {
-  await updateDoc(doc(firestore, 'productCategories', category.id), {
-    img: category.img,
-    name: category.name
-  })
+export const upsertCategory = async (category: CategoryType) => {
+  const { id: _, ...values } = category
+  if (!category.id) {
+    await addDoc(collection(firestore, 'productCategories'), { ...values })
+  } else {
+    await updateDoc(doc(firestore, 'productCategories', category.id), {
+      ...values
+    })
+  }
 }

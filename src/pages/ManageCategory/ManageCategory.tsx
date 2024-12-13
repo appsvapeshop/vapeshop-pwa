@@ -1,5 +1,5 @@
+import { toast } from 'react-toastify'
 import { Skeleton } from '@mui/material'
-import { useParams } from 'react-router-dom'
 import TextField from '@mui/material/TextField'
 import classes from './ManageCategory.module.css'
 import { useState, useEffect, useRef } from 'react'
@@ -7,14 +7,16 @@ import PulseLoader from 'react-spinners/PulseLoader'
 import { AnimatedPage } from '../Cart/cartComponents'
 import Button from '../../components/ui/Button/Button'
 import { uploadFile } from '../../utils/filesUploader'
+import { useParams, useNavigate } from 'react-router-dom'
 import AddCard from '../../components/ui/AddCard/AddCard'
 import LazyImage from '../../components/ui/LazyImage/LazyImage'
 import { Category as CategoryType } from '../../types/Category'
-import { getCategory, updateCategory } from '../../utils/categoriesUtils'
+import { getCategory, upsertCategory } from '../../utils/categoriesUtils'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
 import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
 
 const ManageCategory = () => {
+  const navigate = useNavigate()
   const { categoryId } = useParams()
   const imageRef = useRef<HTMLInputElement>(null)
   const [isSaving, setIsSaving] = useState(false)
@@ -39,12 +41,21 @@ const ManageCategory = () => {
 
   const save = async () => {
     setIsSaving(true)
-    if (imageChanged) {
-      const dataUrl = await uploadFile(imageData!, `categories/${Date.now()}`)
-      await updateCategory({ ...category, img: dataUrl } as CategoryType)
-    } else {
-      await updateCategory(category!)
+    toast.dismiss()
+
+    try {
+      if (imageChanged) {
+        const dataUrl = await uploadFile(imageData!, `categories/${Date.now()}`)
+        await upsertCategory({ ...category, img: dataUrl } as CategoryType)
+      } else {
+        await upsertCategory(category!)
+      }
+      toast.success('Zapisano')
+      navigate('/admin/panel/manageCategories')
+    } catch (error) {
+      toast.error('Coś poszło nie tak')
     }
+
     setIsSaving(false)
   }
 
