@@ -1,6 +1,7 @@
 import { Timestamp } from 'firebase/firestore'
 import { News as NewsType } from '../types/News'
 import { ref, deleteObject } from 'firebase/storage'
+import ValidationError from '../exceptions/ValidationError'
 import { firestore, storage } from '../configs/firebaseConfig'
 import {
   query,
@@ -39,7 +40,10 @@ export const getNewsById = async (newsId: string): Promise<NewsType> => {
 }
 
 export const upsertNews = async (news: NewsType) => {
+  if (!news?.img) throw new ValidationError('Zdjęcie jest wymagane')
+
   const { id: _, ...values } = news
+
   if (!news.id) {
     await addDoc(collection(firestore, 'news'), { ...values, createDate: Timestamp.now() })
   } else {

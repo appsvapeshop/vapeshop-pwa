@@ -54,7 +54,11 @@ const ManageNewsItem = () => {
       toast.success('Zapisano')
       navigate('/admin/panel/manageNews')
     } catch (error) {
-      toast.error('Coś poszło nie tak')
+      if (error instanceof ValidationError) {
+        toast.error(error.message)
+      } else {
+        toast.error('Coś poszło nie tak')
+      }
     }
 
     setIsButtonLoading(false)
@@ -69,8 +73,8 @@ const ManageNewsItem = () => {
         toast.success('Wiadomość usunięta')
         navigate('/admin/panel/manageNews')
       })
-      .catch((error) => {
-          toast.error('Coś poszło nie tak')
+      .catch(() => {
+        toast.error('Coś poszło nie tak')
       })
       .finally(() => {
         setIsButtonLoading(false)
