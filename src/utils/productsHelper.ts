@@ -1,7 +1,17 @@
-import { firestore } from '../configs/firebaseConfig'
+import { ref, deleteObject } from 'firebase/storage'
 import { Product as ProductType } from '../types/Product'
 import { CategoryContext } from '../enums/CategoryContext'
-import { getDocs, collection, query, where, updateDoc, doc, addDoc, deleteDoc } from 'firebase/firestore'
+import { firestore, storage } from '../configs/firebaseConfig'
+import {
+  getDocs,
+  collection,
+  query,
+  where,
+  updateDoc,
+  doc,
+  addDoc,
+  deleteDoc
+} from 'firebase/firestore'
 
 export const getAllProducts = async (): Promise<ProductType[]> => {
   const productsCollection = collection(firestore, 'products')
@@ -107,7 +117,7 @@ export const getProductsById = async (productIds: string[]): Promise<ProductType
 export const upsertProduct = async (product: ProductType) => {
   const { id: _, ...values } = product
   if (!!!product.id) {
-    await addDoc(collection(firestore, 'products'), {...values})
+    await addDoc(collection(firestore, 'products'), { ...values })
   } else {
     await updateDoc(doc(firestore, 'products', product.id), {
       ...values
@@ -115,6 +125,8 @@ export const upsertProduct = async (product: ProductType) => {
   }
 }
 
-export const deleteProduct = async (productId: string) => {
-  await deleteDoc(doc(firestore, 'products', productId))
+export const deleteProduct = async (product: ProductType) => {
+  const categoryImage = ref(storage, product.img)
+  await deleteObject(categoryImage)
+  await deleteDoc(doc(firestore, 'products', product.id))
 }
