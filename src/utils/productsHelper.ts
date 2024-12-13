@@ -13,6 +13,7 @@ import {
   deleteDoc
 } from 'firebase/firestore'
 
+
 export const getAllProducts = async (): Promise<ProductType[]> => {
   const productsCollection = collection(firestore, 'products')
   const productsSnapshot = await getDocs(productsCollection)

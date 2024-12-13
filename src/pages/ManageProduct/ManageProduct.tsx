@@ -64,6 +64,7 @@ const ManageProduct = () => {
   const remove = async () => {
     setIsButtonLoading(true)
     toast.dismiss()
+    
     deleteProduct(product!)
       .then(() => {
         toast.success('Produkt usunięty')
