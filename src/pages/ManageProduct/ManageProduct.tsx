@@ -122,7 +122,7 @@ const ManageProduct = () => {
               }
               onChange={(event) =>
                 setProduct((prev) => {
-                  return { ...prev, category: event.target.value } as Types.ProductType
+                  return { ...prev, category: event.target.value || '' } as Types.ProductType
                 })
               }
             />
