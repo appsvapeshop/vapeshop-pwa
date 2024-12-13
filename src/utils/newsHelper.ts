@@ -1,6 +1,19 @@
+import { Timestamp } from 'firebase/firestore'
 import { News as NewsType } from '../types/News'
-import { firestore } from '../configs/firebaseConfig'
-import { query, orderBy, collection, getDocs, getDoc, doc } from 'firebase/firestore'
+import { ref, deleteObject } from 'firebase/storage'
+import ValidationError from '../exceptions/ValidationError'
+import { firestore, storage } from '../configs/firebaseConfig'
+import {
+  query,
+  orderBy,
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc
+} from 'firebase/firestore'
 
 export const getNews = async (): Promise<NewsType[]> => {
   const newsCollection = collection(firestore, 'news')
@@ -24,4 +37,24 @@ export const getNewsById = async (newsId: string): Promise<NewsType> => {
   } else {
     throw new Error('Category does not exist')
   }
+}
+
+export const upsertNews = async (news: NewsType) => {
+  if (!news?.img) throw new ValidationError('Zdjęcie jest wymagane')
+
+  const { id: _, ...values } = news
+
+  if (!news.id) {
+    await addDoc(collection(firestore, 'news'), { ...values, createDate: Timestamp.now() })
+  } else {
+    await updateDoc(doc(firestore, 'news', news.id), {
+      ...values
+    })
+  }
+}
+
+export const deleteNews = async (news: NewsType) => {
+  const newsImage = ref(storage, news.img)
+  await deleteObject(newsImage)
+  await deleteDoc(doc(firestore, 'news', news.id))
 }
