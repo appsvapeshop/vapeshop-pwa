@@ -64,7 +64,8 @@ const ManageProduct = () => {
   const remove = async () => {
     setIsButtonLoading(true)
     toast.dismiss()
-    deleteProduct(product!.id)
+    
+    deleteProduct(product!)
       .then(() => {
         toast.success('Produkt usunięty')
         navigate('/admin/panel/manageProducts')
@@ -122,7 +123,7 @@ const ManageProduct = () => {
               }
               onChange={(event) =>
                 setProduct((prev) => {
-                  return { ...prev, category: event.target.value } as Types.ProductType
+                  return { ...prev, category: event.target.value || '' } as Types.ProductType
                 })
               }
             />
@@ -187,7 +188,7 @@ const ManageProduct = () => {
 
             <Components.Checkbox
               label="Gazetka"
-              checked={!!product?.coupon}
+              checked={!!product?.newspaper}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setProduct((prev) => {
                   return { ...prev, newspaper: event.target.checked } as Types.ProductType

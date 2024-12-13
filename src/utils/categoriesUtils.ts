@@ -1,6 +1,19 @@
-import { firestore } from '../configs/firebaseConfig'
+import { ref, deleteObject } from 'firebase/storage'
+import ValidationError from '../exceptions/ValidationError'
+import { firestore, storage } from '../configs/firebaseConfig'
 import { Category as CategoryType } from '../types/Category'
-import { getDocs, collection, doc, getDoc, updateDoc } from 'firebase/firestore'
+import {
+  getDocs,
+  collection,
+  doc,
+  getDoc,
+  updateDoc,
+  addDoc,
+  query,
+  where,
+  limit,
+  deleteDoc
+} from 'firebase/firestore'
 
 export const getCategories = async (): Promise<CategoryType[]> => {
   const categoriesCollections = collection(firestore, 'productCategories')
@@ -21,9 +34,26 @@ export const getCategory = async (categoryId: string): Promise<CategoryType> => 
   }
 }
 
-export const updateCategory = async (category: CategoryType) => {
-  await updateDoc(doc(firestore, 'productCategories', category.id), {
-    img: category.img,
-    name: category.name
-  })
+export const upsertCategory = async (category: CategoryType) => {
+  const { id: _, ...values } = category
+  if (!category.id) {
+    await addDoc(collection(firestore, 'productCategories'), { ...values })
+  } else {
+    await updateDoc(doc(firestore, 'productCategories', category.id), {
+      ...values
+    })
+  }
+}
+
+export const deleteCategory = async (category: CategoryType) => {
+  const productsCollection = collection(firestore, 'products')
+  const productsQuery = query(productsCollection, where('category', '==', category.id), limit(1))
+  const productsSnapshot = await getDocs(productsQuery)
+
+  if (productsSnapshot.docs.length !== 0)
+    throw new ValidationError('Kategoria ma przypisane produkty')
+
+  const categoryImage = ref(storage, category.img)
+  await deleteObject(categoryImage)
+  await deleteDoc(doc(firestore, 'productCategories', category.id))
 }
