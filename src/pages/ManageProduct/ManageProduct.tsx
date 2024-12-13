@@ -187,7 +187,7 @@ const ManageProduct = () => {
 
             <Components.Checkbox
               label="Gazetka"
-              checked={!!product?.coupon}
+              checked={!!product?.newspaper}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setProduct((prev) => {
                   return { ...prev, newspaper: event.target.checked } as Types.ProductType
