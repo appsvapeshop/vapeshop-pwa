@@ -1,29 +1,29 @@
+import { toast } from 'react-toastify'
+import { Skeleton } from '@mui/material'
+import TextField from '@mui/material/TextField'
 import classes from './ManageNewsItem.module.css'
-import { AnimatedPage } from '../Cart/cartComponents'
-import { useParams } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
 import { News as NewsType } from '../../types/News'
-import { Skeleton } from '@mui/material'
-import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
-import { getNewsById } from '../../utils/newsHelper'
-import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
-import LazyImage from '../../components/ui/LazyImage/LazyImage'
-import AddCard from '../../components/ui/AddCard/AddCard'
-import TextField from '@mui/material/TextField'
-import Button from '../../components/ui/Button/Button'
 import PulseLoader from 'react-spinners/PulseLoader'
-
-
-
+import { AnimatedPage } from '../Cart/cartComponents'
+import { uploadFile } from '../../utils/filesUploader'
+import Button from '../../components/ui/Button/Button'
+import { useParams, useNavigate } from 'react-router-dom'
+import AddCard from '../../components/ui/AddCard/AddCard'
+import LazyImage from '../../components/ui/LazyImage/LazyImage'
+import { getNewsById, upsertNews, deleteNews } from '../../utils/newsHelper'
+import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
+import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
 
 const ManageNewsItem = () => {
   const { newsId } = useParams()
-  const imageRef = useRef<HTMLInputElement>(null)
-  const [isSaving, setIsSaving] = useState(false)
-  const [imageData, setImageData] = useState<Blob>()
-  const [isLoading, setIsLoading] = useState(true)
-  const [imageChanged, setImageChanged] = useState(false)
+  const navigate = useNavigate()
   const [news, setNews] = useState<NewsType>()
+  const imageRef = useRef<HTMLInputElement>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [imageData, setImageData] = useState<Blob>()
+  const [imageChanged, setImageChanged] = useState(false)
+  const [isButtonLoading, setIsButtonLoading] = useState(false)
 
   useEffect(() => {
     if (newsId !== 'new') {
@@ -40,8 +40,26 @@ const ManageNewsItem = () => {
   }, [newsId])
 
   const save = async () => {
-    setIsSaving(true)
+    setIsButtonLoading(true)
+    toast.dismiss()
+
+    try {
+      if (imageChanged) {
+        const dataUrl = await uploadFile(imageData!, `news/${Date.now()}`)
+        await upsertNews({ ...news, img: dataUrl } as NewsType)
+      } else {
+        await upsertNews(news!)
+      }
+      toast.success('Zapisano')
+      navigate('/admin/panel/manageNews')
+    } catch (error) {
+      toast.error('Coś poszło nie tak')
+    }
+
+    setIsButtonLoading(false)
   }
+
+  const remove = async () => {}
 
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length === 1) {
@@ -55,7 +73,7 @@ const ManageNewsItem = () => {
       <div className={classes.container}>
         {isLoading && (
           <div className={classes.skeletons}>
-            <Skeleton variant="rounded" height={160}/>
+            <Skeleton variant="rounded" height={160} />
             {[...Array(3)].map((_element, index) => (
               <InputSkeleton key={index} />
             ))}
@@ -73,7 +91,7 @@ const ManageNewsItem = () => {
                   onClick={() => imageRef.current?.click()}
                 >
                   <LazyImage
-                    containerStyles={{ height: '100%'}}
+                    containerStyles={{ height: '100%' }}
                     url={imageChanged ? URL.createObjectURL(imageData!) : news!.img}
                     cacheProperties={
                       imageChanged ? undefined : { cacheStorageName: 'products-image' }
@@ -99,22 +117,25 @@ const ManageNewsItem = () => {
               }
             />
 
-            <Button
-              containerStyle={{
-                margin: '2rem 0',
-                position: 'sticky',
-                bottom: '6rem',
-                display: 'flex',
-                justifyContent: 'center'
-              }}
-              styles={{
-                width: '80%',
-                height: '2.5rem'
-              }}
-              onClick={save}
-            >
-              {isSaving ? <PulseLoader size=".6rem" color="var(--primary-font-color)" /> : 'Zapisz'}
-            </Button>
+            <div className={classes.buttons}>
+              <Button onClick={save} colorVariant="primary" styles={{ height: '2.5rem' }}>
+                {isButtonLoading ? (
+                  <PulseLoader size=".6rem" color="var(--primary-font-color)" />
+                ) : (
+                  'Zapisz'
+                )}
+              </Button>
+
+              {newsId !== 'new' && (
+                <Button onClick={remove} colorVariant="error" styles={{ height: '2.5rem' }}>
+                  {isButtonLoading ? (
+                    <PulseLoader size=".6rem" color="var(--primary-font-color)" />
+                  ) : (
+                    'Usuń'
+                  )}
+                </Button>
+              )}
+            </div>
           </>
         )}
       </div>
