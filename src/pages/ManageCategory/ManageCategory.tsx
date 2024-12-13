@@ -9,17 +9,18 @@ import Button from '../../components/ui/Button/Button'
 import { uploadFile } from '../../utils/filesUploader'
 import { useParams, useNavigate } from 'react-router-dom'
 import AddCard from '../../components/ui/AddCard/AddCard'
+import ValidationError from '../../exceptions/ValidationError'
 import LazyImage from '../../components/ui/LazyImage/LazyImage'
 import { Category as CategoryType } from '../../types/Category'
-import { getCategory, upsertCategory } from '../../utils/categoriesUtils'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
+import { getCategory, upsertCategory, deleteCategory } from '../../utils/categoriesUtils'
 import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
 
 const ManageCategory = () => {
   const navigate = useNavigate()
   const { categoryId } = useParams()
   const imageRef = useRef<HTMLInputElement>(null)
-  const [isSaving, setIsSaving] = useState(false)
+  const [isButtonLoading, setIsButtonLoading] = useState(false)
   const [imageData, setImageData] = useState<Blob>()
   const [isLoading, setIsLoading] = useState(true)
   const [imageChanged, setImageChanged] = useState(false)
@@ -40,7 +41,7 @@ const ManageCategory = () => {
   }, [categoryId])
 
   const save = async () => {
-    setIsSaving(true)
+    setIsButtonLoading(true)
     toast.dismiss()
 
     try {
@@ -56,7 +57,28 @@ const ManageCategory = () => {
       toast.error('Coś poszło nie tak')
     }
 
-    setIsSaving(false)
+    setIsButtonLoading(false)
+  }
+
+  const remove = async () => {
+    setIsButtonLoading(true)
+    toast.dismiss()
+
+    deleteCategory(categoryId!)
+      .then(() => {
+        toast.success('Kategoria usunięta')
+        navigate('/admin/panel/manageCategories')
+      })
+      .catch((error) => {
+        if (error instanceof ValidationError) {
+          toast.error(error.message)
+        } else {
+          toast.error('Coś poszło nie tak')
+        }
+      })
+      .finally(() => {
+        setIsButtonLoading(false)
+      })
   }
 
   const changeImage = () => {
@@ -116,22 +138,25 @@ const ManageCategory = () => {
         )}
       </div>
 
-      <Button
-        containerStyle={{
-          margin: '2rem 0',
-          position: 'sticky',
-          bottom: '6rem',
-          display: 'flex',
-          justifyContent: 'center'
-        }}
-        styles={{
-          width: '80%',
-          height: '2.5rem'
-        }}
-        onClick={save}
-      >
-        {isSaving ? <PulseLoader size=".6rem" color="var(--primary-font-color)" /> : 'Zapisz'}
-      </Button>
+      <div className={classes.buttons}>
+        <Button onClick={save} colorVariant="primary" styles={{ height: '2.5rem' }}>
+          {isButtonLoading ? (
+            <PulseLoader size=".6rem" color="var(--primary-font-color)" />
+          ) : (
+            'Zapisz'
+          )}
+        </Button>
+
+        {categoryId !== 'new' && (
+          <Button onClick={remove} colorVariant="error" styles={{ height: '2.5rem' }}>
+            {isButtonLoading ? (
+              <PulseLoader size=".6rem" color="var(--primary-font-color)" />
+            ) : (
+              'Usuń'
+            )}
+          </Button>
+        )}
+      </div>
     </AnimatedPage>
   )
 }
