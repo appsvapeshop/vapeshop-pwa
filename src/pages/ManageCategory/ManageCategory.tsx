@@ -64,7 +64,7 @@ const ManageCategory = () => {
     setIsButtonLoading(true)
     toast.dismiss()
 
-    deleteCategory(categoryId!)
+    deleteCategory(category!)
       .then(() => {
         toast.success('Kategoria usunięta')
         navigate('/admin/panel/manageCategories')
