@@ -16,7 +16,6 @@ const ImagePicker: FC<Props> = ({ imageUrl, cacheStorageName, onChange }) => {
 
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length === 1) {
-      console.log(123)
 
       setChangedData(event.target.files[0])
       onChange(event.target.files[0])

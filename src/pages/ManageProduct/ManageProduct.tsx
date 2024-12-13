@@ -64,7 +64,7 @@ const ManageProduct = () => {
   const remove = async () => {
     setIsButtonLoading(true)
     toast.dismiss()
-    deleteProduct(product!.id)
+    deleteProduct(product!)
       .then(() => {
         toast.success('Produkt usunięty')
         navigate('/admin/panel/manageProducts')
