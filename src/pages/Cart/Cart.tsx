@@ -13,9 +13,9 @@ import { Button, Modal, ListProduct, AnimatedPage } from './cartComponents'
 
 const Cart = () => {
   const { user } = useUserContext()
-  const { cartProducts, removeProduct } = useCart()
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const [qrData, setQrData] = useState<string>()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const { cartProducts, removeProduct, clearCart } = useCart()
 
   const onFinalize = async () => {
     if (!!!user) throw new Error('Unauthorized user')
@@ -58,22 +58,15 @@ const Cart = () => {
         <span>Kwota: {sumPrice(cartProducts)} zł</span>
       </div>
 
-      <Button
-        containerStyle={{
-          margin: '2rem 0',
-          position: 'sticky',
-          bottom: '6rem',
-          display: 'flex',
-          justifyContent: 'center'
-        }}
-        styles={{
-          width: '80%',
-          height: '2.5rem'
-        }}
-        onClick={onFinalize}
-      >
-        Przejdź do płatności{' '}
-      </Button>
+      <div className={classes.buttons}>
+        <Button onClick={onFinalize} colorVariant="primary" styles={{ height: '2.5rem' }}>
+          Przejdź do płatności
+        </Button>
+
+        <Button onClick={() => clearCart()} colorVariant="error" styles={{ height: '2.5rem' }}>
+          Wyczyść
+        </Button>
+      </div>
 
       <AnimatePresence mode="wait">
         {isModalOpen && (

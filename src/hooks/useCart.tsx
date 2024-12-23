@@ -32,5 +32,15 @@ export default function useCart() {
     )
   }
 
-  return { cartProducts: products, addProduct: addProduct, removeProduct: removeProduct }
+  const clearCart = () => {
+    localStorage.removeItem('cartProducts')
+    setProducts([])
+  }
+
+  return {
+    cartProducts: products,
+    addProduct: addProduct,
+    removeProduct: removeProduct,
+    clearCart: clearCart
+  }
 }
