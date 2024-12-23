@@ -36,9 +36,9 @@ const App = () => {
         { index: true, element: <Pages.Home /> },
         { path: 'cart', element: <Pages.Cart /> },
         { path: 'coupons', element: <Pages.Coupons /> },
-        { path: 'coupons/:categoryName', element: <Pages.Coupons /> },
+        { path: 'coupons/:categoryId', element: <Pages.Coupons /> },
         { path: 'newspaper', element: <Pages.Newspaper /> },
-        { path: 'newspaper/:categoryName', element: <Pages.Newspaper /> },
+        { path: 'newspaper/:categoryId', element: <Pages.Newspaper /> },
         { path: 'accountSettings', element: <Pages.AccountSettings /> },
         { path: 'accountSettings/changePassword', element: <Pages.ChangePassword /> },
         {

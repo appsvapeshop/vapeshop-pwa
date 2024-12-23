@@ -50,7 +50,7 @@ const Categories = ({ context }: { context: CategoryContext }) => {
               key={category.id}
               itemsLength={productsByCategory?.get(category.id)?.length ?? 0}
               onClick={() => {
-                navigate(category.name)
+                navigate(category.id)
               }}
             />
           ))}
