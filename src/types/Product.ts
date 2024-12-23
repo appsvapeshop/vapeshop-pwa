@@ -12,7 +12,7 @@ export type Product = {
   promoPrice?: number
   mixedPrice?: number
   category: string
-  timestamp?: number
   createDate?: Timestamp
   updateDate?: Timestamp
+  addedToCartDate?: number
 }

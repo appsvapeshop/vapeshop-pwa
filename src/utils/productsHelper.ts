@@ -109,7 +109,7 @@ export const getProductsById = async (productIds: string[]): Promise<ProductType
 }
 
 export const upsertProduct = async (product: ProductType) => {
-  const { id: _, ...values } = product
+  const { id, addedToCartDate, ...values } = product
   if (!!!product.id) {
     await addDoc(collection(firestore, 'products'), { ...values, createDate: Timestamp.now() })
   } else {
