@@ -14,6 +14,7 @@ import {
   Timestamp
 } from 'firebase/firestore'
 
+
 export const getAllProducts = async (): Promise<ProductType[]> => {
   const productsCollection = collection(firestore, 'products')
   const productsSnapshot = await getDocs(productsCollection)
@@ -125,5 +126,6 @@ export const deleteProduct = async (product: ProductType) => {
     const categoryImage = ref(storage, product.img)
     await deleteObject(categoryImage)
   }
+  
   await deleteDoc(doc(firestore, 'products', product.id))
 }
