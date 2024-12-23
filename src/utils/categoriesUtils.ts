@@ -12,7 +12,8 @@ import {
   query,
   where,
   limit,
-  deleteDoc
+  deleteDoc,
+  Timestamp
 } from 'firebase/firestore'
 
 export const getCategories = async (): Promise<CategoryType[]> => {
@@ -37,10 +38,14 @@ export const getCategory = async (categoryId: string): Promise<CategoryType> => 
 export const upsertCategory = async (category: CategoryType) => {
   const { id: _, ...values } = category
   if (!category.id) {
-    await addDoc(collection(firestore, 'productCategories'), { ...values })
+    await addDoc(collection(firestore, 'productCategories'), {
+      ...values,
+      createDate: Timestamp.now()
+    })
   } else {
     await updateDoc(doc(firestore, 'productCategories', category.id), {
-      ...values
+      ...values,
+      updateDate: Timestamp.now()
     })
   }
 }
@@ -53,7 +58,10 @@ export const deleteCategory = async (category: CategoryType) => {
   if (productsSnapshot.docs.length !== 0)
     throw new ValidationError('Kategoria ma przypisane produkty')
 
-  const categoryImage = ref(storage, category.img)
-  await deleteObject(categoryImage)
+  if (!!category.img) {
+    const categoryImage = ref(storage, category.img)
+    await deleteObject(categoryImage)
+  }
+
   await deleteDoc(doc(firestore, 'productCategories', category.id))
 }

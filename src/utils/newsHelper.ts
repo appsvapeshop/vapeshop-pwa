@@ -48,7 +48,8 @@ export const upsertNews = async (news: NewsType) => {
     await addDoc(collection(firestore, 'news'), { ...values, createDate: Timestamp.now() })
   } else {
     await updateDoc(doc(firestore, 'news', news.id), {
-      ...values
+      ...values,
+      updateDate: Timestamp.now()
     })
   }
 }

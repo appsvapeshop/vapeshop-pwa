@@ -12,24 +12,24 @@ import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
 import { getProductsByCategory, getNewspaperProducts } from '../../utils/productsHelper'
 
 const Newspaper = () => {
-  const { categoryName } = useParams()
+  const { categoryId } = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const { categoriesForNewspaper } = useSettingsContext()
   const [products, setProducts] = useState<ProductType[]>()
 
   useEffect(() => {
-    if (categoryName === undefined && !categoriesForNewspaper) {
+    if (categoryId === undefined && !categoriesForNewspaper) {
       getNewspaperProducts()
         .then((productsSnapshot) => setProducts(productsSnapshot))
         .finally(() => setIsLoading(false))
-    } else if (categoryName !== undefined) {
-      getProductsByCategory(categoryName)
+    } else if (categoryId !== undefined) {
+      getProductsByCategory(categoryId)
         .then((productsSnapshot) => setProducts(productsSnapshot))
         .finally(() => setIsLoading(false))
     }
-  }, [categoryName, categoriesForNewspaper])
+  }, [categoryId, categoriesForNewspaper])
 
-  if (categoriesForNewspaper && categoryName === undefined)
+  if (categoriesForNewspaper && categoryId === undefined)
     return <Categories context={CategoryContext.Newspaper} />
 
   return (

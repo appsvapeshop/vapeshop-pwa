@@ -78,6 +78,8 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       if ((error as FirebaseError).code === 'auth/email-already-in-use')
         throw new Error('Email jest już w użyciu')
+      if ((error as FirebaseError).code === 'auth/password-does-not-meet-requirements')
+        throw new Error('Hasło jest za słabe')
 
       throw new Error('Error occurs')
     }
@@ -111,8 +113,8 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       if ((error as FirebaseError).code === 'auth/invalid-credential')
         throw new Error('Stare hasło jest niepoprawne')
-      if ((error as FirebaseError).code === 'auth/weak-password')
-        throw new Error('Hasło powinno mieć minimum 6 znaków')
+      if ((error as FirebaseError).code === 'auth/password-does-not-meet-requirements')
+        throw new Error('Hasło jest za słabe')
       throw new Error('Coś poszło nie tak')
     }
   }

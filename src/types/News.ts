@@ -1,9 +1,9 @@
-import { FieldValue } from 'firebase/firestore'
+import { Timestamp } from 'firebase/firestore'
 
 export type News = {
   id: string
   img: string
   title: string
-  content: string
-  createDate: FieldValue
+  createDate?: Timestamp
+  updateDate?: Timestamp
 }
