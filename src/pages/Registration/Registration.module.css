@@ -17,3 +17,7 @@
   left: 5px;
   color: var(--inactive-icon-color);
 }
+
+.password-validator {
+  width: 70%;
+}
