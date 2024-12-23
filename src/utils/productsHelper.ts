@@ -10,7 +10,8 @@ import {
   updateDoc,
   doc,
   addDoc,
-  deleteDoc
+  deleteDoc,
+  Timestamp
 } from 'firebase/firestore'
 
 export const getAllProducts = async (): Promise<ProductType[]> => {
@@ -110,16 +111,19 @@ export const getProductsById = async (productIds: string[]): Promise<ProductType
 export const upsertProduct = async (product: ProductType) => {
   const { id: _, ...values } = product
   if (!!!product.id) {
-    await addDoc(collection(firestore, 'products'), { ...values })
+    await addDoc(collection(firestore, 'products'), { ...values, createDate: Timestamp.now() })
   } else {
     await updateDoc(doc(firestore, 'products', product.id), {
-      ...values
+      ...values,
+      updateDate: Timestamp.now()
     })
   }
 }
 
 export const deleteProduct = async (product: ProductType) => {
-  const categoryImage = ref(storage, product.img)
-  await deleteObject(categoryImage)
+  if (!!product.img) {
+    const categoryImage = ref(storage, product.img)
+    await deleteObject(categoryImage)
+  }
   await deleteDoc(doc(firestore, 'products', product.id))
 }
