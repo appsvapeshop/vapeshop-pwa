@@ -1,6 +1,3 @@
-// TODO: Usuwanie kategorii / produktów
-// TODO: Dodać password policy
-// TODO: Dodać walidacje przy tworzeniu hasła (check lista np: minimum znakow, znak specjalny)
 // TODO: Dodac pickliste w koszyku do wyboru ilosci produktu
 // TODO: Install button na profilu
 // TODO: Link do potwierdzenia rejstracji / custom mail
@@ -10,10 +7,8 @@
 // TODO: dorobic wyszukiwarke produktow
 // TODO: pinned / reorder => news / products
 // TODO: koszyk informacja o nieaktualnych kwotach ( czerwony text)
-// TODO: Dodać news details
 // TODO: modyfikacja brandingu
 // TODO: internacjonalizacja
-
 
 // TECH: Redux offline
 // TECH: Czyszczenie Cache Storage (50mb FIFO)

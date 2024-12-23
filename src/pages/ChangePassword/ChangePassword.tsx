@@ -6,6 +6,7 @@ import PulseLoader from 'react-spinners/PulseLoader'
 import { AnimatedPage } from '../Cart/cartComponents'
 import Button from '../../components/ui/Button/Button'
 import { useUserContext } from '../../stores/UserContext'
+import PasswordValidator from '../../components/PasswordValidator/PasswordValidator'
 
 type Passwords = {
   oldPassword?: string
@@ -16,7 +17,7 @@ type Passwords = {
 const ChangePassword = () => {
   const { changePassword } = useUserContext()
   const [isLoading, setIsLoading] = useState(false)
-  const [passwords, setPasswords] = useState<Passwords>()
+  const [passwords, setPasswords] = useState<Passwords>({})
 
   const onSave = async () => {
     if (!!!passwords?.oldPassword || !!!passwords?.newPassword || !!!passwords?.rePassword) {
@@ -66,6 +67,10 @@ const ChangePassword = () => {
           onChange={(event) =>
             setPasswords({ ...passwords, newPassword: (event.target as HTMLInputElement).value })
           }
+        />
+        <PasswordValidator
+          className={classes['password-validator']}
+          password={passwords.newPassword}
         />
         <Input
           label="Powtórz hasło"

@@ -12,6 +12,7 @@ import PropagateLoader from 'react-spinners/PropagateLoader'
 import { ToastContainer, Zoom, toast } from 'react-toastify'
 import { validateRegistration } from './validateRegistration'
 import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
+import PasswordValidator from '../../components/PasswordValidator/PasswordValidator'
 import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
 
 const Registration = () => {
@@ -75,8 +76,12 @@ const Registration = () => {
             setCredentials({ ...credentials, password: (event.target as HTMLInputElement).value })
           }
         />
+        <PasswordValidator
+          className={classes['password-validator']}
+          password={credentials.password}
+        />
         <Input
-          label="Hasło"
+          label="Powtórz hasło"
           type="password"
           styles={{ width: '70%' }}
           variant="outlined"
