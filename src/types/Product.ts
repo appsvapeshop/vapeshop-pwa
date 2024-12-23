@@ -1,4 +1,4 @@
-import { FieldValue } from 'firebase/firestore'
+import { Timestamp } from 'firebase/firestore'
 
 export type Product = {
   id: string
@@ -11,7 +11,8 @@ export type Product = {
   price?: number
   promoPrice?: number
   mixedPrice?: number
-  createDate: FieldValue
   category: string
   timestamp?: number
+  createDate?: Timestamp
+  updateDate?: Timestamp
 }
