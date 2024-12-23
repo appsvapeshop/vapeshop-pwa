@@ -25,7 +25,6 @@ const Coupons = () => {
         .then((productsSnapshot) => setCoupons(productsSnapshot))
         .finally(() => setIsLoading(false))
     } else if (categoryId !== undefined) {
-      console.log(123)
       getProductsByCategory(categoryId)
         .then((productsSnapshot) => setCoupons(productsSnapshot))
         .finally(() => setIsLoading(false))

@@ -20,13 +20,15 @@ export default function useCart() {
   const addProduct = (product: ProductType) => {
     setProducts((previous: Array<ProductType>) => [
       ...previous,
-      { ...product, timestamp: Date.now() }
+      { ...product, addedToCartDate: Date.now() }
     ])
   }
 
   const removeProduct = (product: ProductType) => {
     setProducts((previous: Array<ProductType>) =>
-      previous.filter((previousProduct) => previousProduct.timestamp !== product.timestamp)
+      previous.filter(
+        (previousProduct) => previousProduct.addedToCartDate !== product.addedToCartDate
+      )
     )
   }
 
