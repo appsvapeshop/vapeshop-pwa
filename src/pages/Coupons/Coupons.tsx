@@ -14,24 +14,25 @@ import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
 
 const Coupons = () => {
   const { addProduct } = useCart()
-  const { categoryName } = useParams()
+  const { categoryId } = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const { categoriesForCoupons } = useSettingsContext()
   const [coupons, setCoupons] = useState<ProductType[]>([])
 
   useEffect(() => {
-    if (categoryName === undefined && !categoriesForCoupons) {
+    if (categoryId === undefined && !categoriesForCoupons) {
       getCoupons()
         .then((productsSnapshot) => setCoupons(productsSnapshot))
         .finally(() => setIsLoading(false))
-    } else if (categoryName !== undefined) {
-      getProductsByCategory(categoryName)
+    } else if (categoryId !== undefined) {
+      console.log(123)
+      getProductsByCategory(categoryId)
         .then((productsSnapshot) => setCoupons(productsSnapshot))
         .finally(() => setIsLoading(false))
     }
-  }, [categoryName, categoriesForCoupons])
+  }, [categoryId, categoriesForCoupons])
 
-  if (categoriesForCoupons && categoryName === undefined)
+  if (categoriesForCoupons && categoryId === undefined)
     return <Categories context={CategoryContext.Coupons} />
 
   return (
