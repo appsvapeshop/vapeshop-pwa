@@ -17,7 +17,7 @@ const ListProduct: FC<Props> = ({ products, removeHandler }) => {
   const groupedProducts = groupProductsById(products)
   const { increment, decrement } = useCartContext()
 
-  return Object.keys(groupedProducts).map((productId: string, index: number) => (
+  return Object.keys(groupedProducts).sort().map((productId: string, index: number) => (
     <div className={classes.container} key={`product${index}`}>
       <div className={classes['image-container']}>
         <LazyImage
