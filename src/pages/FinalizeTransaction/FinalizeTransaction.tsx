@@ -84,7 +84,7 @@ const FinalizeTransaction = () => {
         {!isLoading && databaseProducts && (
           <>
             <div className={classes['product-container']}>
-              <Components.ProductsList products={databaseProducts} />
+              <Components.ProductsList products={databaseProducts} readOnly={true} />
             </div>
 
             <div className={classes['summary-container']}>

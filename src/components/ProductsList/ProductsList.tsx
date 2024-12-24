@@ -10,10 +10,11 @@ import TappedComponent from '../animations/TappedComponent/TappedComponent'
 
 type Props = {
   products: ProductType[]
+  readOnly?: boolean
   removeHandler?: (product: ProductType) => void
 }
 
-const ListProduct: FC<Props> = ({ products, removeHandler }) => {
+const ListProduct: FC<Props> = ({ products, removeHandler, readOnly = false }) => {
   const groupedProducts = groupProductsById(products)
   const { increment, decrement } = useCartContext()
 
@@ -42,6 +43,7 @@ const ListProduct: FC<Props> = ({ products, removeHandler }) => {
             htmlInput: { style: { textAlign: 'center' } },
             input: { style: { height: '2rem' } }
           }}
+          readOnly={readOnly}
           decrementHandler={() => {
             decrement(groupedProducts[productId].product)
           }}
