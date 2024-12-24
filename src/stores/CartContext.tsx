@@ -32,7 +32,7 @@ const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
         (previousProduct) => previousProduct.id === product.id
       )
       previous.splice(productIndex, 1)
-      return previous
+      return [...previous]
     })
   }
 

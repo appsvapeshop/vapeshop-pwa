@@ -3,6 +3,7 @@ import { IoClose } from 'react-icons/io5'
 import classes from './ProductsList.module.css'
 import LazyImage from '../ui/LazyImage/LazyImage'
 import NumberField from '../ui/NumberField/NumberField'
+import { useCartContext } from '../../stores/CartContext'
 import { Product as ProductType } from '../../types/Product'
 import { groupProductsById } from '../../utils/productsHelper'
 import TappedComponent from '../animations/TappedComponent/TappedComponent'
@@ -14,6 +15,7 @@ type Props = {
 
 const ListProduct: FC<Props> = ({ products, removeHandler }) => {
   const groupedProducts = groupProductsById(products)
+  const { increment, decrement } = useCartContext()
 
   return Object.keys(groupedProducts).map((productId: string, index: number) => (
     <div className={classes.container} key={`product${index}`}>
@@ -40,8 +42,12 @@ const ListProduct: FC<Props> = ({ products, removeHandler }) => {
             htmlInput: { style: { textAlign: 'center' } },
             input: { style: { height: '2rem' } }
           }}
-          decrementHandler={() => {}}
-          incrementHandler={() => {}}
+          decrementHandler={() => {
+            decrement(groupedProducts[productId].product)
+          }}
+          incrementHandler={() => {
+            increment(groupedProducts[productId].product)
+          }}
         />
       </div>
 
