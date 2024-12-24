@@ -84,9 +84,7 @@ const FinalizeTransaction = () => {
         {!isLoading && databaseProducts && (
           <>
             <div className={classes['product-container']}>
-              {databaseProducts.map((product, index) => (
-                <Components.ListProduct key={`${product.id}-${index}`} product={product} />
-              ))}
+              <Components.ProductsList products={databaseProducts} />
             </div>
 
             <div className={classes['summary-container']}>

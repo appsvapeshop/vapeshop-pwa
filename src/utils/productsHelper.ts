@@ -2,6 +2,7 @@ import { ref, deleteObject } from 'firebase/storage'
 import { Product as ProductType } from '../types/Product'
 import { CategoryContext } from '../enums/CategoryContext'
 import { firestore, storage } from '../configs/firebaseConfig'
+import { GroupedProducts as GroupedProductsType } from '../types/GroupedProducts'
 import {
   getDocs,
   collection,
@@ -13,7 +14,6 @@ import {
   deleteDoc,
   Timestamp
 } from 'firebase/firestore'
-
 
 export const getAllProducts = async (): Promise<ProductType[]> => {
   const productsCollection = collection(firestore, 'products')
@@ -110,7 +110,7 @@ export const getProductsById = async (productIds: string[]): Promise<ProductType
 }
 
 export const upsertProduct = async (product: ProductType) => {
-  const { id, addedToCartDate, ...values } = product
+  const { id, ...values } = product
   if (!!!product.id) {
     await addDoc(collection(firestore, 'products'), { ...values, createDate: Timestamp.now() })
   } else {
@@ -126,6 +126,24 @@ export const deleteProduct = async (product: ProductType) => {
     const categoryImage = ref(storage, product.img)
     await deleteObject(categoryImage)
   }
-  
+
   await deleteDoc(doc(firestore, 'products', product.id))
+}
+
+export const groupProductsById = (products: ProductType[]): GroupedProductsType => {
+  return products.reduce((accumulator, product) => {
+    if (!accumulator[product.id]) {
+      accumulator[product.id] = { product: product, size: 0 }
+    }
+
+    accumulator[product.id].size += 1
+    return accumulator
+  }, Object.assign({}))
+}
+
+export const getSavedProducts = () => {
+  const products = JSON.parse(localStorage.getItem('cartProducts') as string)
+  if (products) return products
+
+  return []
 }

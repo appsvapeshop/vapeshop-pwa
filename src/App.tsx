@@ -1,5 +1,6 @@
 import * as Pages from './pages/pages'
 import Preload from './components/Preload/Preload'
+import CartContextProvider from './stores/CartContext'
 import AuthContextProvider from './stores/UserContext'
 import SettingsContextProvider from './stores/SettingsContext'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
@@ -75,9 +76,11 @@ const App = () => {
   return (
     <AuthContextProvider>
       <SettingsContextProvider>
-        <ThemeProvider theme={theme}>
-          <RouterProvider router={router} />
-        </ThemeProvider>
+        <CartContextProvider>
+          <ThemeProvider theme={theme}>
+            <RouterProvider router={router} />
+          </ThemeProvider>
+        </CartContextProvider>
       </SettingsContextProvider>
     </AuthContextProvider>
   )
