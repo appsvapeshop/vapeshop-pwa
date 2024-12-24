@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { IoClose } from 'react-icons/io5'
 import classes from './ProductsList.module.css'
 import LazyImage from '../ui/LazyImage/LazyImage'
+import NumberField from '../ui/NumberField/NumberField'
 import { Product as ProductType } from '../../types/Product'
 import { groupProductsById } from '../../utils/productsHelper'
 import TappedComponent from '../animations/TappedComponent/TappedComponent'
@@ -10,6 +11,7 @@ type Props = {
   products: ProductType[]
   removeHandler?: (product: ProductType) => void
 }
+
 const ListProduct: FC<Props> = ({ products, removeHandler }) => {
   const groupedProducts = groupProductsById(products)
 
@@ -31,6 +33,16 @@ const ListProduct: FC<Props> = ({ products, removeHandler }) => {
             groupedProducts[productId].product.mixedPrice !== 0 &&
             ` + ${groupedProducts[productId].product.mixedPrice} zł`}
         </span>
+        <NumberField
+          value={groupedProducts[productId].size}
+          styles={{ margin: '10px 0' }}
+          slotProps={{
+            htmlInput: { style: { textAlign: 'center' } },
+            input: { style: { height: '2rem' } }
+          }}
+          decrementHandler={() => {}}
+          incrementHandler={() => {}}
+        />
       </div>
 
       {removeHandler !== undefined && (
