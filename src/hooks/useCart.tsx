@@ -27,6 +27,20 @@ export default function useCart() {
     )
   }
 
+  const increment = (product: ProductType) => {
+    addProduct(product)
+  }
+
+  const decrement = (product: ProductType) => {
+    setProducts((previous: Array<ProductType>) => {
+      const productIndex = previous.findIndex(
+        (previousProduct) => previousProduct.id === product.id
+      )
+      previous.splice(productIndex, 1)
+      return previous
+    })
+  }
+
   const clearCart = () => {
     localStorage.removeItem('cartProducts')
     setProducts([])
@@ -36,6 +50,8 @@ export default function useCart() {
     cartProducts: products,
     addProduct: addProduct,
     removeProduct: removeProduct,
+    increment: increment,
+    decrement: decrement,
     clearCart: clearCart
   }
 }
