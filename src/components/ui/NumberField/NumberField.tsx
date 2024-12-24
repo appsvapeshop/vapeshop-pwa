@@ -9,6 +9,7 @@ type Props = {
   value?: number | undefined
   slotProps?: any
   styles?: React.CSSProperties
+  readOnly?: boolean
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   incrementHandler?: () => void
   decrementHandler?: () => void
@@ -21,13 +22,16 @@ const NumberField: FC<Props> = ({
   styles,
   onChange,
   decrementHandler,
-  incrementHandler
+  incrementHandler,
+  readOnly = false
 }) => {
   return (
     <div className={classes.quantity}>
-      <TappedComponent onClick={decrementHandler}>
-        <FaMinus size="1rem" color="var(--inactive-icon-color)" />
-      </TappedComponent>
+      {!readOnly && (
+        <TappedComponent onClick={decrementHandler}>
+          <FaMinus size="1rem" color="var(--inactive-icon-color)" />
+        </TappedComponent>
+      )}
       <MuiTextField
         disabled
         className={classes.input}
@@ -40,9 +44,11 @@ const NumberField: FC<Props> = ({
         slotProps={slotProps}
         style={styles}
       />
-      <TappedComponent onClick={incrementHandler}>
-        <FaPlus size="1rem" color="var(--inactive-icon-color)" />
-      </TappedComponent>
+      {!readOnly && (
+        <TappedComponent onClick={incrementHandler}>
+          <FaPlus size="1rem" color="var(--inactive-icon-color)" />
+        </TappedComponent>
+      )}
     </div>
   )
 }
