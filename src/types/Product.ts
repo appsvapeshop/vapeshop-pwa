@@ -14,5 +14,4 @@ export type Product = {
   category: string
   createDate?: Timestamp
   updateDate?: Timestamp
-  addedToCartDate?: number
 }
