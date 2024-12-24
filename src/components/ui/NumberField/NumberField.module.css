@@ -5,3 +5,9 @@
 .input > div {
   border-radius: 20px;
 }
+
+.quantity{
+  display: flex;
+  align-items: center;
+  gap: 10px
+}
