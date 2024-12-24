@@ -1,37 +1,36 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import classes from './Cart.module.css'
-import useCart from '../../hooks/useCart'
 import 'react-toastify/dist/ReactToastify.css'
 import { AnimatePresence } from 'framer-motion'
 import { getCartQR } from '../../utils/qrUtils'
 import { useUserContext } from '../../stores/UserContext'
-import { Product as ProductType } from '../../types/Product'
+import { useCartContext } from '../../stores/CartContext'
 import { sumPrice, sumPoints } from '../../utils/cartHelper'
 import LazyImage from '../../components/ui/LazyImage/LazyImage'
-import { Button, Modal, ListProduct, AnimatedPage } from './cartComponents'
+import { Button, Modal, ProductsList, AnimatedPage } from './cartComponents'
 
 const Cart = () => {
   const { user } = useUserContext()
   const [qrData, setQrData] = useState<string>()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const { cartProducts, removeProduct, clearCart } = useCart()
+  const { products, removeProduct, clearCart } = useCartContext()
 
   const onFinalize = async () => {
     if (!!!user) throw new Error('Unauthorized user')
 
-    if (user.points < sumPoints(cartProducts)) {
+    if (user.points < sumPoints(products)) {
       toast.dismiss()
       toast.error('Masz za mało punktów')
       return
     }
 
-    const qrData = await getCartQR(user, cartProducts)
+    const qrData = await getCartQR(user, products)
     setQrData(qrData)
     setIsModalOpen(true)
   }
 
-  if (cartProducts.length === 0)
+  if (products.length === 0)
     return (
       <AnimatedPage>
         <div className={classes.container}>
@@ -44,18 +43,12 @@ const Cart = () => {
     <AnimatedPage>
       <div className={classes.container}>
         <div className={classes['product-container']}>
-          {cartProducts.map((cartProduct: ProductType, index: number) => (
-            <ListProduct
-              key={`product${index}`}
-              product={cartProduct}
-              removeHandler={removeProduct}
-            />
-          ))}
+          <ProductsList products={products} removeHandler={removeProduct} />
         </div>
       </div>
       <div className={classes.summary}>
-        <span>Suma punktów: {sumPoints(cartProducts)} pkt</span>
-        <span>Kwota: {sumPrice(cartProducts)} zł</span>
+        <span>Suma punktów: {sumPoints(products)} pkt</span>
+        <span>Kwota: {sumPrice(products)} zł</span>
       </div>
 
       <div className={classes.buttons}>
