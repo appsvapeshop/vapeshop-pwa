@@ -9,7 +9,7 @@ import { useUserContext } from '../../stores/UserContext'
 import { Product as ProductType } from '../../types/Product'
 import { sumPrice, sumPoints } from '../../utils/cartHelper'
 import LazyImage from '../../components/ui/LazyImage/LazyImage'
-import { Button, Modal, ListProduct, AnimatedPage } from './cartComponents'
+import { Button, Modal, ProductsList, AnimatedPage } from './cartComponents'
 
 const Cart = () => {
   const { user } = useUserContext()
@@ -45,7 +45,7 @@ const Cart = () => {
       <div className={classes.container}>
         <div className={classes['product-container']}>
           {cartProducts.map((cartProduct: ProductType, index: number) => (
-            <ListProduct
+            <ProductsList
               key={`product${index}`}
               product={cartProduct}
               removeHandler={removeProduct}

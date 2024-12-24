@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { IoClose } from 'react-icons/io5'
-import classes from './ListProduct.module.css'
+import classes from './ProductsList.module.css'
 import LazyImage from '../ui/LazyImage/LazyImage'
 import { Product as ProductType } from '../../types/Product'
 import TappedComponent from '../animations/TappedComponent/TappedComponent'
