@@ -140,3 +140,10 @@ export const groupProductsById = (products: ProductType[]): GroupedProductsType 
     return accumulator
   }, Object.assign({}))
 }
+
+export const getSavedProducts = () => {
+  const products = JSON.parse(localStorage.getItem('cartProducts') as string)
+  if (products) return products
+
+  return []
+}

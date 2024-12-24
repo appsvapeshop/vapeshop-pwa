@@ -1,22 +1,16 @@
 import { Product as ProductType } from '../types/Product'
-import { createContext, useState, useEffect } from 'react'
+import { getSavedProducts } from '../utils/productsHelper'
 import { CartContext as CartContextType } from '../types/CartContext'
+import { createContext, useState, useEffect, useContext } from 'react'
 
 const CartContext = createContext<CartContextType | null>(null)
 
 const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [products, setProducts] = useState<ProductType[]>([])
+  const [products, setProducts] = useState(() => getSavedProducts())
 
   useEffect(() => {
-    setProducts(getSavedProducts())
-  }, [])
-
-  const getSavedProducts = () => {
-    const products = JSON.parse(localStorage.getItem('cartProducts') as string)
-    if (products) return products
-
-    return []
-  }
+    localStorage.setItem('cartProducts', JSON.stringify(products))
+  }, [products])
 
   const addProduct = (product: ProductType) => {
     setProducts((previous: Array<ProductType>) => [...previous, product])
@@ -60,3 +54,11 @@ const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
 }
 
 export default CartContextProvider
+
+export const useCartContext = () => {
+  const context = useContext(CartContext)
+  if (!context) {
+    throw new Error('useSettingsContext must be used within a SettingsContextProvider')
+  }
+  return context
+}
