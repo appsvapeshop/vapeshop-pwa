@@ -8,7 +8,7 @@ import { getCartQR } from '../../utils/qrUtils'
 import { useUserContext } from '../../stores/UserContext'
 import { sumPrice, sumPoints } from '../../utils/cartHelper'
 import LazyImage from '../../components/ui/LazyImage/LazyImage'
-import { Button, Modal, ProductsList, AnimatedPage } from './cartComponents'
+import { Button, Modal, CartProductsList, AnimatedPage } from './cartComponents'
 
 const Cart = () => {
   const { user } = useUserContext()
@@ -43,7 +43,7 @@ const Cart = () => {
     <AnimatedPage>
       <div className={classes.container}>
         <div className={classes['product-container']}>
-          <ProductsList products={cartProducts} removeHandler={removeProduct} />
+          <CartProductsList products={cartProducts} removeHandler={removeProduct} />
         </div>
       </div>
       <div className={classes.summary}>
