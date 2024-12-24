@@ -29,6 +29,7 @@ const NumberField: FC<Props> = ({
         <FaMinus size="1rem" color="var(--inactive-icon-color)" />
       </TappedComponent>
       <MuiTextField
+        disabled
         className={classes.input}
         label={label}
         variant="outlined"
