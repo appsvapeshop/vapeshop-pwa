@@ -6,7 +6,6 @@ import 'react-toastify/dist/ReactToastify.css'
 import { AnimatePresence } from 'framer-motion'
 import { getCartQR } from '../../utils/qrUtils'
 import { useUserContext } from '../../stores/UserContext'
-import { Product as ProductType } from '../../types/Product'
 import { sumPrice, sumPoints } from '../../utils/cartHelper'
 import LazyImage from '../../components/ui/LazyImage/LazyImage'
 import { Button, Modal, ProductsList, AnimatedPage } from './cartComponents'
@@ -44,13 +43,7 @@ const Cart = () => {
     <AnimatedPage>
       <div className={classes.container}>
         <div className={classes['product-container']}>
-          {cartProducts.map((cartProduct: ProductType, index: number) => (
-            <ProductsList
-              key={`product${index}`}
-              product={cartProduct}
-              removeHandler={removeProduct}
-            />
-          ))}
+          <ProductsList products={cartProducts} removeHandler={removeProduct} />
         </div>
       </div>
       <div className={classes.summary}>

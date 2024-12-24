@@ -6,12 +6,12 @@ import { Product as ProductType } from '../../types/Product'
 import TappedComponent from '../animations/TappedComponent/TappedComponent'
 
 type Props = {
-  product: ProductType
+  products: ProductType[]
   removeHandler?: (product: ProductType) => void
 }
-const ListProduct: FC<Props> = ({ product, removeHandler }) => {
-  return (
-    <div className={classes.container}>
+const ListProduct: FC<Props> = ({ products, removeHandler }) => {
+  return products.map((product: ProductType, index: number) => (
+    <div className={classes.container} key={`product${index}`}>
       <div className={classes['image-container']}>
         <LazyImage url={product.img} containerStyles={{ minHeight: 100 }} />
       </div>
@@ -37,7 +37,7 @@ const ListProduct: FC<Props> = ({ product, removeHandler }) => {
         </TappedComponent>
       )}
     </div>
-  )
+  ))
 }
 
 export default ListProduct
