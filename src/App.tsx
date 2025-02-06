@@ -42,6 +42,7 @@ const App = () => {
         { path: 'newspaper/:categoryId', element: <Pages.Newspaper /> },
         { path: 'accountSettings', element: <Pages.AccountSettings /> },
         { path: 'accountSettings/changePassword', element: <Pages.ChangePassword /> },
+        { path: 'regulations', element: <Pages.Regulations /> },
         {
           path: 'admin',
           element: <AdminRoute />,
@@ -68,7 +69,8 @@ const App = () => {
       children: [
         { path: '/p/login', element: <Pages.Login /> },
         { path: '/p/registration', element: <Pages.Registration /> },
-        { path: '/p/forgotPassword', element: <Pages.ForgotPassword /> }
+        { path: '/p/forgotPassword', element: <Pages.ForgotPassword /> },
+        { path: '/p/regulations', element: <Pages.Regulations publicAccess={true}/> }
       ]
     }
   ])

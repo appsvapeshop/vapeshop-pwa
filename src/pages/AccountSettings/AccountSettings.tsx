@@ -47,6 +47,18 @@ const AccountSettings = () => {
           >
             Zmień hasło
           </Button>
+
+          <Button
+            styles={{ height: '3rem', fontWeight: '500' }}
+            variant="outlined"
+            colorVariant="secondary"
+            onClick={() => {
+              navigate('/regulations')
+            }}
+          >
+            Regulamin
+          </Button>
+
           <Button
             styles={{ height: '3rem', fontWeight: '500' }}
             variant="outlined"
