@@ -8,6 +8,7 @@ import { IoIosArrowBack } from 'react-icons/io'
 import Input from '../../components/ui/Input/Input'
 import Button from '../../components/ui/Button/Button'
 import { useUserContext } from '../../stores/UserContext'
+import Checkbox from '../../components/ui/Checkbox/Checkbox'
 import PropagateLoader from 'react-spinners/PropagateLoader'
 import { ToastContainer, Zoom, toast } from 'react-toastify'
 import { validateRegistration } from './validateRegistration'
@@ -19,11 +20,18 @@ const Registration = () => {
   const navigation = useNavigate()
   const { createUser } = useUserContext()
   const [isLoading, setIsLoading] = useState(false)
+  const [regulationsAccepted, setRegulationsAccepted] = useState(false)
   const [credentials, setCredentials] = useState({ email: '', password: '', rePassword: '' })
 
   const onRegister = async () => {
     setIsLoading(true)
     toast.dismiss()
+
+    if (!regulationsAccepted) {
+      toast.info('Musisz zaakceptować regulamin')
+      setIsLoading(false)
+      return
+    }
 
     try {
       validateRegistration(credentials.email, credentials.password, credentials.rePassword)
@@ -38,19 +46,9 @@ const Registration = () => {
 
   return (
     <AnimatedPage>
-      <ToastContainer
-        position="top-center"
-        toastClassName="toastify"
-        autoClose={3000}
-        closeOnClick
-        transition={Zoom}
-      />
+      <ToastContainer position="top-center" toastClassName="toastify" autoClose={3000} closeOnClick transition={Zoom} />
       <TappedComponent>
-        <IoIosArrowBack
-          className={classes['step-back-icon']}
-          size={40}
-          onClick={() => navigation(-1)}
-        />
+        <IoIosArrowBack className={classes['step-back-icon']} size={40} onClick={() => navigation(-1)} />
       </TappedComponent>
       <form className={classes.container}>
         <img src={logo} alt="logo" />
@@ -61,9 +59,7 @@ const Registration = () => {
           variant="outlined"
           colorVariant="secondary"
           autoComplete="email"
-          onChange={(event) =>
-            setCredentials({ ...credentials, email: (event.target as HTMLInputElement).value })
-          }
+          onChange={(event) => setCredentials({ ...credentials, email: (event.target as HTMLInputElement).value })}
         />
         <Input
           label="Hasło"
@@ -72,14 +68,9 @@ const Registration = () => {
           variant="outlined"
           colorVariant="secondary"
           autoComplete="current-password"
-          onChange={(event) =>
-            setCredentials({ ...credentials, password: (event.target as HTMLInputElement).value })
-          }
+          onChange={(event) => setCredentials({ ...credentials, password: (event.target as HTMLInputElement).value })}
         />
-        <PasswordValidator
-          className={classes['password-validator']}
-          password={credentials.password}
-        />
+        <PasswordValidator className={classes['password-validator']} password={credentials.password} />
         <Input
           label="Powtórz hasło"
           type="password"
@@ -87,15 +78,26 @@ const Registration = () => {
           variant="outlined"
           colorVariant="secondary"
           autoComplete="new-password"
-          onChange={(event) =>
-            setCredentials({ ...credentials, rePassword: (event.target as HTMLInputElement).value })
-          }
-        />{' '}
-        <Button
-          onClick={onRegister}
-          styles={{ height: '2.5rem', width: '70%' }}
-          colorVariant="secondary"
-        >
+          onChange={(event) => setCredentials({ ...credentials, rePassword: (event.target as HTMLInputElement).value })}
+        />
+
+        <div className={classes.regulations}>
+          <span>
+            Akceptuje{' '}
+            <TappedComponent styles={{ display: 'inline-block' }} onClick={() => navigation('/p/regulations')}>
+              <b>regulamin</b>
+            </TappedComponent>
+          </span>
+          <Checkbox
+            label=""
+            checked={regulationsAccepted}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setRegulationsAccepted(event.target.checked)
+            }}
+          />
+        </div>
+
+        <Button onClick={onRegister} styles={{ height: '2.5rem', width: '70%' }} colorVariant="secondary">
           {isLoading ? (
             <PropagateLoader
               size=".6rem"
