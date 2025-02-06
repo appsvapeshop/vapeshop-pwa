@@ -27,6 +27,6 @@
     flex-direction: column;
 }
 
-.regulations p {
+.regulations > span {
     margin: 10px 0;
 }
