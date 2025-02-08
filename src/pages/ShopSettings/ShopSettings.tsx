@@ -20,9 +20,9 @@ const ShopSettings = () => {
   }, [settings.settingsStatus])
 
   const onSave = async () => {
-    if (!!!temporarySettings?.conversionFactor) {
+    if (!!!temporarySettings?.pointsPerAmount) {
       toast.dismiss()
-      toast.error('Stawka za 1 punkt nie może być 0zł')
+      toast.error('Stawka za 1 punkt nie może być 0 zł')
       return
     }
 
@@ -50,12 +50,12 @@ const ShopSettings = () => {
           <>
             <TextField
               label="Stawka za 1 punkt"
-              value={temporarySettings?.conversionFactor}
+              value={temporarySettings?.pointsPerAmount}
               type="number"
               slotProps={{ input: { endAdornment: 'zł' } }}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const value: number = Number(event.target.value)
-                setTemporarySettings({ ...temporarySettings!, conversionFactor: value })
+                setTemporarySettings({ ...temporarySettings!, pointsPerAmount: value })
               }}
             />
 
