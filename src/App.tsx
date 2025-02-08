@@ -54,6 +54,7 @@ const App = () => {
             { path: 'panel/manageCategories/:categoryId', element: <Pages.ManageCategory /> },
             { path: 'panel/manageProducts', element: <Pages.ManageProducts /> },
             { path: 'panel/manageProducts/:productId', element: <Pages.ManageProduct /> },
+            { path: 'panel/manageProducts/:productId/variants', element: <Pages.ManageProductVariants /> },
             { path: 'panel/clients', element: <Pages.Clients /> },
             { path: 'panel/clients/history/:userId', element: <Pages.ClientHistory /> },
             { path: 'panel/manageNews', element: <Pages.ManageNews /> },

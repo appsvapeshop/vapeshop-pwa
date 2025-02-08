@@ -128,6 +128,17 @@ const ManageProduct = () => {
               }
             />
 
+            <Components.Button
+              onClick={() => {
+                navigate('variants')
+              }}
+              colorVariant="secondary"
+              variant="outlined"
+              styles={{ margin: 0, height: '3rem', width: '55%', borderWidth: '1px' }}
+            >
+              Warianty
+            </Components.Button>
+
             <Components.TextField
               label="Punkty"
               value={product?.points}
@@ -197,29 +208,13 @@ const ManageProduct = () => {
             />
 
             <div className={classes['buttons']}>
-              <Components.Button
-                onClick={save}
-                colorVariant="primary"
-                styles={{ height: '2.5rem' }}
-              >
-                {isButtonLoading ? (
-                  <Components.PulseLoader size=".6rem" color="var(--primary-font-color)" />
-                ) : (
-                  'Zapisz'
-                )}
+              <Components.Button onClick={save} colorVariant="primary" styles={{ height: '2.5rem' }}>
+                {isButtonLoading ? <Components.PulseLoader size=".6rem" color="var(--primary-font-color)" /> : 'Zapisz'}
               </Components.Button>
 
               {productId !== 'new' && (
-                <Components.Button
-                  onClick={remove}
-                  colorVariant="error"
-                  styles={{ height: '2.5rem' }}
-                >
-                  {isButtonLoading ? (
-                    <Components.PulseLoader size=".6rem" color="var(--primary-font-color)" />
-                  ) : (
-                    'Usuń'
-                  )}
+                <Components.Button onClick={remove} colorVariant="error" styles={{ height: '2.5rem' }}>
+                  {isButtonLoading ? <Components.PulseLoader size=".6rem" color="var(--primary-font-color)" /> : 'Usuń'}
                 </Components.Button>
               )}
             </div>
