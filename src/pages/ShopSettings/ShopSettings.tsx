@@ -1,12 +1,12 @@
 import { toast } from 'react-toastify'
 import { useState, useEffect } from 'react'
 import classes from './ShopSettings.module.css'
-import Input from '../../components/ui/Input/Input'
 import { AnimatedPage } from '../Cart/cartComponents'
 import Button from '../../components/ui/Button/Button'
 import { Checkbox, FormControlLabel } from '@mui/material'
 import { SettingStatus } from '../../types/SettingsContext'
 import { SettingsContext } from '../../types/SettingsContext'
+import TextField from '../../components/ui/TextField/TextField'
 import { useSettingsContext } from '../../stores/SettingsContext'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
 
@@ -22,7 +22,7 @@ const ShopSettings = () => {
   const onSave = async () => {
     if (!!!temporarySettings?.conversionFactor) {
       toast.dismiss()
-      toast.error('Ilość punktów za 1zł nie może być 0')
+      toast.error('Stawka za 1 punkt nie może być 0zł')
       return
     }
 
@@ -48,17 +48,17 @@ const ShopSettings = () => {
 
         {!isLoading && (
           <>
-            <Input
-              variant="outlined"
-              label="Ilość punktów za 1zł"
-              type="number"
-              colorVariant="secondary"
+            <TextField
+              label="Stawka za 1 punkt"
               value={temporarySettings?.conversionFactor}
+              type="number"
+              slotProps={{ input: { endAdornment: 'zł' } }}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const value: number = Number(event.target.value)
                 setTemporarySettings({ ...temporarySettings!, conversionFactor: value })
               }}
             />
+
             <FormControlLabel
               labelPlacement="top"
               label="Kategorie dla kuponów"
