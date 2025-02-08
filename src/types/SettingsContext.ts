@@ -1,5 +1,6 @@
 export type SettingsContext = {
   settingsId: string | undefined
+  pointsPerAmount: number | undefined
   conversionFactor: number | undefined
   categoriesForCoupons: boolean | undefined
   categoriesForNewspaper: boolean | undefined
