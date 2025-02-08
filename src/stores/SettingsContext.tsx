@@ -37,14 +37,14 @@ const SettingsContextProvider = ({ children }: { children: React.ReactNode }) =>
     await updateDoc(doc(firestore, 'settings', updatedSettings.settingsId as string), {
       categoriesForCoupons: updatedSettings.categoriesForCoupons,
       categoriesForNewspaper: updatedSettings.categoriesForNewspaper,
-      conversionFactor: updatedSettings.conversionFactor
+      pointsPerAmount: updatedSettings.pointsPerAmount
     })
     setSettings(updatedSettings)
   }
 
   const contextValue = {
     settingsId: settings?.settingsId,
-    conversionFactor: settings?.conversionFactor,
+    pointsPerAmount: settings?.pointsPerAmount,
     categoriesForCoupons: settings?.categoriesForCoupons,
     categoriesForNewspaper: settings?.categoriesForNewspaper,
     settingsStatus: settingsStatus,
