@@ -1,10 +1,21 @@
 import { deleteObject, ref } from 'firebase/storage'
+import { ProductVariant } from '../types/ProductVariant'
 import { Product as ProductType } from '../types/Product'
 import { CategoryContext } from '../enums/CategoryContext'
 import { firestore, storage } from '../configs/firebaseConfig'
 import { GroupedProducts as GroupedProductsType } from '../types/GroupedProducts'
-import { addDoc, collection, deleteDoc, doc, getDocs, query, Timestamp, updateDoc, where } from 'firebase/firestore'
-import { ProductVariant } from '../types/ProductVariant'
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  Timestamp,
+  updateDoc,
+  where,
+  getDoc
+} from 'firebase/firestore'
 
 export const getAllProducts = async (): Promise<ProductType[]> => {
   const productsCollection = collection(firestore, 'products')
@@ -31,6 +42,18 @@ export const getProductVariants = async (productId: string): Promise<ProductVari
     const variantData = Object.assign({ id: variant.id }, variant.data())
     return variantData as ProductVariant
   })
+}
+
+export const getProductVariant = async (productId: string, variantId: string): Promise<ProductVariant> => {
+  const productReference = doc(firestore, 'products', productId)
+  const variantReference = doc(productReference, 'variants', variantId)
+  const variantSnapshot = await getDoc(variantReference)
+
+  if (variantSnapshot.exists()) {
+    return Object.assign({ id: variantSnapshot.id }, variantSnapshot.data()) as ProductVariant
+  } else {
+    throw new Error('Variant does not exist')
+  }
 }
 
 export const upsertProductVariant = async (productId: string, productVariant: ProductVariant) => {
