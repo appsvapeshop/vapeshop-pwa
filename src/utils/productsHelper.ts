@@ -1,19 +1,10 @@
-import { ref, deleteObject } from 'firebase/storage'
+import { deleteObject, ref } from 'firebase/storage'
 import { Product as ProductType } from '../types/Product'
 import { CategoryContext } from '../enums/CategoryContext'
 import { firestore, storage } from '../configs/firebaseConfig'
 import { GroupedProducts as GroupedProductsType } from '../types/GroupedProducts'
-import {
-  getDocs,
-  collection,
-  query,
-  where,
-  updateDoc,
-  doc,
-  addDoc,
-  deleteDoc,
-  Timestamp
-} from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDocs, query, Timestamp, updateDoc, where } from 'firebase/firestore'
+import { ProductVariant } from '../types/ProductVariant'
 
 export const getAllProducts = async (): Promise<ProductType[]> => {
   const productsCollection = collection(firestore, 'products')
@@ -27,6 +18,38 @@ export const getAllProducts = async (): Promise<ProductType[]> => {
   })
 
   return products
+}
+
+export const getProductVariants = async (productId: string): Promise<ProductVariant[]> => {
+  const productReference = doc(firestore, 'products', productId)
+  const variantsReference = collection(productReference, 'variants')
+  const variantsSnapshot = await getDocs(variantsReference)
+
+  if (variantsSnapshot.docs.length === 0) return []
+
+  return variantsSnapshot.docs.map((variant) => {
+    const variantData = Object.assign({ id: variant.id }, variant.data())
+    return variantData as ProductVariant
+  })
+}
+
+export const upsertProductVariant = async (productId: string, productVariant: ProductVariant) => {
+  const { id, ...values } = productVariant
+  if (!productVariant.id && !!productId) {
+    const productReference = doc(firestore, 'products', productId)
+    await addDoc(collection(productReference, 'variants'), { ...values, createDate: Timestamp.now() })
+  } else {
+    const productReference = doc(firestore, 'products', productId)
+    await updateDoc(doc(productReference, 'variants', productVariant.id), {
+      ...values,
+      updateDate: Timestamp.now()
+    })
+  }
+}
+
+export const deleteProductVariant = async (productId: string, productVariant: ProductVariant) => {
+  const productReference = doc(firestore, 'products', productId)
+  await deleteDoc(doc(productReference, 'variants', productVariant.id))
 }
 
 export const getCoupons = async (): Promise<ProductType[]> => {
