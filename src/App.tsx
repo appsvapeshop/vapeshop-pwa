@@ -36,6 +36,7 @@ const App = () => {
       children: [
         { index: true, element: <Pages.Home /> },
         { path: 'cart', element: <Pages.Cart /> },
+        { path: 'product/:productId', element: <Pages.ProductDetails /> },
         { path: 'coupons', element: <Pages.Coupons /> },
         { path: 'coupons/:categoryId', element: <Pages.Coupons /> },
         { path: 'newspaper', element: <Pages.Newspaper /> },
@@ -72,7 +73,7 @@ const App = () => {
         { path: '/p/login', element: <Pages.Login /> },
         { path: '/p/registration', element: <Pages.Registration /> },
         { path: '/p/forgotPassword', element: <Pages.ForgotPassword /> },
-        { path: '/p/regulations', element: <Pages.Regulations publicAccess={true}/> }
+        { path: '/p/regulations', element: <Pages.Regulations publicAccess={true} /> }
       ]
     }
   ])
