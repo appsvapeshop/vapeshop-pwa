@@ -32,7 +32,7 @@ const ManageProductVariant = () => {
     } else {
       setIsLoading(false)
     }
-  }, [variantId])
+  }, [variantId, productId])
 
   const save = () => {
     setIsButtonLoading(true)
@@ -55,8 +55,16 @@ const ManageProductVariant = () => {
   }
 
   const remove = async () => {
-    //TODO
     setIsButtonLoading(true)
+    deleteProductVariant(productId!, variant!)
+      .then(() => {
+        toast.success('Wariant usunięty')
+        navigate(-1)
+      })
+      .catch(() => {
+        toast.error('Coś poszło nie tak')
+      })
+      .finally(() => setIsButtonLoading(false))
   }
 
   return (
