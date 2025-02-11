@@ -1,11 +1,11 @@
 import { FC } from 'react'
-import { toast } from 'react-toastify'
-import Button from '../ui/Button/Button'
 import classes from './Product.module.css'
 import 'react-toastify/dist/ReactToastify.css'
 import LazyImage from '../ui/LazyImage/LazyImage'
 import { ProductContext } from '../../enums/ProductContext'
 import { Product as ProductType } from '../../types/Product'
+import TappedComponent from '../animations/TappedComponent/TappedComponent'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {
   data: ProductType
@@ -14,38 +14,30 @@ type Props = {
 }
 
 const Product: FC<Props> = ({ data, context, addHandler = () => {} }) => {
-  return (
-    <div className={classes.container}>
-      <LazyImage
-        url={data.img}
-        containerStyles={{ minHeight: '150px' }}
-        cacheProperties={{ cacheStorageName: 'products-image' }}
-      />
-      <span className={classes.brand}>{data.brand}</span>
-      <span className={classes.name}>{data.name}</span>
+  const navigation = useNavigate()
 
-      {context === ProductContext.Coupons && (
-        <>
+  return (
+    <TappedComponent onClick={() => navigation(`/product/${data.id}`)}>
+      <div className={classes.container}>
+        <LazyImage
+          url={data.img}
+          containerStyles={{ minHeight: '150px' }}
+          cacheProperties={{ cacheStorageName: 'products-image' }}
+        />
+        <span className={classes.brand}>{data.brand}</span>
+        <span className={classes.name}>{data.name}</span>
+
+        {context === ProductContext.Coupons && (
+          <>
           <span className={classes.value}>
             {data.points} pkt
             {!!data.mixedPrice && `+ ${data.mixedPrice} zł`}
           </span>
-          <Button
-            colorVariant="primary"
-            onClick={() => {
-              toast.dismiss()
-              toast.success('Produkt dodany')
-              addHandler(data)
-            }}
-            styles={{ padding: '0.3rem 1rem' }}
-          >
-            Dodaj do koszyka
-          </Button>
-        </>
-      )}
+          </>
+        )}
 
-      {context === ProductContext.Newspaper && (
-        <>
+        {context === ProductContext.Newspaper && (
+          <>
           <span className={classes.value}>
             {!!data.promoPrice && (
               <>
@@ -56,16 +48,16 @@ const Product: FC<Props> = ({ data, context, addHandler = () => {} }) => {
 
             {!!!data.promoPrice && <span>{data.price} zł</span>}
           </span>
-        </>
-      )}
+          </>
+        )}
 
-      {context === ProductContext.Manage && (
-        <>
+        {context === ProductContext.Manage && (
+          <>
           <span className={classes.value}>
             {data.points} pkt
             {!!data.mixedPrice && ` + ${data.mixedPrice} zł`}
           </span>
-          <span className={classes.value}>
+            <span className={classes.value}>
             {!!data.promoPrice && (
               <>
                 <s>{data.price} zł</s>
@@ -73,11 +65,13 @@ const Product: FC<Props> = ({ data, context, addHandler = () => {} }) => {
               </>
             )}
 
-            {!!!data.promoPrice && <span>{data.price} zł</span>}
+              {!!!data.promoPrice && <span>{data.price} zł</span>}
           </span>
-        </>
-      )}
-    </div>
+          </>
+        )}
+      </div>
+    </TappedComponent>
+
   )
 }
 

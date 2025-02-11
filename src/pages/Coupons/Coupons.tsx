@@ -2,7 +2,6 @@ import classes from './Coupons.module.css'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Product from '../../components/Product/Product'
-import { useCartContext } from '../../stores/CartContext'
 import { ProductContext } from '../../enums/ProductContext'
 import { Product as ProductType } from '../../types/Product'
 import { CategoryContext } from '../../enums/CategoryContext'
@@ -13,7 +12,6 @@ import { getCoupons, getProductsByCategory } from '../../utils/productsHelper'
 import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
 
 const Coupons = () => {
-  const { addProduct } = useCartContext()
   const { categoryId } = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const { categoriesForCoupons } = useSettingsContext()
@@ -48,12 +46,11 @@ const Coupons = () => {
         {!isLoading && (
           <>
             {coupons.map((coupon) => (
-              <Product
-                key={coupon.id}
-                data={coupon}
-                context={ProductContext.Coupons}
-                addHandler={addProduct}
-              />
+                <Product
+                  key={coupon.id}
+                  data={coupon}
+                  context={ProductContext.Coupons}
+                />
             ))}
           </>
         )}
