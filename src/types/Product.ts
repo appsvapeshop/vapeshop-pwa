@@ -6,7 +6,7 @@ export type Product = {
   img: string
   brand: string
   name: string
-  variant?: string
+  variant?: ProductVariant
   coupon: boolean
   newspaper: boolean
   points?: number

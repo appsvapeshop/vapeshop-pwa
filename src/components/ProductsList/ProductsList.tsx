@@ -28,7 +28,7 @@ const ListProduct: FC<Props> = ({ products, removeHandler, readOnly = false }) =
       </div>
       <div className={classes['product-description']}>
         <span className={classes.brand}>{groupedProducts[productId].product.brand}</span>
-        <span className={classes.name}>{groupedProducts[productId].product.name}</span>
+        <span className={classes.name}>{groupedProducts[productId].product.name}{groupedProducts[productId].product.variant && ` ( ${groupedProducts[productId].product.variant.name} )`}</span>
         <span className={classes.value}>
           {groupedProducts[productId].product.points} pkt{' '}
           {groupedProducts[productId].product.mixedPrice !== undefined &&

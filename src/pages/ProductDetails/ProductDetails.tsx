@@ -84,13 +84,14 @@ const ProductDetails = () => {
           {variants && variants.length > 0 && (
             <Picklist
               label="Wariant"
-              value={product?.variant}
+              value={product?.variant?.id}
               options={variants?.map((variant) => {
-                return { name: variant.name, value: variant.id }
+                return { name: variant.name, value: variant.id}
               })}
               onChange={(event) =>
                 setProduct((prev) => {
-                  return { ...prev, variant: event.target.value || '' } as ProductType
+                  const variant = variants.find(e => e.id === event.target.value)
+                  return { ...prev, variant: {id: event.target.value, name: variant?.name} } as ProductType
                 })
               }
             />
