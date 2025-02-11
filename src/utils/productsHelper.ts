@@ -155,6 +155,17 @@ export const getProductsById = async (productIds: string[]): Promise<ProductType
   return products
 }
 
+export const getProductById = async (productId: string): Promise<ProductType> => {
+  const productReference = doc(firestore, 'products', productId)
+  const productSnapshot = await getDoc(productReference)
+
+  if (productSnapshot.exists()) {
+    return Object.assign({ id: productSnapshot.id }, productSnapshot.data()) as ProductType
+  } else {
+    throw new Error('Variant does not exist')
+  }
+}
+
 export const upsertProduct = async (product: ProductType) => {
   const { id, ...values } = product
   if (!!!product.id) {
