@@ -31,6 +31,24 @@ export const getAllProducts = async (): Promise<ProductType[]> => {
   return products
 }
 
+export const getProductsWithVariants = async (productIds: string[]): Promise<any[]> => {
+  const productsCollection = collection(firestore, 'products')
+  const productsQuery = query(productsCollection, where('__name__', 'in', productIds))
+  const productsSnapshot = await getDocs(productsQuery)
+
+  if (productsSnapshot.docs.length === 0) return []
+
+  const products = productsSnapshot.docs.map((product) => {
+    return Object.assign({ id: product.id }, product.data())
+  })
+
+  for (const product of products) {
+    product.variants = await getProductVariants(product.id);
+  }
+
+  return products
+}
+
 export const getProductVariants = async (productId: string): Promise<ProductVariant[]> => {
   const productReference = doc(firestore, 'products', productId)
   const variantsReference = collection(productReference, 'variants')

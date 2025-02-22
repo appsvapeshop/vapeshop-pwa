@@ -28,7 +28,7 @@ export const getDatabaseProducts = (
 }
 
 export const validateQr = (qrData: QrData) => {
-  if (qrData.productsSummary === undefined || qrData.productsSummary.size === 0)
+  if (qrData.productsSummary === undefined)
     throw new Error('Koszyk klienta nie może być pusty')
   if (qrData.userId === undefined) throw new Error('Użytkownik nieprawidłowy')
 }
