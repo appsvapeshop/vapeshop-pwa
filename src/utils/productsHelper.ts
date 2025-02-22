@@ -187,13 +187,19 @@ export const deleteProduct = async (product: ProductType) => {
   await deleteDoc(doc(firestore, 'products', product.id))
 }
 
-export const groupProductsById = (products: ProductType[]): GroupedProductsType => {
+export const groupProductsByIdAndVariants = (products: ProductType[]): GroupedProductsType => {
   return products.reduce((accumulator, product) => {
     if (!accumulator[product.id]) {
-      accumulator[product.id] = { product: product, size: 0 }
+      accumulator[product.id] = { [product.variant?.id!]: { product: product, size: 1 } }
+    } else {
+      const variants = accumulator[product.id]
+      if (variants[product.variant!.id]) {
+        variants[product.variant!.id].size += 1
+      } else {
+        variants[product.variant!.id] = { product: product, size: 1 }
+      }
     }
 
-    accumulator[product.id].size += 1
     return accumulator
   }, Object.assign({}))
 }
