@@ -8,7 +8,7 @@ import { Product as ProductType } from '../types/Product'
 export const getCartQR = async (user: UserType, cartProducts: ProductType[]) => {
   const productSummary = cartProducts.reduce((accumulator, product) => {
     if (!accumulator[product.id]) {
-      accumulator[product.id] = { [product.variant?.id!]: 1 }
+      accumulator[product.id] = { [product.variant?.id || product.id]: 1 }
     } else {
       const variants = accumulator[product.id]
       if (variants[product.variant!.id]) {

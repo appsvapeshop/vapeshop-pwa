@@ -12,15 +12,24 @@ export const isAmountsValid = (databaseProducts: Array<ProductType>, qrData: QrD
 }
 
 export const getDatabaseProducts = (
-  retrievedProducts: ProductType[],
+  retrievedProducts: any,
   qrData: QrData
 ): ProductType[] => {
   const databaseProducts: ProductType[] = []
 
   retrievedProducts.forEach((retrievedProduct) => {
-    const productQuantity = qrData.productsSummary![retrievedProduct.id] || 0
-    for (let i: number = 1; i <= productQuantity; i++) {
-      databaseProducts.push(retrievedProduct)
+    if(!retrievedProduct.variants || retrievedProduct.variants.length === 0){
+      const productQuantity = qrData.productsSummary![retrievedProduct.id][retrievedProduct.id] || 0
+      for (let i: number = 1; i <= productQuantity; i++){
+        databaseProducts.push(retrievedProduct)
+      }
+    } else {
+      retrievedProduct.variants.forEach(variant => {
+        const productQuantity = qrData.productsSummary![retrievedProduct.id][variant.id] || 0
+        for (let i: number = 1; i <= productQuantity; i++){
+          databaseProducts.push({...retrievedProduct, variant: variant})
+        }
+      })
     }
   })
 

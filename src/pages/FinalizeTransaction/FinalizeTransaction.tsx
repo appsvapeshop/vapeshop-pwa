@@ -9,9 +9,10 @@ import classes from './FinalizeTransaction.module.css'
 import { useUserContext } from '../../stores/UserContext'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { sumPoints, sumPrice } from '../../utils/cartHelper'
-import { getProductsById } from '../../utils/productsHelper'
+import { getProductsById, getProductsWithVariants } from '../../utils/productsHelper'
 import { TransactionMode } from '../../enums/TransactionMode'
 import * as transactionUtils from '../../utils/transactionUtils'
+import { getDatabaseProducts } from '../../utils/transactionUtils'
 
 const FinalizeTransaction = () => {
   const location = useLocation()
@@ -30,8 +31,8 @@ const FinalizeTransaction = () => {
         toast.error((error as Error).message)
       }
 
-      const retrievedProducts = await getProductsById(Object.keys(qrData.productsSummary!))
-      setDatabaseProducts(transactionUtils.getDatabaseProducts(retrievedProducts, qrData))
+      const retrievedProducts = await getProductsWithVariants(Object.keys(qrData.productsSummary!))
+      setDatabaseProducts(getDatabaseProducts(retrievedProducts, qrData));
 
       try {
         transactionUtils.validateProductsWithDatabase(qrData, retrievedProducts)
