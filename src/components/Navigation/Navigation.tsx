@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Modal from '../ui/Modal/Modal'
-import { UserRole } from '../../types/User'
+import { UserRole } from '../../enums/UserRole'
 import UserCard from '../UserCard/UserCard'
 import classes from './Navigation.module.css'
 import QrScanner from '../QrScanner/QrScanner'

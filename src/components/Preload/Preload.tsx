@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react'
 import Splash from '../../pages/Splash/Splash'
 import { AnimatePresence } from 'framer-motion'
 import { Platform } from '../../enums/Platform'
-import { AuthStatus } from '../../types/UserContext'
+import { AuthStatus } from '../../enums/AuthStatus'
 import { ToastContainer, Zoom } from 'react-toastify'
 import { getPlatform } from '../../utils/getPlatform'
 import { useUserContext } from '../../stores/UserContext'
-import { SettingStatus } from '../../types/SettingsContext'
+import { FetchStatus } from '../../enums/FetchStatus'
 import { installPrompt, IosPrompt } from '../../utils/installer'
 import { useSettingsContext } from '../../stores/SettingsContext'
 
 const Preload = ({ children }: { children: React.ReactNode }) => {
   const { authStatus } = useUserContext()
-  const { settingsStatus } = useSettingsContext()
+  const { fetchStatus } = useSettingsContext()
   const [iosPrompt, setIosPrompt] = useState(false)
   const [installationEvent, setInstallationEvent] = useState<any>()
   const [installationDispatched, setInstallationDispatched] = useState(false)
@@ -49,11 +49,11 @@ const Preload = ({ children }: { children: React.ReactNode }) => {
       <AnimatePresence mode="wait" initial={true}>
         {(authStatus === AuthStatus.NotStarted ||
           authStatus === AuthStatus.InProgress ||
-          settingsStatus === SettingStatus.NotStarted ||
-          settingsStatus === SettingStatus.InProgress) && <Splash key={authStatus} />}
+          fetchStatus === FetchStatus.NotStarted ||
+          fetchStatus === FetchStatus.InProgress) && <Splash key={authStatus} />}
 
         {(authStatus === AuthStatus.Authorized || authStatus === AuthStatus.Unauthorized) &&
-          settingsStatus !== SettingStatus.NotStarted && <>{children}</>}
+          fetchStatus !== FetchStatus.NotStarted && <>{children}</>}
       </AnimatePresence>
     </>
   )

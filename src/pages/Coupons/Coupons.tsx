@@ -15,12 +15,12 @@ import TappedComponent from '../../components/animations/TappedComponent/TappedC
 const Coupons = () => {
   const { categoryId } = useParams()
   const [isLoading, setIsLoading] = useState(true)
-  const { categoriesForCoupons } = useSettingsContext()
+  const { settings } = useSettingsContext()
   const [coupons, setCoupons] = useState<ProductType[]>([])
   const navigation = useNavigate()
 
   useEffect(() => {
-    if (categoryId === undefined && !categoriesForCoupons) {
+    if (categoryId === undefined && !settings.categoriesForCoupons) {
       getCoupons()
         .then((productsSnapshot) => setCoupons(productsSnapshot))
         .finally(() => setIsLoading(false))
@@ -29,9 +29,9 @@ const Coupons = () => {
         .then((productsSnapshot) => setCoupons(productsSnapshot))
         .finally(() => setIsLoading(false))
     }
-  }, [categoryId, categoriesForCoupons])
+  }, [categoryId, settings.categoriesForCoupons])
 
-  if (categoriesForCoupons && categoryId === undefined)
+  if (settings.categoriesForCoupons && categoryId === undefined)
     return <Categories context={CategoryContext.Coupons} />
 
   return (

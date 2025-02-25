@@ -1,23 +1,23 @@
 import { Timestamp } from 'firebase/firestore'
 
 /**
- * News type
+ * Product Category type
  */
-export type News = {
+export type ProductCategory = {
   /**
    * Product Category ID
    */
   id: string
 
   /**
+   * Product Category name
+   */
+  name: string
+
+  /**
    * Product Category image path ( URL )
    */
   img: string
-
-  /**
-   * News title ( not displayed )
-   */
-  title: string
 
   /**
    * Product Category create date

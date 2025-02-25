@@ -11,7 +11,7 @@ type Props = {
   addHandler?: (product: ProductType) => void
 }
 
-const Product: FC<Props> = ({ data, context, addHandler = () => {} }) => {
+const Product: FC<Props> = ({ data, context }) => {
   return (
       <div className={classes.container}>
         <LazyImage

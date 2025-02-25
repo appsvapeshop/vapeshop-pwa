@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import { Navigate } from 'react-router-dom'
-import { UserRole } from '../../../types/User'
+import { UserRole } from '../../../enums/UserRole'
 import { useUserContext } from '../../../stores/UserContext'
 
 const AdminRoute = () => {

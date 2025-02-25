@@ -3,7 +3,6 @@ import { ProductVariant } from '../types/ProductVariant'
 import { Product as ProductType } from '../types/Product'
 import { CategoryContext } from '../enums/CategoryContext'
 import { firestore, storage } from '../configs/firebaseConfig'
-import { GroupedProducts as GroupedProductsType } from '../types/GroupedProducts'
 import {
   addDoc,
   collection,
@@ -144,7 +143,7 @@ export const getProductsGroupedByCategory = async (
   const productsQuery = getProductQuery(categoryContext)
   const productsSnapshot = await getDocs(productsQuery)
   const products = productsSnapshot.docs.map((product) => product.data() as ProductType)
-  const groupedByCategory = Map.groupBy(products, ({ category }) => category)
+  const groupedByCategory = Map.groupBy(products, ({ categoryId }) => categoryId)
   return groupedByCategory
 }
 
@@ -205,7 +204,7 @@ export const deleteProduct = async (product: ProductType) => {
   await deleteDoc(doc(firestore, 'products', product.id))
 }
 
-export const groupProductsByIdAndVariants = (products: ProductType[]): GroupedProductsType => {
+export const groupProductsByIdAndVariants = (products: ProductType[]): any => {
   return products.reduce((accumulator, product) => {
     if (!accumulator[product.id]) {
       accumulator[product.id] = { [product.variant?.id!]: { product: product, size: 1 } }

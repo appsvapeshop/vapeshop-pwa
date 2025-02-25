@@ -58,9 +58,9 @@ const FinalizeTransaction = () => {
       }
 
       const transaction: Types.Transaction = {
-        mode: TransactionMode.Exchange,
-        userId: qrData.userId!,
-        timestamp: Timestamp.now(),
+        transactionMode: TransactionMode.Exchange,
+        customerId: qrData.userId!,
+        transactionDate: Timestamp.now(),
         points: totalPoints,
         price: totalAmount,
         products: databaseProducts

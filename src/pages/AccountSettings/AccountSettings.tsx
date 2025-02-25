@@ -1,4 +1,4 @@
-import { UserRole } from '../../types/User'
+import { UserRole } from '../../enums/UserRole'
 import { useNavigate } from 'react-router-dom'
 import classes from './AccountSettings.module.css'
 import { AnimatedPage } from '../Cart/cartComponents'

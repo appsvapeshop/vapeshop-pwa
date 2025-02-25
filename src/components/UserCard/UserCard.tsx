@@ -15,12 +15,10 @@ const UserCard = () => {
 
     getUserCode()
   }, [user])
-
-  if (qrData === undefined) return
-
+  
   return (
     <div className={classes.container}>
-      <LazyImage url={qrData} />
+      <LazyImage url={qrData!} />
     </div>
   )
 }

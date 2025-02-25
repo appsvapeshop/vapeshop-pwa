@@ -16,7 +16,7 @@ type Props = {
 
 const ListProduct: FC<Props> = ({ products, removeHandler, readOnly = false }) => {
   const groupedProducts = groupProductsByIdAndVariants(products)
-  const { increment, decrement } = useCartContext()
+  const { increaseQuantity, reduceQuantity } = useCartContext()
 
   return Object.keys(groupedProducts)
     .sort()
@@ -49,10 +49,10 @@ const ListProduct: FC<Props> = ({ products, removeHandler, readOnly = false }) =
               }}
               readOnly={readOnly}
               decrementHandler={() => {
-                decrement(groupedProducts[productId][variantId].product)
+                reduceQuantity(groupedProducts[productId][variantId].product)
               }}
               incrementHandler={() => {
-                increment(groupedProducts[productId][variantId].product)
+                increaseQuantity(groupedProducts[productId][variantId].product)
               }}
             />
           </div>

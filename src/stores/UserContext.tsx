@@ -1,7 +1,8 @@
 import { getUser } from '../utils/userUtils'
-import { User, UserRole } from '../types/User'
+import { User } from '../types/User'
+import { UserRole } from '../enums/UserRole'
 import { FirebaseError } from '@firebase/util'
-import { AuthStatus } from '../types/UserContext'
+import { AuthStatus } from '../enums/AuthStatus'
 import { Transaction } from '../types/Transaction'
 import { TransactionMode } from '../enums/TransactionMode'
 import { auth, firestore } from '../configs/firebaseConfig'
@@ -23,7 +24,7 @@ import {
 const UserContext = createContext<UserContextType | null>(null)
 
 const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User>()
   const [authStatus, setAuthStatus] = useState<AuthStatus>(AuthStatus.NotStarted)
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(firestoreUser)
         setAuthStatus(AuthStatus.Authorized)
       } else {
-        setUser(null)
+        // setUser(null)
         setAuthStatus(AuthStatus.Unauthorized)
       }
     })
@@ -96,9 +97,9 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   const addTransaction = async (transaction: Transaction) => {
     const points =
-      transaction.mode === TransactionMode.Exchange ? transaction.points * -1 : transaction.points
+      transaction.transactionMode === TransactionMode.Exchange ? transaction.points * -1 : transaction.points
 
-    await updateDoc(doc(firestore, 'users', transaction.userId), { points: increment(points) })
+    await updateDoc(doc(firestore, 'users', transaction.customerId), { points: increment(points) })
     await addDoc(collection(firestore, 'transactions'), transaction)
   }
 
@@ -119,19 +120,21 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  const contextValue: UserContextType = {
+    user: user!,
+    authStatus: authStatus,
+    signIn: signIn,
+    signOut: signOut,
+    createUser: createUser,
+    resetPassword: resetPassword,
+    refreshUser: refreshUser,
+    addTransaction: addTransaction,
+    changePassword: changePassword
+  }
+
   return (
     <UserContext.Provider
-      value={{
-        user,
-        authStatus,
-        signIn,
-        signOut,
-        createUser,
-        resetPassword,
-        refreshUser,
-        addTransaction,
-        changePassword
-      }}
+      value={contextValue}
     >
       {children}
     </UserContext.Provider>

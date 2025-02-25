@@ -113,7 +113,7 @@ const ManageProduct = () => {
 
             <Components.Picklist
               label="Kategoria"
-              value={product?.category}
+              value={product?.categoryId}
               options={
                 !!categories
                   ? categories?.map((category) => {
@@ -123,7 +123,7 @@ const ManageProduct = () => {
               }
               onChange={(event) =>
                 setProduct((prev) => {
-                  return { ...prev, category: event.target.value || '' } as Types.ProductType
+                  return { ...prev, categoryId: event.target.value || '' } as Types.ProductType
                 })
               }
             />

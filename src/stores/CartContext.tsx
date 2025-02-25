@@ -45,8 +45,8 @@ const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
     products: products,
     addProduct: addProduct,
     removeProduct: removeProduct,
-    increment: increment,
-    decrement: decrement,
+    increaseQuantity: increment,
+    reduceQuantity: decrement,
     clearCart: clearCart
   }
 
