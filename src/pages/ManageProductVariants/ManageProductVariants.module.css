@@ -1,0 +1,42 @@
+.container {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.skeletons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.skeletons > span {
+    width: 75%;
+    height: 4rem;
+    transform: none;
+}
+
+.add-card {
+    height: 4rem;
+    width: 75%;
+}
+
+.variant {
+    height: 4rem;
+    width: 75%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    background-color: var(--pulse-loading-color);
+    text-decoration: none;
+    color: var(--primary-font-color);
+    font-weight: 500;
+}
+

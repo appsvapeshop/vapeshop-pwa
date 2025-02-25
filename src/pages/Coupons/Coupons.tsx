@@ -1,8 +1,7 @@
 import classes from './Coupons.module.css'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Product from '../../components/Product/Product'
-import { useCartContext } from '../../stores/CartContext'
 import { ProductContext } from '../../enums/ProductContext'
 import { Product as ProductType } from '../../types/Product'
 import { CategoryContext } from '../../enums/CategoryContext'
@@ -11,13 +10,14 @@ import { useSettingsContext } from '../../stores/SettingsContext'
 import LoadingProduct from '../../components/skeletons/LoadingProduct/LoadingProduct'
 import { getCoupons, getProductsByCategory } from '../../utils/productsHelper'
 import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
+import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
 
 const Coupons = () => {
-  const { addProduct } = useCartContext()
   const { categoryId } = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const { categoriesForCoupons } = useSettingsContext()
   const [coupons, setCoupons] = useState<ProductType[]>([])
+  const navigation = useNavigate()
 
   useEffect(() => {
     if (categoryId === undefined && !categoriesForCoupons) {
@@ -48,12 +48,12 @@ const Coupons = () => {
         {!isLoading && (
           <>
             {coupons.map((coupon) => (
-              <Product
-                key={coupon.id}
-                data={coupon}
-                context={ProductContext.Coupons}
-                addHandler={addProduct}
-              />
+              <TappedComponent key={coupon.id} onClick={() => navigation(`/product/${coupon.id}`)}>
+                <Product
+                  data={coupon}
+                  context={ProductContext.Coupons}
+                />
+              </TappedComponent>
             ))}
           </>
         )}

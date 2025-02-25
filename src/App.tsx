@@ -36,6 +36,7 @@ const App = () => {
       children: [
         { index: true, element: <Pages.Home /> },
         { path: 'cart', element: <Pages.Cart /> },
+        { path: 'product/:productId', element: <Pages.ProductDetails /> },
         { path: 'coupons', element: <Pages.Coupons /> },
         { path: 'coupons/:categoryId', element: <Pages.Coupons /> },
         { path: 'newspaper', element: <Pages.Newspaper /> },
@@ -54,6 +55,8 @@ const App = () => {
             { path: 'panel/manageCategories/:categoryId', element: <Pages.ManageCategory /> },
             { path: 'panel/manageProducts', element: <Pages.ManageProducts /> },
             { path: 'panel/manageProducts/:productId', element: <Pages.ManageProduct /> },
+            { path: 'panel/manageProducts/:productId/variants', element: <Pages.ManageProductVariants /> },
+            { path: 'panel/manageProducts/:productId/variants/:variantId', element: <Pages.ManageProductVariant /> },
             { path: 'panel/clients', element: <Pages.Clients /> },
             { path: 'panel/clients/history/:userId', element: <Pages.ClientHistory /> },
             { path: 'panel/manageNews', element: <Pages.ManageNews /> },
@@ -70,7 +73,7 @@ const App = () => {
         { path: '/p/login', element: <Pages.Login /> },
         { path: '/p/registration', element: <Pages.Registration /> },
         { path: '/p/forgotPassword', element: <Pages.ForgotPassword /> },
-        { path: '/p/regulations', element: <Pages.Regulations publicAccess={true}/> }
+        { path: '/p/regulations', element: <Pages.Regulations publicAccess={true} /> }
       ]
     }
   ])

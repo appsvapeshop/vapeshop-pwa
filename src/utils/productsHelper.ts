@@ -1,18 +1,20 @@
-import { ref, deleteObject } from 'firebase/storage'
+import { deleteObject, ref } from 'firebase/storage'
+import { ProductVariant } from '../types/ProductVariant'
 import { Product as ProductType } from '../types/Product'
 import { CategoryContext } from '../enums/CategoryContext'
 import { firestore, storage } from '../configs/firebaseConfig'
 import { GroupedProducts as GroupedProductsType } from '../types/GroupedProducts'
 import {
-  getDocs,
-  collection,
-  query,
-  where,
-  updateDoc,
-  doc,
   addDoc,
+  collection,
   deleteDoc,
-  Timestamp
+  doc,
+  getDocs,
+  query,
+  Timestamp,
+  updateDoc,
+  where,
+  getDoc
 } from 'firebase/firestore'
 
 export const getAllProducts = async (): Promise<ProductType[]> => {
@@ -27,6 +29,68 @@ export const getAllProducts = async (): Promise<ProductType[]> => {
   })
 
   return products
+}
+
+export const getProductsWithVariants = async (productIds: string[]): Promise<any[]> => {
+  const productsCollection = collection(firestore, 'products')
+  const productsQuery = query(productsCollection, where('__name__', 'in', productIds))
+  const productsSnapshot = await getDocs(productsQuery)
+
+  if (productsSnapshot.docs.length === 0) return []
+
+  const products = productsSnapshot.docs.map((product) => {
+    return Object.assign({ id: product.id }, product.data())
+  })
+
+  for (const product of products) {
+    product.variants = await getProductVariants(product.id);
+  }
+
+  return products
+}
+
+export const getProductVariants = async (productId: string): Promise<ProductVariant[]> => {
+  const productReference = doc(firestore, 'products', productId)
+  const variantsReference = collection(productReference, 'variants')
+  const variantsSnapshot = await getDocs(variantsReference)
+
+  if (variantsSnapshot.docs.length === 0) return []
+
+  return variantsSnapshot.docs.map((variant) => {
+    const variantData = Object.assign({ id: variant.id }, variant.data())
+    return variantData as ProductVariant
+  })
+}
+
+export const getProductVariant = async (productId: string, variantId: string): Promise<ProductVariant> => {
+  const productReference = doc(firestore, 'products', productId)
+  const variantReference = doc(productReference, 'variants', variantId)
+  const variantSnapshot = await getDoc(variantReference)
+
+  if (variantSnapshot.exists()) {
+    return Object.assign({ id: variantSnapshot.id }, variantSnapshot.data()) as ProductVariant
+  } else {
+    throw new Error('Variant does not exist')
+  }
+}
+
+export const upsertProductVariant = async (productId: string, productVariant: ProductVariant) => {
+  const { id, ...values } = productVariant
+  if (!productVariant.id && !!productId) {
+    const productReference = doc(firestore, 'products', productId)
+    await addDoc(collection(productReference, 'variants'), { ...values, createDate: Timestamp.now() })
+  } else {
+    const productReference = doc(firestore, 'products', productId)
+    await updateDoc(doc(productReference, 'variants', productVariant.id), {
+      ...values,
+      updateDate: Timestamp.now()
+    })
+  }
+}
+
+export const deleteProductVariant = async (productId: string, productVariant: ProductVariant) => {
+  const productReference = doc(firestore, 'products', productId)
+  await deleteDoc(doc(productReference, 'variants', productVariant.id))
 }
 
 export const getCoupons = async (): Promise<ProductType[]> => {
@@ -109,6 +173,17 @@ export const getProductsById = async (productIds: string[]): Promise<ProductType
   return products
 }
 
+export const getProductById = async (productId: string): Promise<ProductType> => {
+  const productReference = doc(firestore, 'products', productId)
+  const productSnapshot = await getDoc(productReference)
+
+  if (productSnapshot.exists()) {
+    return Object.assign({ id: productSnapshot.id }, productSnapshot.data()) as ProductType
+  } else {
+    throw new Error('Variant does not exist')
+  }
+}
+
 export const upsertProduct = async (product: ProductType) => {
   const { id, ...values } = product
   if (!!!product.id) {
@@ -130,13 +205,19 @@ export const deleteProduct = async (product: ProductType) => {
   await deleteDoc(doc(firestore, 'products', product.id))
 }
 
-export const groupProductsById = (products: ProductType[]): GroupedProductsType => {
+export const groupProductsByIdAndVariants = (products: ProductType[]): GroupedProductsType => {
   return products.reduce((accumulator, product) => {
     if (!accumulator[product.id]) {
-      accumulator[product.id] = { product: product, size: 0 }
+      accumulator[product.id] = { [product.variant?.id!]: { product: product, size: 1 } }
+    } else {
+      const variants = accumulator[product.id]
+      if (variants[product.variant!.id]) {
+        variants[product.variant!.id].size += 1
+      } else {
+        variants[product.variant!.id] = { product: product, size: 1 }
+      }
     }
 
-    accumulator[product.id].size += 1
     return accumulator
   }, Object.assign({}))
 }
