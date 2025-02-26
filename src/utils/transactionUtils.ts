@@ -17,14 +17,16 @@ export const getDatabaseProducts = (
 ): ProductType[] => {
   const databaseProducts: ProductType[] = []
 
-  retrievedProducts.forEach((retrievedProduct) => {
+  retrievedProducts.forEach((retrievedProduct: any) => {
     if(!retrievedProduct.variants || retrievedProduct.variants.length === 0){
+      // @ts-ignore
       const productQuantity = qrData.productsSummary![retrievedProduct.id][retrievedProduct.id] || 0
       for (let i: number = 1; i <= productQuantity; i++){
         databaseProducts.push(retrievedProduct)
       }
     } else {
-      retrievedProduct.variants.forEach(variant => {
+      retrievedProduct.variants.forEach((variant: any) => {
+        // @ts-ignore
         const productQuantity = qrData.productsSummary![retrievedProduct.id][variant.id] || 0
         for (let i: number = 1; i <= productQuantity; i++){
           databaseProducts.push({...retrievedProduct, variant: variant})

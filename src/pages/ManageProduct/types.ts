@@ -1,4 +1,4 @@
 import { Product as ProductType } from '../../types/Product'
-import { Category as CategoryType } from '../../types/Category'
+import { ProductCategory as CategoryType } from '../../types/ProductCategory'
 
 export type { ProductType, CategoryType }

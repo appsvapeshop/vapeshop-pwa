@@ -14,11 +14,11 @@ import { getProductsByCategory, getNewspaperProducts } from '../../utils/product
 const Newspaper = () => {
   const { categoryId } = useParams()
   const [isLoading, setIsLoading] = useState(true)
-  const { categoriesForNewspaper } = useSettingsContext()
+  const { settings } = useSettingsContext()
   const [products, setProducts] = useState<ProductType[]>()
 
   useEffect(() => {
-    if (categoryId === undefined && !categoriesForNewspaper) {
+    if (categoryId === undefined && !settings.categoriesForNewspaper) {
       getNewspaperProducts()
         .then((productsSnapshot) => setProducts(productsSnapshot))
         .finally(() => setIsLoading(false))
@@ -27,9 +27,9 @@ const Newspaper = () => {
         .then((productsSnapshot) => setProducts(productsSnapshot))
         .finally(() => setIsLoading(false))
     }
-  }, [categoryId, categoriesForNewspaper])
+  }, [categoryId, settings.categoriesForNewspaper])
 
-  if (categoriesForNewspaper && categoryId === undefined)
+  if (settings.categoriesForNewspaper && categoryId === undefined)
     return <Categories context={CategoryContext.Newspaper} />
 
   return (

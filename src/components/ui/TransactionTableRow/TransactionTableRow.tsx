@@ -15,17 +15,17 @@ const TransactionTableRow = ({ transaction }: { transaction: Transaction }) => {
       <Material.TableRow>
         <Material.TableCell>
           <TappedComponent onClick={() => setIsRowExpanded((prev) => !prev)}>
-            {transaction.mode === TransactionMode.Sell ? 'Sprzedaż' : 'Wymiana'}
-            {transaction.mode === TransactionMode.Exchange && (
+            {transaction.transactionMode === TransactionMode.Sell ? 'Sprzedaż' : 'Wymiana'}
+            {transaction.transactionMode === TransactionMode.Exchange && (
               <>{isRowExpanded ? <IoIosArrowUp /> : <IoIosArrowDown />}</>
             )}
           </TappedComponent>
         </Material.TableCell>
         <Material.TableCell>
           <TappedComponent>
-            {new Date(transaction.timestamp.seconds * 1000).toLocaleTimeString()}
+            {new Date(transaction.transactionDate.seconds * 1000).toLocaleTimeString()}
             <br />
-            {new Date(transaction.timestamp.seconds * 1000).toLocaleDateString()}
+            {new Date(transaction.transactionDate.seconds * 1000).toLocaleDateString()}
           </TappedComponent>
         </Material.TableCell>
         <Material.TableCell>
@@ -36,7 +36,7 @@ const TransactionTableRow = ({ transaction }: { transaction: Transaction }) => {
         </Material.TableCell>
       </Material.TableRow>
 
-      {transaction.mode === TransactionMode.Exchange && (
+      {transaction.transactionMode === TransactionMode.Exchange && (
         <Material.TableRow>
           <Material.TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={isRowExpanded} timeout="auto" unmountOnExit>
@@ -60,9 +60,9 @@ const TransactionTableRow = ({ transaction }: { transaction: Transaction }) => {
                       </Material.TableCell>
                       <Material.TableCell>
                         <>
-                          {new Date(transaction.timestamp.seconds * 1000).toLocaleTimeString()}
+                          {new Date(transaction.transactionDate.seconds * 1000).toLocaleTimeString()}
                           <br />
-                          {new Date(transaction.timestamp.seconds * 1000).toLocaleDateString()}
+                          {new Date(transaction.transactionDate.seconds * 1000).toLocaleDateString()}
                         </>
                       </Material.TableCell>
                       <Material.TableCell>{product.points} pkt</Material.TableCell>

@@ -22,7 +22,7 @@ export const getCartQR = async (user: UserType, cartProducts: ProductType[]) => 
   }, Object.assign({}))
 
   const qrData: QrData = {
-    mode: QrContext.FinalizeCart,
+    qrContext: QrContext.FinalizeCart,
     userId: user.id,
     productsSummary: productSummary,
     cartAmount: sumPrice(cartProducts),
@@ -38,7 +38,7 @@ export const getCartQR = async (user: UserType, cartProducts: ProductType[]) => 
 
 export const getUserQR = async ({ id }: { id: string }): Promise<string> => {
   const qrData: QrData = {
-    mode: QrContext.UserCard,
+    qrContext: QrContext.UserCard,
     userId: id
   }
   return await QRCode.toDataURL(JSON.stringify(qrData), {

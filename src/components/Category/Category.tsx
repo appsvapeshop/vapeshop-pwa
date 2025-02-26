@@ -2,7 +2,7 @@ import { FC } from 'react'
 import classes from './Category.module.css'
 import LazyImage from '../ui/LazyImage/LazyImage'
 import { TbDiamondsFilled } from 'react-icons/tb'
-import { Category as CategoryType } from '../../types/Category'
+import { ProductCategory as CategoryType } from '../../types/ProductCategory'
 import TappedComponent from '../animations/TappedComponent/TappedComponent'
 
 type Props = {

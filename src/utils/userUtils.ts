@@ -14,7 +14,8 @@ export const getUser = async (email: string): Promise<User> => {
     id: users.docs[0].id,
     email: user.email,
     points: user.points,
-    role: user.role
+    role: user.role,
+    createDate: user.createDate,
   }
 }
 
@@ -30,7 +31,8 @@ export const getUserById = async (id: string): Promise<User> => {
     id: users.docs[0].id,
     email: user.email,
     points: user.points,
-    role: user.role
+    role: user.role,
+    createDate: user.createDate
   }
 }
 

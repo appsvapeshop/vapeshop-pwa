@@ -11,10 +11,10 @@ const QrScanner = ({ onClose }: { onClose: () => void }) => {
   const onScanned = (result: Result | null | undefined) => {
     if (!!result) {
       const scannedData = JSON.parse(result.getText()) as QrData
-      if (scannedData.mode === QrContext.UserCard) {
+      if (scannedData.qrContext === QrContext.UserCard) {
         navigate('/admin/panel/clients', { state: { ...scannedData } })
         onClose()
-      } else if (scannedData.mode === QrContext.FinalizeCart) {
+      } else if (scannedData.qrContext === QrContext.FinalizeCart) {
         navigate('/admin/finalizeTransaction', { state: { ...scannedData } })
         onClose()
       }

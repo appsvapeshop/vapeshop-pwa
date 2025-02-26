@@ -1,18 +1,23 @@
 import { Timestamp } from 'firebase/firestore'
 
 /**
- * Product Variant type
+ * Product Category type
  */
-export type ProductVariant = {
+export type ProductCategory = {
   /**
-   * Product Variant ID
+   * Product Category ID
    */
   id: string
 
   /**
-   * Product Variant Name
+   * Product Category name
    */
   name: string
+
+  /**
+   * Product Category image path ( URL )
+   */
+  img: string
 
   /**
    * Product Category create date

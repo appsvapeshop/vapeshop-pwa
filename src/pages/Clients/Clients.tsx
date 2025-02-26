@@ -25,7 +25,7 @@ const Clients = () => {
   const [amount, setAmount] = useState<number>(0)
   const amountRef = useRef<HTMLInputElement>(null)
   const [qrData] = useState<QrData>(location.state)
-  const { pointsPerAmount } = useSettingsContext()
+  const { settings } = useSettingsContext()
   const [isLoading, setIsLoading] = useState(false)
   const [customers, setCustomers] = useState<User[]>([])
   const [customer, setCustomer] = useState<User | null>()
@@ -73,7 +73,7 @@ const Clients = () => {
       return
     }
 
-    if(!pointsPerAmount){
+    if(!settings.amountForOnePoint){
       toast.dismiss()
       toast.error('Stawka za 1 punkt nie może być 0 zł')
       return
@@ -82,10 +82,10 @@ const Clients = () => {
     setTransactionSending(true)
 
     const transaction: Transaction = {
-      mode: TransactionMode.Sell,
-      userId: customer.id,
-      timestamp: Timestamp.now(),
-      points: Math.trunc(amount / pointsPerAmount),
+      transactionMode: TransactionMode.Sell,
+      customerId: customer.id,
+      transactionDate: Timestamp.now(),
+      points: Math.trunc(amount / settings.amountForOnePoint),
       price: amount
     }
 
@@ -174,7 +174,7 @@ const Clients = () => {
             <TextField
               label="+ punkty"
               variant="standard"
-              value={!!!amount ? '' : Math.trunc(amount / (pointsPerAmount || 0))}
+              value={!!!amount ? '' : Math.trunc(amount / (settings.amountForOnePoint || 0))}
               disabled
               slotProps={{ input: { endAdornment: 'pkt' } }}
             />

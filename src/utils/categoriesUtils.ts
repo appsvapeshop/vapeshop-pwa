@@ -1,7 +1,7 @@
 import { ref, deleteObject } from 'firebase/storage'
 import ValidationError from '../exceptions/ValidationError'
 import { firestore, storage } from '../configs/firebaseConfig'
-import { Category as CategoryType } from '../types/Category'
+import { ProductCategory as CategoryType } from '../types/ProductCategory'
 import {
   getDocs,
   collection,
