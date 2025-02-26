@@ -31,7 +31,6 @@ const ProductDetails = () => {
   }, [productId])
 
   const onAdd = () => {
-    console.log(product?.variant)
     if(variants && variants.length > 0 && (!product?.variant || !product.variant.name )){
       toast.error('Wybierz wariant')
       return

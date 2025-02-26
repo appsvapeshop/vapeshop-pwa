@@ -1,4 +1,5 @@
 import { Timestamp } from 'firebase/firestore'
+import { ProductVariant as ProductVariantType } from './ProductVariant'
 
 /**
  * Product type
@@ -25,9 +26,9 @@ export type Product = {
   name: string
 
   /**
-   * Product variant. Will override all properties if selected
+   * Product variant
    */
-  variant: Product
+  variant: ProductVariantType
 
   /**
    * Whether the product is a coupon ( will be displayed in coupons )
