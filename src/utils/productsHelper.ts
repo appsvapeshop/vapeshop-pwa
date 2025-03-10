@@ -143,7 +143,7 @@ export const getProductsGroupedByCategory = async (
   const productsQuery = getProductQuery(categoryContext)
   const productsSnapshot = await getDocs(productsQuery)
   const products = productsSnapshot.docs.map((product) => product.data() as ProductType)
-  const groupedByCategory = Map.groupBy(products, ({ categoryId }) => categoryId)
+  const groupedByCategory = Map.groupBy(products, ({ category }) => category)
   return groupedByCategory
 }
 
