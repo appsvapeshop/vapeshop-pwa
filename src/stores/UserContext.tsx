@@ -104,6 +104,9 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
 export default UserContextProvider
 
+/**
+ * Custom hook for User Context
+ */
 export const useUserContext = () => {
   const context = useContext(UserContext)
   if (!context) {
