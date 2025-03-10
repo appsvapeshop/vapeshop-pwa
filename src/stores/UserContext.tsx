@@ -1,13 +1,22 @@
-import { getUser } from '../utils/userUtils'
-import { User } from '../types/User'
 import { UserRole } from '../enums/UserRole'
-import { FirebaseError } from '@firebase/util'
 import { AuthStatus } from '../enums/AuthStatus'
-import { Transaction } from '../types/Transaction'
 import { TransactionMode } from '../enums/TransactionMode'
+
+import EmailInUse from '../exceptions/EmailInUse'
+import InvalidEmail from '../exceptions/InvalidEmail'
+import WeakPassword from '../exceptions/WeakPassword'
+import ErrorOccurred from '../exceptions/ErrorOccurred'
+import InvalidCredential from '../exceptions/InvalidCredential'
+import InvalidOldPassword from '../exceptions/InvalidOldPassword'
+
+import { User } from '../types/User'
+import { Transaction } from '../types/Transaction'
+
+import { getUser } from '../utils/userUtils'
+import { FirebaseError } from '@firebase/util'
 import { auth, firestore } from '../configs/firebaseConfig'
 import { UserContext as UserContextType } from '../types/UserContext'
-import { createContext, useState, useContext, useEffect } from 'react'
+import React, { createContext, useState, useContext, useEffect } from 'react'
 import { addDoc, collection, updateDoc, doc, increment } from 'firebase/firestore'
 import {
   createUserWithEmailAndPassword,
@@ -21,22 +30,31 @@ import {
   EmailAuthProvider
 } from 'firebase/auth'
 
+/**
+ * User Context. Is null before initialization
+ */
 const UserContext = createContext<UserContextType | null>(null)
 
+/**
+ * User Context Provider. Provides the currently logged-in user and useful user management functions
+ */
 const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User>()
   const [authStatus, setAuthStatus] = useState<AuthStatus>(AuthStatus.NotStarted)
 
+  /**
+   * Subscribe and load current logged-in user when application loads. Unsubscribe after loaded user
+   */
   useEffect(() => {
     setAuthStatus(AuthStatus.InProgress)
 
     const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
-      if (authUser) {
-        const firestoreUser = await getUser(authUser.email!)
-        setUser(firestoreUser)
+      if (authUser && authUser.email) {
+        const loadedUser = await getUser(authUser.email)
+
+        setUser(loadedUser)
         setAuthStatus(AuthStatus.Authorized)
       } else {
-        // setUser(null)
         setAuthStatus(AuthStatus.Unauthorized)
       }
     })
@@ -46,28 +64,46 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [])
 
+  /**
+   * Sign in user using email and password
+   */
   const signIn = async (email: string, password: string) => {
     try {
       await setPersistence(auth, browserLocalPersistence)
       await signInWithEmailAndPassword(auth, email, password)
 
-      const firestoreUser = await getUser(email)
-      setUser(firestoreUser)
+      const loadedUser = await getUser(email)
+
+      setUser(loadedUser)
       setAuthStatus(AuthStatus.Authorized)
     } catch (error) {
-      if ((error as FirebaseError).code === 'auth/invalid-email')
-        throw new Error('Email niepoprawny')
-      if ((error as FirebaseError).code === 'auth/invalid-credential')
-        throw new Error('Email lub hasło jest niepoprawne')
+      if ((error as FirebaseError).code === 'auth/invalid-email') throw new InvalidEmail()
+      if ((error as FirebaseError).code === 'auth/invalid-credential') throw new InvalidCredential()
 
-      throw new Error('Error occurs')
+      throw new ErrorOccurred()
     }
   }
 
+  /**
+   * Sign out current user and update Auth Status
+   */
   const signOut = () => {
-    auth.signOut()
+    auth
+      .signOut()
+      .then(() => {
+        setAuthStatus(AuthStatus.Unauthorized)
+      })
+      .catch(() => {
+        throw new ErrorOccurred()
+      })
   }
 
+  /**
+   * Create new user with email/password
+   *
+   * @param email user email. Must not be null
+   * @param password user password. Must not be null
+   */
   const createUser = async (email: string, password: string) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password)
@@ -77,24 +113,37 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
         role: UserRole.Customer
       })
     } catch (error) {
-      if ((error as FirebaseError).code === 'auth/email-already-in-use')
-        throw new Error('Email jest już w użyciu')
-      if ((error as FirebaseError).code === 'auth/password-does-not-meet-requirements')
-        throw new Error('Hasło jest za słabe')
-
-      throw new Error('Error occurs')
+      if ((error as FirebaseError).code === 'auth/email-already-in-use') throw new EmailInUse()
+      if ((error as FirebaseError).code === 'auth/password-does-not-meet-requirements') throw new WeakPassword()
+      throw new ErrorOccurred()
     }
   }
 
+  /**
+   * Reset user password and send new one to email
+   *
+   * @param email user email. Must not be null
+   */
   const resetPassword = async (email: string) => {
     await sendPasswordResetEmail(auth, email)
   }
 
+  /**
+   * Refresh current user data e.g. user points*
+   */
   const refreshUser = async () => {
-    const firestoreUser = await getUser(user!.email)
-    setUser(firestoreUser)
+    if (user?.email) {
+      setUser(await getUser(user.email))
+    } else {
+      throw new ErrorOccurred()
+    }
   }
 
+  /**
+   * Add new transaction for current user
+   *
+   * @param transaction data. Must not be null
+   */
   const addTransaction = async (transaction: Transaction) => {
     const points =
       transaction.transactionMode === TransactionMode.Exchange ? transaction.points * -1 : transaction.points
@@ -103,20 +152,23 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     await addDoc(collection(firestore, 'transactions'), transaction)
   }
 
+  /**
+   * Change current user password
+   *
+   * @param oldPassword old user password. Must not be null
+   * @param newPassword new user password. Must not be null
+   */
   const changePassword = async (oldPassword: string, newPassword: string) => {
-    if (auth?.currentUser?.email === null || auth?.currentUser?.email === undefined)
-      throw new Error('User unauthorized')
+    if (!auth?.currentUser?.email) throw new ErrorOccurred()
 
     try {
       const credential = EmailAuthProvider.credential(auth.currentUser.email, oldPassword)
       await reauthenticateWithCredential(auth.currentUser, credential)
       await updatePassword(auth.currentUser, newPassword)
     } catch (error) {
-      if ((error as FirebaseError).code === 'auth/invalid-credential')
-        throw new Error('Stare hasło jest niepoprawne')
-      if ((error as FirebaseError).code === 'auth/password-does-not-meet-requirements')
-        throw new Error('Hasło jest za słabe')
-      throw new Error('Coś poszło nie tak')
+      if ((error as FirebaseError).code === 'auth/invalid-credential') throw new InvalidOldPassword()
+      if ((error as FirebaseError).code === 'auth/password-does-not-meet-requirements') throw new WeakPassword()
+      throw new ErrorOccurred()
     }
   }
 
@@ -132,13 +184,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
     changePassword: changePassword
   }
 
-  return (
-    <UserContext.Provider
-      value={contextValue}
-    >
-      {children}
-    </UserContext.Provider>
-  )
+  return <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
 }
 
 export default UserContextProvider
