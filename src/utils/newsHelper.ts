@@ -1,7 +1,7 @@
 import { Timestamp } from 'firebase/firestore'
 import { News as NewsType } from '../types/News'
 import { ref, deleteObject } from 'firebase/storage'
-import ValidationError from '../exceptions/ValidationError'
+import ValidationException from '../exceptions/ValidationException'
 import { firestore, storage } from '../configs/firebaseConfig'
 import {
   query,
@@ -40,7 +40,7 @@ export const getNewsById = async (newsId: string): Promise<NewsType> => {
 }
 
 export const upsertNews = async (news: NewsType) => {
-  if (!news?.img) throw new ValidationError('Zdjęcie jest wymagane')
+  if (!news?.img) throw new ValidationException('Zdjęcie jest wymagane')
 
   const { id: _, ...values } = news
 

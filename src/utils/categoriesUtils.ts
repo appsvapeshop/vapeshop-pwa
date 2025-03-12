@@ -1,5 +1,5 @@
 import { ref, deleteObject } from 'firebase/storage'
-import ValidationError from '../exceptions/ValidationError'
+import ValidationException from '../exceptions/ValidationException'
 import { firestore, storage } from '../configs/firebaseConfig'
 import { ProductCategory as CategoryType } from '../types/ProductCategory'
 import {
@@ -56,7 +56,7 @@ export const deleteCategory = async (category: CategoryType) => {
   const productsSnapshot = await getDocs(productsQuery)
 
   if (productsSnapshot.docs.length !== 0)
-    throw new ValidationError('Kategoria ma przypisane produkty')
+    throw new ValidationException('Kategoria ma przypisane produkty')
 
   if (!!category.img) {
     const categoryImage = ref(storage, category.img)

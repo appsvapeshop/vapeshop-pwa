@@ -9,7 +9,7 @@ import Button from '../../components/ui/Button/Button'
 import { uploadFile } from '../../utils/filesUploader'
 import { useParams, useNavigate } from 'react-router-dom'
 import AddCard from '../../components/ui/AddCard/AddCard'
-import ValidationError from '../../exceptions/ValidationError'
+import ValidationException from '../../exceptions/ValidationException'
 import LazyImage from '../../components/ui/LazyImage/LazyImage'
 import { ProductCategory as CategoryType } from '../../types/ProductCategory'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
@@ -70,7 +70,7 @@ const ManageCategory = () => {
         navigate('/admin/panel/manageCategories')
       })
       .catch((error) => {
-        if (error instanceof ValidationError) {
+        if (error instanceof ValidationException) {
           toast.error(error.message)
         } else {
           toast.error('Coś poszło nie tak')

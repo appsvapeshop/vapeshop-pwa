@@ -10,7 +10,7 @@ import { uploadFile } from '../../utils/filesUploader'
 import Button from '../../components/ui/Button/Button'
 import { useParams, useNavigate } from 'react-router-dom'
 import AddCard from '../../components/ui/AddCard/AddCard'
-import ValidationError from '../../exceptions/ValidationError'
+import ValidationException from '../../exceptions/ValidationException'
 import LazyImage from '../../components/ui/LazyImage/LazyImage'
 import { getNewsById, upsertNews, deleteNews } from '../../utils/newsHelper'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
@@ -54,7 +54,7 @@ const ManageNewsItem = () => {
       toast.success('Zapisano')
       navigate('/admin/panel/manageNews')
     } catch (error) {
-      if (error instanceof ValidationError) {
+      if (error instanceof ValidationException) {
         toast.error(error.message)
       } else {
         toast.error('Coś poszło nie tak')
