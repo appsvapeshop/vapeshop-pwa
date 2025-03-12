@@ -12,16 +12,15 @@ import Autocomplete from '@mui/material/Autocomplete'
 import { AnimatedPage } from '../Cart/cartComponents'
 import { QrData } from '../FinalizeTransaction/types'
 import Button from '../../components/ui/Button/Button'
-import { useUserContext } from '../../stores/UserContext'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { TransactionMode } from '../../enums/TransactionMode'
 import { useSettingsContext } from '../../stores/SettingsContext'
+import { addTransaction } from '../../services/UserService'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
 
 const Clients = () => {
   const location = useLocation()
   const navigate = useNavigate()
-  const { addTransaction } = useUserContext()
   const [amount, setAmount] = useState<number>(0)
   const amountRef = useRef<HTMLInputElement>(null)
   const [qrData] = useState<QrData>(location.state)

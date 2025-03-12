@@ -5,8 +5,8 @@ import Input from '../../components/ui/Input/Input'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { AnimatedPage } from '../Cart/cartComponents'
 import Button from '../../components/ui/Button/Button'
-import { useUserContext } from '../../stores/UserContext'
 import PasswordValidator from '../../components/PasswordValidator/PasswordValidator'
+import { changePassword } from '../../services/UserService'
 
 type Passwords = {
   oldPassword?: string
@@ -15,12 +15,11 @@ type Passwords = {
 }
 
 const ChangePassword = () => {
-  const { changePassword } = useUserContext()
   const [isLoading, setIsLoading] = useState(false)
   const [passwords, setPasswords] = useState<Passwords>({})
 
   const onSave = async () => {
-    if (!!!passwords?.oldPassword || !!!passwords?.newPassword || !!!passwords?.rePassword) {
+    if (!passwords?.oldPassword || !passwords?.newPassword || !passwords?.rePassword) {
       toast.dismiss()
       toast.error('Uzupełnij wszystkie pola')
       return
@@ -34,7 +33,7 @@ const ChangePassword = () => {
 
     setIsLoading(true)
     try {
-      await changePassword(passwords?.oldPassword!, passwords?.newPassword!, passwords?.rePassword!)
+      await changePassword(passwords?.oldPassword!, passwords?.newPassword!)
       toast.success('Hasło zostało zmienione')
     } catch (error) {
       toast.error((error as Error).message)

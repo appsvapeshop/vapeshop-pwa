@@ -7,16 +7,15 @@ import { useNavigate } from 'react-router-dom'
 import { IoIosArrowBack } from 'react-icons/io'
 import Input from '../../components/ui/Input/Input'
 import Button from '../../components/ui/Button/Button'
-import { useUserContext } from '../../stores/UserContext'
 import PropagateLoader from 'react-spinners/PropagateLoader'
 import { ToastContainer, Zoom, toast } from 'react-toastify'
 import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
 import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
+import { resetPassword } from '../../services/UserService'
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState<string>('')
   const navigation = useNavigate()
-  const { resetPassword } = useUserContext()
   const [isLoading, setIsLoading] = useState(false)
 
   const onReset = async () => {

@@ -6,18 +6,17 @@ import { Timestamp } from 'firebase/firestore'
 import { AnimatePresence } from 'framer-motion'
 import { getUserById } from '../../utils/userUtils'
 import classes from './FinalizeTransaction.module.css'
-import { useUserContext } from '../../stores/UserContext'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { sumPoints, sumPrice } from '../../utils/cartHelper'
 import { getProductsWithVariants } from '../../utils/productsHelper'
 import { TransactionMode } from '../../enums/TransactionMode'
 import * as transactionUtils from '../../utils/transactionUtils'
+import { addTransaction } from '../../services/UserService'
 import { getDatabaseProducts } from '../../utils/transactionUtils'
 
 const FinalizeTransaction = () => {
   const location = useLocation()
   const navigate = useNavigate()
-  const { addTransaction } = useUserContext()
   const [isLoading, setIsLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [qrData] = useState<Types.QrData>(location.state)

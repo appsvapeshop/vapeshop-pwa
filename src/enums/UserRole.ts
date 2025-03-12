@@ -2,6 +2,6 @@
  * Available user roles
  */
 export enum UserRole {
-  Admin,
-  Customer
+  Admin = 'Admin',
+  Customer = 'Customer'
 }

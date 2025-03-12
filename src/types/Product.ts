@@ -65,7 +65,7 @@ export type Product = {
   /**
    * Product Category ID
    */
-  categoryId: string
+  category: string
 
   /**
    * Product Category create date

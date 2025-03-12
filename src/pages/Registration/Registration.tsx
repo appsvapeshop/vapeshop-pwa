@@ -4,10 +4,10 @@ import classes from './Registration.module.css'
 
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { createUser } from '../../services/UserService'
 import { IoIosArrowBack } from 'react-icons/io'
 import Input from '../../components/ui/Input/Input'
 import Button from '../../components/ui/Button/Button'
-import { useUserContext } from '../../stores/UserContext'
 import Checkbox from '../../components/ui/Checkbox/Checkbox'
 import PropagateLoader from 'react-spinners/PropagateLoader'
 import { ToastContainer, Zoom, toast } from 'react-toastify'
@@ -18,7 +18,6 @@ import TappedComponent from '../../components/animations/TappedComponent/TappedC
 
 const Registration = () => {
   const navigation = useNavigate()
-  const { createUser } = useUserContext()
   const [isLoading, setIsLoading] = useState(false)
   const [regulationsAccepted, setRegulationsAccepted] = useState(false)
   const [credentials, setCredentials] = useState({ email: '', password: '', rePassword: '' })
