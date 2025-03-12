@@ -14,7 +14,7 @@ type Props = {
 const LazyImage: FC<Props> = ({ url, styles = {}, containerStyles = {}, cacheProperties }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [errorOccurred, setErrorOccurred] = useState(false)
-  const { cacheLoaded, imgSrc } = useCachedImage(url, cacheProperties)
+  const { cacheLoaded, imageSource } = useCachedImage(url, cacheProperties)
 
   return (
     <div
@@ -26,7 +26,7 @@ const LazyImage: FC<Props> = ({ url, styles = {}, containerStyles = {}, cachePro
           alt=""
           className={classes['lazy-image']}
           style={styles}
-          src={imgSrc}
+          src={imageSource}
           onLoad={(e) => {
             setIsLoading(false)
             e.currentTarget.classList.add(`${classes.show}`)
