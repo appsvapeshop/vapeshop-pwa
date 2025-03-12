@@ -227,3 +227,18 @@ export const getSavedProducts = () => {
 
   return []
 }
+
+/**
+ *
+ */
+export const sumPrice = (products: ProductType[]): number => {
+  return products.reduce((sum, product) => sum + (product.mixedPrice || 0), 0)
+}
+
+/**
+ *
+ */
+export const sumPoints = (products: ProductType[]): number => {
+  return products.reduce((sum, product) => sum + (product.points ?? 0), 0)
+}
+

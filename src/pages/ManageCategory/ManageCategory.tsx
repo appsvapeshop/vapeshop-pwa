@@ -13,7 +13,7 @@ import ValidationException from '../../exceptions/ValidationException'
 import LazyImage from '../../components/ui/LazyImage/LazyImage'
 import { ProductCategory as CategoryType } from '../../types/ProductCategory'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
-import { getCategory, upsertCategory, deleteCategory } from '../../utils/categoriesUtils'
+import { getCategory, upsertCategory, deleteCategory } from '../../services/CategoryService'
 import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
 
 const ManageCategory = () => {

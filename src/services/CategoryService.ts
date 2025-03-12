@@ -1,40 +1,58 @@
-import { ref, deleteObject } from 'firebase/storage'
-import ValidationException from '../exceptions/ValidationException'
+import CategoryNotFound from '../exceptions/CategoryNotFound'
 import { firestore, storage } from '../configs/firebaseConfig'
+import CategoryHasProducts from '../exceptions/CategoryHasProducts'
 import { ProductCategory as CategoryType } from '../types/ProductCategory'
+
+import { deleteObject, ref } from 'firebase/storage'
 import {
-  getDocs,
+  addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
-  updateDoc,
-  addDoc,
-  query,
-  where,
+  getDocs,
   limit,
-  deleteDoc,
-  Timestamp
+  query,
+  Timestamp,
+  updateDoc,
+  where
 } from 'firebase/firestore'
 
+/**
+ * Get all categories
+ *
+ * @return all categories
+ */
 export const getCategories = async (): Promise<CategoryType[]> => {
   const categoriesCollections = collection(firestore, 'productCategories')
   const categoriesSnapshot = await getDocs(categoriesCollections)
-  const categories = categoriesSnapshot.docs.map((category) => {
+  return categoriesSnapshot.docs.map((category) => {
     const categoryData = Object.assign({ id: category.id }, category.data())
     return categoryData as CategoryType
   })
-  return categories
 }
 
+/**
+ * Get category for given category ID
+ *
+ * @param categoryId. Must not be null
+ *
+ * @return category for given ID
+ */
 export const getCategory = async (categoryId: string): Promise<CategoryType> => {
   const categorySnapshot = await getDoc(doc(firestore, 'productCategories', categoryId))
   if (categorySnapshot.exists()) {
     return Object.assign({ id: categorySnapshot.id }, categorySnapshot.data()) as CategoryType
   } else {
-    throw new Error('Category does not exist')
+    throw new CategoryNotFound()
   }
 }
 
+/**
+ * Upsert given Category record
+ *
+ * @param category record. Must not be null
+ */
 export const upsertCategory = async (category: CategoryType) => {
   const { id: _, ...values } = category
   if (!category.id) {
@@ -50,15 +68,19 @@ export const upsertCategory = async (category: CategoryType) => {
   }
 }
 
+/**
+ * Delete given Category and image assigned to this category
+ *
+ * @param category record. Must not be null
+ */
 export const deleteCategory = async (category: CategoryType) => {
   const productsCollection = collection(firestore, 'products')
   const productsQuery = query(productsCollection, where('category', '==', category.id), limit(1))
   const productsSnapshot = await getDocs(productsQuery)
 
-  if (productsSnapshot.docs.length !== 0)
-    throw new ValidationException('Kategoria ma przypisane produkty')
+  if (productsSnapshot.docs.length !== 0) throw new CategoryHasProducts()
 
-  if (!!category.img) {
+  if (category.img) {
     const categoryImage = ref(storage, category.img)
     await deleteObject(categoryImage)
   }

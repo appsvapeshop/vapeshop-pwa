@@ -1,5 +1,5 @@
 import { QrData } from '../types/QrData'
-import { sumPoints, sumPrice } from './cartHelper'
+import { sumPoints, sumPrice } from './productsHelper'
 import { Transaction } from '../types/Transaction'
 import { firestore } from '../configs/firebaseConfig'
 import { Product as ProductType } from '../types/Product'

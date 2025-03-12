@@ -6,6 +6,8 @@ import { collection, getDocs } from 'firebase/firestore'
 
 /**
  * Get current Shop Settings
+ *
+ * @return Shop Settings for current shop
  */
 export const getSettings = async (): Promise<ShopSettings> => {
   const settingsCollection = collection(firestore, 'settings')
