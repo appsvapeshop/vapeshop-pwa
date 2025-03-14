@@ -1,7 +1,7 @@
 import classes from './ManageNews.module.css'
 import { useNavigate } from 'react-router-dom'
 import { AnimatedPage } from '../Cart/cartComponents'
-import { getNews } from '../../utils/newsHelper'
+import { getNews } from '../../services/NewsService'
 import { useState, useEffect } from 'react'
 import { News as NewsType } from '../../types/News'
 import { Skeleton } from '@mui/material'

@@ -1,5 +1,7 @@
 /**
- * Download file from given URL and return data that represents that file
+ * Download file from given URL and return data that represents that file.
+ *
+ * @param url file URL. Must not be null.
  *
  * @return data that represents file from given URL
  */

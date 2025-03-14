@@ -12,7 +12,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import AddCard from '../../components/ui/AddCard/AddCard'
 import ValidationException from '../../exceptions/ValidationException'
 import LazyImage from '../../components/ui/LazyImage/LazyImage'
-import { getNewsById, upsertNews, deleteNews } from '../../utils/newsHelper'
+import { getNewsById, upsertNews, deleteNews } from '../../services/NewsService'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
 import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
 

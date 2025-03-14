@@ -1,7 +1,7 @@
 import classes from './Home.module.css'
 import { useEffect, useState } from 'react'
 import News from '../../components/News/News'
-import { getNews } from '../../utils/newsHelper'
+import { getNews } from '../../services/NewsService'
 import { News as NewsType } from '../../types/News'
 import UserPoints from '../../components/UserPoints/UserPoints'
 import LoadingNews from '../../components/skeletons/LoadingNews/LoadingNews'
