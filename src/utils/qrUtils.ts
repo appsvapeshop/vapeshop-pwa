@@ -2,7 +2,7 @@ import QRCode from 'qrcode'
 import { QrData } from '../types/QrData'
 import { QrContext } from '../enums/QrContext'
 import { User as UserType } from '../types/User'
-import { sumPoints, sumPrice } from './productsHelper'
+import { sumPoints, sumPrice } from './ProductUtils'
 import { Product as ProductType } from '../types/Product'
 
 export const getCartQR = async (user: UserType, cartProducts: ProductType[]) => {

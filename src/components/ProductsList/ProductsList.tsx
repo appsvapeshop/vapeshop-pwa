@@ -5,7 +5,7 @@ import LazyImage from '../ui/LazyImage/LazyImage'
 import NumberField from '../ui/NumberField/NumberField'
 import { useCartContext } from '../../stores/CartContext'
 import { Product as ProductType } from '../../types/Product'
-import { groupProductsByIdAndVariants } from '../../utils/productsHelper'
+import { groupProductsByIdAndVariants } from '../../utils/ProductUtils'
 import TappedComponent from '../animations/TappedComponent/TappedComponent'
 
 type Props = {

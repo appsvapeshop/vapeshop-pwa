@@ -6,7 +6,7 @@ import { AnimatePresence } from 'framer-motion'
 import { getCartQR } from '../../utils/qrUtils'
 import { useUserContext } from '../../stores/UserContext'
 import { useCartContext } from '../../stores/CartContext'
-import { sumPrice, sumPoints } from '../../utils/productsHelper'
+import { sumPrice, sumPoints } from '../../utils/ProductUtils'
 import LazyImage from '../../components/ui/LazyImage/LazyImage'
 import { Button, Modal, ProductsList, AnimatedPage } from './cartComponents'
 

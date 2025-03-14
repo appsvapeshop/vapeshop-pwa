@@ -1,5 +1,5 @@
 import { Product as ProductType } from '../types/Product'
-import { getSavedProducts } from '../utils/productsHelper'
+import { getSavedProducts } from '../utils/ProductUtils'
 import { CartContext as CartContextType } from '../types/CartContext'
 import React, { createContext, useState, useEffect, useContext } from 'react'
 
