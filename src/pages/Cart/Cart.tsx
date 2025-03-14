@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import classes from './Cart.module.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { AnimatePresence } from 'framer-motion'
-import { getCartQR } from '../../utils/qrUtils'
+import { generateCartQR } from '../../utils/QrUtils'
 import { useUserContext } from '../../stores/UserContext'
 import { useCartContext } from '../../stores/CartContext'
 import { sumPrice, sumPoints } from '../../utils/ProductUtils'
@@ -25,7 +25,7 @@ const Cart = () => {
       return
     }
 
-    const qrData = await getCartQR(user, products)
+    const qrData = await generateCartQR(user, products)
     setQrData(qrData)
     setIsModalOpen(true)
   }

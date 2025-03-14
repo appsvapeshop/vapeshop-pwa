@@ -28,7 +28,7 @@ export const groupProductsByIdAndVariants = (products: ProductType[]): any => {
 /**
  * Get all saved cart products from local storage.
  *
- * @return all cart products from local storage
+ * @return all cart products from local storage.
  */
 export const getSavedProducts = () => {
   return JSON.parse(localStorage.getItem('cartProducts') as string) || []
@@ -36,6 +36,10 @@ export const getSavedProducts = () => {
 
 /**
  * Get total price for given products
+ *
+ * @param products for which total will be calculated. Must not be null.
+ *
+ * @return total price for given products
  */
 export const sumPrice = (products: ProductType[]): number => {
   return products.reduce((sum, product) => sum + (product.mixedPrice || 0), 0)
@@ -43,6 +47,10 @@ export const sumPrice = (products: ProductType[]): number => {
 
 /**
  * Get total points for given products
+ *
+ * @param products for which total will be calculated. Must not be null.
+ *
+ * @return total points for given products
  */
 export const sumPoints = (products: ProductType[]): number => {
   return products.reduce((sum, product) => sum + (product.points ?? 0), 0)
