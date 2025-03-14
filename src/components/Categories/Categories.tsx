@@ -8,7 +8,7 @@ import { CategoryContext } from '../../enums/CategoryContext'
 import { ProductCategory as CategoryType } from '../../types/ProductCategory'
 import LoadingCategory from '../skeletons/LoadingCategory/LoadingCategory'
 import AnimatedPage from '../animations/AnimatedPage/AnimatedPage'
-import { getProductsGroupedByCategory } from '../../utils/productsHelper'
+import { getProductsForContextAndGroupedByCategory } from '../../services/ProductService'
 
 const Categories = ({ context }: { context: CategoryContext }) => {
   const navigate = useNavigate()
@@ -19,7 +19,7 @@ const Categories = ({ context }: { context: CategoryContext }) => {
   useEffect(() => {
     const getData = async () => {
       const categoriesSnapshot = await getCategories()
-      const productsSnapshot = await getProductsGroupedByCategory(context)
+      const productsSnapshot = await getProductsForContextAndGroupedByCategory(context)
       setCategories(categoriesSnapshot)
       setProductsByCategory(productsSnapshot)
       setIsLoading(false)

@@ -18,9 +18,9 @@ import {
 } from 'firebase/firestore'
 
 /**
- * Get all news
+ * Get all news.
  *
- * @return all news
+ * @return all news.
  */
 export const getNews = async (): Promise<NewsType[]> => {
   const newsCollection = collection(firestore, 'news')
@@ -36,11 +36,11 @@ export const getNews = async (): Promise<NewsType[]> => {
 }
 
 /**
- * Get News for given category ID
+ * Get News for given category ID.
  *
- * @param newsId. Must not be null
+ * @param newsId. Must not be null.
  *
- * @return News for given ID
+ * @return News for given ID.
  */
 export const getNewsById = async (newsId: string): Promise<NewsType> => {
   const newsSnapshot = await getDoc(doc(firestore, 'news', newsId))
@@ -52,9 +52,9 @@ export const getNewsById = async (newsId: string): Promise<NewsType> => {
 }
 
 /**
- * Upsert given News record
+ * Upsert given News record.
  *
- * @param news record. Must not be null
+ * @param news record. Must not be null.
  */
 export const upsertNews = async (news: NewsType) => {
   if (!news.img) throw new ImageIsRequired()
@@ -72,9 +72,9 @@ export const upsertNews = async (news: NewsType) => {
 }
 
 /**
- * Delete given News and image assigned to this News
+ * Delete given News and image assigned to this News.
  *
- * @param news record. Must not be null
+ * @param news record. Must not be null.
  */
 export const deleteNews = async (news: NewsType) => {
   const newsImage = ref(storage, news.img)

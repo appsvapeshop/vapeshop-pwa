@@ -8,7 +8,7 @@ import { ProductVariant } from '../../types/ProductVariant'
 import TextField from '../../components/ui/TextField/TextField'
 import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
-import { deleteProductVariant, upsertProductVariant, getProductVariant } from '../../utils/productsHelper'
+import { deleteProductVariant, upsertProductVariant, getProductVariant } from '../../services/ProductService'
 
 const ManageProductVariant = () => {
   const navigate = useNavigate()

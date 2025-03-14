@@ -9,7 +9,7 @@ import Categories from '../../components/Categories/Categories'
 import { useSettingsContext } from '../../stores/SettingsContext'
 import LoadingProduct from '../../components/skeletons/LoadingProduct/LoadingProduct'
 import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
-import { getProductsByCategory, getNewspaperProducts } from '../../utils/productsHelper'
+import { getProductsByCategoryId, getNewspaperProducts } from '../../services/ProductService'
 
 const Newspaper = () => {
   const { categoryId } = useParams()
@@ -23,7 +23,7 @@ const Newspaper = () => {
         .then((productsSnapshot) => setProducts(productsSnapshot))
         .finally(() => setIsLoading(false))
     } else if (categoryId !== undefined) {
-      getProductsByCategory(categoryId)
+      getProductsByCategoryId(categoryId)
         .then((productsSnapshot) => setProducts(productsSnapshot))
         .finally(() => setIsLoading(false))
     }
