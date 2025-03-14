@@ -2,7 +2,7 @@ import classes from './Header.module.css'
 import { FaUserGear } from 'react-icons/fa6'
 import banner from '../../assets/banner.png'
 import { IoIosArrowBack } from 'react-icons/io'
-import { getIconColor } from '../../utils/getIconColor'
+import { getIconColor } from '../../utils/StylingUtils'
 import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import TappedComponent from '../animations/TappedComponent/TappedComponent'
 
