@@ -4,7 +4,7 @@ import classes from './ManageCategories.module.css'
 import { AnimatedPage } from '../Cart/cartComponents'
 import Category from '../../components/Category/Category'
 import AddCard from '../../components/ui/AddCard/AddCard'
-import { getCategories } from '../../utils/categoriesUtils'
+import { getCategories } from '../../services/CategoryService'
 import { ProductCategory as CategoryType } from '../../types/ProductCategory'
 import LoadingCategory from '../../components/skeletons/LoadingCategory/LoadingCategory'
 

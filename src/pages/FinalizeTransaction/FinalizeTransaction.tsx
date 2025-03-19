@@ -4,15 +4,15 @@ import * as Components from './components'
 import { useEffect, useState } from 'react'
 import { Timestamp } from 'firebase/firestore'
 import { AnimatePresence } from 'framer-motion'
-import { getUserById } from '../../utils/userUtils'
+import { getUserById } from '../../services/UserService'
 import classes from './FinalizeTransaction.module.css'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { sumPoints, sumPrice } from '../../utils/cartHelper'
-import { getProductsWithVariants } from '../../utils/productsHelper'
+import { sumPoints, sumPrice } from '../../utils/ProductUtils'
+import { getProductsWithVariants } from '../../services/ProductService'
 import { TransactionMode } from '../../enums/TransactionMode'
-import * as transactionUtils from '../../utils/transactionUtils'
+import * as transactionUtils from '../../utils/TransactionUtils'
 import { addTransaction } from '../../services/UserService'
-import { getDatabaseProducts } from '../../utils/transactionUtils'
+import { getProductListFromQr } from '../../utils/TransactionUtils'
 
 const FinalizeTransaction = () => {
   const location = useLocation()
@@ -31,7 +31,7 @@ const FinalizeTransaction = () => {
       }
 
       const retrievedProducts = await getProductsWithVariants(Object.keys(qrData.productsSummary!))
-      setDatabaseProducts(getDatabaseProducts(retrievedProducts, qrData));
+      setDatabaseProducts(getProductListFromQr(retrievedProducts, qrData));
 
       try {
         transactionUtils.validateProductsWithDatabase(qrData, retrievedProducts)

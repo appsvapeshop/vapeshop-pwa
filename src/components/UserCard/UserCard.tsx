@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import classes from './UserCard.module.css'
-import { getUserQR } from '../../utils/qrUtils'
+import { generateUserQR } from '../../utils/QrUtils'
 import LazyImage from '../ui/LazyImage/LazyImage'
 import { useUserContext } from '../../stores/UserContext'
 
@@ -10,7 +10,7 @@ const UserCard = () => {
 
   useEffect(() => {
     const getUserCode = async () => {
-      setQrData(await getUserQR(user!))
+      setQrData(await generateUserQR(user!))
     }
 
     getUserCode()

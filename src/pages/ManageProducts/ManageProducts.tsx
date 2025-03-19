@@ -4,7 +4,7 @@ import classes from './ManageProducts.module.css'
 import { AnimatedPage } from '../Cart/cartComponents'
 import Product from '../../components/Product/Product'
 import AddCard from '../../components/ui/AddCard/AddCard'
-import { getAllProducts } from '../../utils/productsHelper'
+import { getProducts } from '../../services/ProductService'
 import { ProductContext } from '../../enums/ProductContext'
 import { Product as ProductType } from '../../types/Product'
 import LoadingProduct from '../../components/skeletons/LoadingProduct/LoadingProduct'
@@ -16,7 +16,7 @@ const ManageProducts = () => {
   const [products, setProducts] = useState<ProductType[]>()
 
   useEffect(() => {
-    getAllProducts()
+    getProducts()
       .then((snapshot) => setProducts(snapshot))
       .finally(() => setIsLoading(false))
   }, [])

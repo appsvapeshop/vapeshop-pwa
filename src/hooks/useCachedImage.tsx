@@ -1,6 +1,6 @@
 import { sha1 } from 'js-sha1'
 import { useState, useEffect } from 'react'
-import { getImageData } from '../utils/getImageData'
+import { getFileData } from '../utils/FileUtils'
 
 import ErrorOccurred from '../exceptions/ErrorOccurred'
 import { ImageCacheProperties } from '../types/ImageCacheProperties'
@@ -33,7 +33,7 @@ const useCachedImage = (url: string, cacheProperties: ImageCacheProperties | und
       const cachedData = await cache.match(imageHash)
 
       if (!cachedData) {
-        const imageData = await getImageData(url)
+        const imageData = await getFileData(url)
         await cache.put(`/${imageHash}`, new Response(imageData as string))
       } else {
         const imageData = await cachedData.text()

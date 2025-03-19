@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import classes from './ManageProductVariants.module.css'
 import AddCard from '../../components/ui/AddCard/AddCard'
 import { ProductVariant } from '../../types/ProductVariant'
-import { getProductVariants } from '../../utils/productsHelper'
+import { getProductVariants } from '../../services/ProductService'
 import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
 
 const ManageProductVariants = () => {

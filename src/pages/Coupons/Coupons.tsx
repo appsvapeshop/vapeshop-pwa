@@ -8,7 +8,7 @@ import { CategoryContext } from '../../enums/CategoryContext'
 import Categories from '../../components/Categories/Categories'
 import { useSettingsContext } from '../../stores/SettingsContext'
 import LoadingProduct from '../../components/skeletons/LoadingProduct/LoadingProduct'
-import { getCoupons, getProductsByCategory } from '../../utils/productsHelper'
+import { getCoupons, getProductsByCategoryId } from '../../services/ProductService'
 import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
 import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
 
@@ -25,7 +25,7 @@ const Coupons = () => {
         .then((productsSnapshot) => setCoupons(productsSnapshot))
         .finally(() => setIsLoading(false))
     } else if (categoryId !== undefined) {
-      getProductsByCategory(categoryId)
+      getProductsByCategoryId(categoryId)
         .then((productsSnapshot) => setCoupons(productsSnapshot))
         .finally(() => setIsLoading(false))
     }
