@@ -3,6 +3,7 @@ import { UserRole } from '../enums/UserRole'
 import { Transaction } from '../types/Transaction'
 import { TransactionMode } from '../enums/TransactionMode'
 
+import { FirebaseError } from '@firebase/util'
 import EmailInUse from '../exceptions/EmailInUse'
 import UserNotFound from '../exceptions/UserNotFound'
 import WeakPassword from '../exceptions/WeakPassword'
@@ -18,7 +19,6 @@ import {
   reauthenticateWithCredential,
   createUserWithEmailAndPassword
 } from 'firebase/auth'
-import { FirebaseError } from '@firebase/util'
 
 /**
  * Select user for given email.

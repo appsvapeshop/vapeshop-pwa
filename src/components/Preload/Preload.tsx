@@ -7,7 +7,7 @@ import { ToastContainer, Zoom } from 'react-toastify'
 import { getPlatform } from '../../utils/PlatformUtils'
 import { useUserContext } from '../../stores/UserContext'
 import { FetchStatus } from '../../enums/FetchStatus'
-import { installPrompt, IosPrompt } from '../../utils/installer'
+import { installPrompt, IosPrompt } from '../../utils/InstallationUtils'
 import { useSettingsContext } from '../../stores/SettingsContext'
 
 const Preload = ({ children }: { children: React.ReactNode }) => {
