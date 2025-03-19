@@ -5,7 +5,7 @@ import classes from './ClientHistory.module.css'
 import { AnimatedPage } from '../Cart/cartComponents'
 import { Transaction } from '../../types/Transaction'
 import TransactionTableRow from '../../components/ui/TransactionTableRow/TransactionTableRow'
-import { getUserTransactions } from '../../utils/transactionUtils'
+import { getUserTransactions } from '../../services/TransactionService'
 import TableSkeleton from '../../components/skeletons/TableSkeleton/TableSkeleton'
 
 const ClientHistory = () => {
