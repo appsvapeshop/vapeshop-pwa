@@ -10,7 +10,7 @@ import ErrorOccurred from '../exceptions/ErrorOccurred'
 import InvalidOldPassword from '../exceptions/InvalidOldPassword'
 
 import { auth, firestore } from '../configs/firebaseConfig'
-import { addDoc, collection, doc, getDocs, increment, query, updateDoc, where } from 'firebase/firestore'
+import { addDoc, collection, doc, endAt, getDocs, increment, orderBy, query, startAt, updateDoc, where } from 'firebase/firestore'
 import {
   updatePassword,
   EmailAuthProvider,
@@ -21,13 +21,37 @@ import {
 import { FirebaseError } from '@firebase/util'
 
 /**
- * Select user for given email
+ * Select user for given email.
  *
- * @param email user email. Must not be null
+ * @param id user ID. Must not be null
  *
- * @return user for given email
+ * @return user for given ID.
  */
-export const getUser = async (email: string): Promise<User> => {
+export const getUserById = async (id: string): Promise<User> => {
+  const usersCollections = collection(firestore, 'users')
+  const userQuery = query(usersCollections, where('__name__', '==', id))
+  const users = await getDocs(userQuery)
+
+  if (users.size === 0 || users.size > 1) throw new Error('User snapshot - wrong size')
+  const user = users.docs[0].data()
+
+  return {
+    id: users.docs[0].id,
+    email: user.email,
+    points: user.points,
+    role: user.role,
+    createDate: user.createDate
+  }
+}
+
+/**
+ * Select user for given email.
+ *
+ * @param email user email. Must not be null.
+ *
+ * @return user for given email.
+ */
+export const getUserByEmail = async (email: string): Promise<User> => {
   const usersCollections = collection(firestore, 'users')
   const userQuery = query(usersCollections, where('email', '==', email))
   const users = await getDocs(userQuery)
@@ -45,10 +69,35 @@ export const getUser = async (email: string): Promise<User> => {
 }
 
 /**
- * Create new user with email/password
+ * Search user by email for given value.
  *
- * @param email user email. Must not be null
- * @param password user password. Must not be null
+ * @param searchValue. Must not be null.
+ *
+ * @return users who match the search value.
+ */
+export const searchUsers = async (searchValue: string): Promise<User[]> => {
+  const usersCollections = collection(firestore, 'users')
+  const searchQuery = query(
+    usersCollections,
+    orderBy('email'),
+    startAt(searchValue.toLowerCase()),
+    endAt(searchValue.toLowerCase() + '\uf8ff')
+  )
+
+  const usersSnapshot = await getDocs(searchQuery)
+
+  return usersSnapshot.docs.map((user) => {
+    const userData = Object.assign({ id: user.id }, user.data())
+    return userData as User
+  })
+}
+
+
+/**
+ * Create new user with email/password.
+ *
+ * @param email user email. Must not be null.
+ * @param password user password. Must not be null.
  */
 export const createUser = async (email: string, password: string) => {
   try {
@@ -66,9 +115,9 @@ export const createUser = async (email: string, password: string) => {
 }
 
 /**
- * Add new transaction for current user
+ * Add new transaction for current user.
  *
- * @param transaction data. Must not be null
+ * @param transaction data. Must not be null.
  */
 export const addTransaction = async (transaction: Transaction) => {
   const points = transaction.transactionMode === TransactionMode.Exchange ? transaction.points * -1 : transaction.points
@@ -78,19 +127,19 @@ export const addTransaction = async (transaction: Transaction) => {
 }
 
 /**
- * Reset user password and send new one to email
+ * Reset user password and send new one to email.
  *
- * @param email user email. Must not be null
+ * @param email user email. Must not be null.
  */
 export const resetPassword = async (email: string) => {
   await sendPasswordResetEmail(auth, email)
 }
 
 /**
- * Change current user password
+ * Change current user password.
  *
- * @param oldPassword old user password. Must not be null
- * @param newPassword new user password. Must not be null
+ * @param oldPassword old user password. Must not be null.
+ * @param newPassword new user password. Must not be null.
  */
 export const changePassword = async (oldPassword: string, newPassword: string) => {
   if (!auth?.currentUser?.email) throw new ErrorOccurred()

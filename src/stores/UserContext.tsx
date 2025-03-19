@@ -7,7 +7,7 @@ import InvalidCredential from '../exceptions/InvalidCredential'
 
 import { FirebaseError } from '@firebase/util'
 import { auth } from '../configs/firebaseConfig'
-import { getUser } from '../services/UserService'
+import { getUserByEmail } from '../services/UserService'
 import { UserContext as UserContextType } from '../types/UserContext'
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import { setPersistence, onAuthStateChanged, signInWithEmailAndPassword, browserLocalPersistence } from 'firebase/auth'
@@ -32,7 +32,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
       if (authUser && authUser.email) {
-        const loadedUser = await getUser(authUser.email)
+        const loadedUser = await getUserByEmail(authUser.email)
 
         setUser(loadedUser)
         setAuthStatus(AuthStatus.Authorized)
@@ -54,7 +54,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
       await setPersistence(auth, browserLocalPersistence)
       await signInWithEmailAndPassword(auth, email, password)
 
-      const loadedUser = await getUser(email)
+      const loadedUser = await getUserByEmail(email)
 
       setUser(loadedUser)
       setAuthStatus(AuthStatus.Authorized)
@@ -85,7 +85,7 @@ const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
    */
   const refreshUser = async () => {
     if (user?.email) {
-      setUser(await getUser(user.email))
+      setUser(await getUserByEmail(user.email))
     } else {
       throw new ErrorOccurred()
     }
