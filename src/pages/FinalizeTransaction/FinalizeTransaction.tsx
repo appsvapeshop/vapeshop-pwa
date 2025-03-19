@@ -124,7 +124,7 @@ const FinalizeTransaction = () => {
         {isModalOpen && (
           <Components.Modal onClose={() => setIsModalOpen(false)}>
             <Components.Confirmation
-              warning={
+              message={
                 transactionUtils.isAmountsValid(databaseProducts, qrData) ? '' : 'Kwoty są różne'
               }
               onConfirmation={onFinalize}
