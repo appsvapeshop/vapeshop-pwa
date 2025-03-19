@@ -1,15 +1,23 @@
-import Category from '../Category/Category'
 import { useEffect, useState } from 'react'
 import classes from './Categories.module.css'
 import { useNavigate } from 'react-router-dom'
 import { getCategories } from '../../services/CategoryService'
+import { getProductsForContextAndGroupedByCategory } from '../../services/ProductService'
+
+import Category from '../Category/Category'
+import AnimatedPage from '../animations/AnimatedPage/AnimatedPage'
+import LoadingCategory from '../skeletons/LoadingCategory/LoadingCategory'
+
+import ErrorOccurred from '../../exceptions/ErrorOccurred'
 import { Product as ProductType } from '../../types/Product'
 import { CategoryContext } from '../../enums/CategoryContext'
 import { ProductCategory as CategoryType } from '../../types/ProductCategory'
-import LoadingCategory from '../skeletons/LoadingCategory/LoadingCategory'
-import AnimatedPage from '../animations/AnimatedPage/AnimatedPage'
-import { getProductsForContextAndGroupedByCategory } from '../../services/ProductService'
 
+/**
+ * Display all available product categories
+ *
+ * @param context is component displayed for coupons or for newspaper. Must not be null.
+ */
 const Categories = ({ context }: { context: CategoryContext }) => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(true)
@@ -17,15 +25,22 @@ const Categories = ({ context }: { context: CategoryContext }) => {
   const [productsByCategory, setProductsByCategory] = useState<Map<string, ProductType[]>>()
 
   useEffect(() => {
-    const getData = async () => {
-      const categoriesSnapshot = await getCategories()
-      const productsSnapshot = await getProductsForContextAndGroupedByCategory(context)
-      setCategories(categoriesSnapshot)
-      setProductsByCategory(productsSnapshot)
+    /**
+     * Initialize all required data by component
+     */
+    const initialize = async () => {
+      const categories = await getCategories()
+      setCategories(categories)
+
+      const productsByCategory = await getProductsForContextAndGroupedByCategory(context)
+      setProductsByCategory(productsByCategory)
+
       setIsLoading(false)
     }
 
-    getData()
+    initialize().catch(() => {
+      throw new ErrorOccurred()
+    })
   }, [context])
 
   return (
@@ -39,9 +54,7 @@ const Categories = ({ context }: { context: CategoryContext }) => {
           </>
         )}
 
-        {!isLoading && categories?.length === 0 && (
-          <span className={classes['no-category']}>Brak kategorii</span>
-        )}
+        {!isLoading && categories?.length === 0 && <span className={classes['no-category']}>Brak kategorii</span>}
 
         {!isLoading &&
           categories?.map((category) => (
