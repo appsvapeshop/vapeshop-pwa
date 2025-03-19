@@ -9,7 +9,7 @@ import PulseLoader from 'react-spinners/PulseLoader'
 import { Transaction } from '../../types/Transaction'
 import Autocomplete from '@mui/material/Autocomplete'
 import { AnimatedPage } from '../Cart/cartComponents'
-import { QrData } from '../FinalizeTransaction/types'
+import { QrData } from '../../types/QrData'
 import Button from '../../components/ui/Button/Button'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { TransactionMode } from '../../enums/TransactionMode'
@@ -59,13 +59,13 @@ const Clients = () => {
   }
 
   const onAddPoints = async () => {
-    if (!!!customer || !!!customer.id) {
+    if (!customer || !customer.id) {
       toast.dismiss()
       toast.error('Klient nie został wybrany')
       return
     }
 
-    if (!!!amount) {
+    if (!amount) {
       toast.dismiss()
       toast.error('Kwota nie została wprowadzona')
       return
@@ -108,7 +108,7 @@ const Clients = () => {
   }
 
   const onShowHistory = () => {
-    if (!!!customer?.id) {
+    if (!customer?.id) {
       toast.error('Wybierz klienta')
       return
     }
@@ -172,7 +172,7 @@ const Clients = () => {
             <TextField
               label="+ punkty"
               variant="standard"
-              value={!!!amount ? '' : Math.trunc(amount / (settings.amountForOnePoint || 0))}
+              value={!amount ? '' : Math.trunc(amount / (settings.amountForOnePoint || 0))}
               disabled
               slotProps={{ input: { endAdornment: 'pkt' } }}
             />
