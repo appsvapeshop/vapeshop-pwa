@@ -35,7 +35,7 @@ const ManageNews = () => {
           <>
             <AddCard className={classes['add-card']} onClick={() => navigate('new')} />
             {news?.map((newsItem) => (
-              <News key={newsItem.id} data={newsItem} onClick={() => navigate(newsItem.id)}/>
+              <News key={newsItem.id} news={newsItem} onClick={() => navigate(newsItem.id)}/>
             ))}
           </>
         )}

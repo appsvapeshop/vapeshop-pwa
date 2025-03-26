@@ -34,7 +34,7 @@ const Home = () => {
           news !== undefined &&
           news.length !== 0 &&
           news.map((newsRecord) => (
-            <News key={newsRecord.id} data={newsRecord} onClick={() => {}} />
+            <News key={newsRecord.id} news={newsRecord} onClick={() => {}} />
           ))}
       </div>
     </AnimatedPage>
