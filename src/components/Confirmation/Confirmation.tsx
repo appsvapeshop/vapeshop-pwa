@@ -20,7 +20,7 @@ const Confirmation: FC<Props> = ({ message, onConfirmation, onCancel }) => {
   const [isLoading, setIsLoading] = useState(false)
 
   /**
-   * Set loading indicator and fire give onConfirmation.
+   * Set loading indicator and fire given onConfirmation.
    */
   const confirm = async () => {
     setIsLoading(true)
@@ -29,7 +29,7 @@ const Confirmation: FC<Props> = ({ message, onConfirmation, onCancel }) => {
 
   return (
     <div className={classes.container}>
-      {!!message && <span className={classes.warning}>{message}</span>}
+      {message && <span className={classes.warning}>{message}</span>}
 
       <span className={classes.text}>Czy na pewno chcesz kontynuować ?</span>
 
