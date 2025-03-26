@@ -22,7 +22,7 @@ const Home = () => {
       <div className={classes.container}>
         <UserPoints />
 
-        {!isLoading && (
+        {isLoading && (
           <>
             <CardSkeleton containerStyles={{width: '80%'}}/>
             <CardSkeleton containerStyles={{width: '80%'}}/>
