@@ -4,10 +4,10 @@ import 'react-toastify/dist/ReactToastify.css'
 import { cloneElement, useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { useLocation, useOutlet } from 'react-router-dom'
-import { useNetworkStatus } from '../../../hooks/useNetworkStatus'
+import { useNetworkStatus } from '../../hooks/useNetworkStatus'
 
-import Header from '../../Header/Header'
-import Navigation from '../../Navigation/Navigation'
+import Header from '../../components/Header/Header'
+import Navigation from '../../components/Navigation/Navigation'
 
 /**
  * Root component for all components that are not public.

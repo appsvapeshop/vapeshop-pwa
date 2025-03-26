@@ -5,10 +5,10 @@ import AuthContextProvider from './stores/UserContext'
 import SettingsContextProvider from './stores/SettingsContext'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import AdminRoute from './routes/AdminRoute/AdminRoute'
-import RootLayout from './components/layouts/RootLayout/RootLayout'
+import RootLayout from './layouts/RootLayout/RootLayout'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import ProtectedRoute from './routes/ProtectedRoute/ProtectedRoute'
-import PublicLayout from './components/layouts/PublicLayout/PublicLayout'
+import PublicLayout from './layouts/PublicLayout/PublicLayout'
 
 const theme = createTheme({
   palette: {
