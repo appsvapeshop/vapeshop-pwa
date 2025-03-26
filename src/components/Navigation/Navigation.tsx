@@ -1,20 +1,25 @@
 import { useState } from 'react'
-import Modal from '../ui/Modal/Modal'
-import { UserRole } from '../../enums/UserRole'
-import UserCard from '../UserCard/UserCard'
 import classes from './Navigation.module.css'
-import QrScanner from '../QrScanner/QrScanner'
 import { AnimatePresence } from 'framer-motion'
-import { NavLink, useLocation } from 'react-router-dom'
 import { getIconColor } from '../../utils/StylingUtils'
+import { NavLink, useLocation } from 'react-router-dom'
 import { useUserContext } from '../../stores/UserContext'
+
+import Modal from '../ui/Modal/Modal'
+import UserCard from '../UserCard/UserCard'
+import QrScanner from '../QrScanner/QrScanner'
 import TappedComponent from '../animations/TappedComponent/TappedComponent'
 import { Cart, Newspaper, Home, Coupons, QR, Card } from './navigationIcons'
 
+import { UserRole } from '../../enums/UserRole'
+
+/**
+ * Navigation component.
+ */
 const Navigation = () => {
   const iconSize = 35
-  const location = useLocation()
   const { user } = useUserContext()
+  const location = useLocation()
   const [cardVisible, setCardVisible] = useState(false)
   const [scannerVisible, setScannerVisible] = useState(false)
 
