@@ -1,6 +1,6 @@
-import classes from './LoadingProduct.module.css'
+import classes from './ProductSkeleton.module.css'
 
-const LoadingProduct = () => {
+const ProductSkeleton = () => {
   return (
     <div className={classes.container}>
       <div className={classes['image-loading']}></div>
@@ -13,4 +13,4 @@ const LoadingProduct = () => {
   )
 }
 
-export default LoadingProduct
+export default ProductSkeleton

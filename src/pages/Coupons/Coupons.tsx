@@ -7,7 +7,7 @@ import { Product as ProductType } from '../../types/Product'
 import { CategoryContext } from '../../enums/CategoryContext'
 import Categories from '../../components/Categories/Categories'
 import { useSettingsContext } from '../../stores/SettingsContext'
-import LoadingProduct from '../../components/skeletons/LoadingProduct/LoadingProduct'
+import ProductSkeleton from '../../components/skeletons/ProductSkeleton/ProductSkeleton'
 import { getCoupons, getProductsByCategoryId } from '../../services/ProductService'
 import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
 import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
@@ -39,9 +39,9 @@ const Coupons = () => {
       <div className={classes.container}>
         {isLoading && (
           <>
-            <LoadingProduct />
-            <LoadingProduct />
-            <LoadingProduct />
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
           </>
         )}
 
