@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react'
 import classes from './UserCard.module.css'
-import { generateUserQR } from '../../utils/QrUtils'
 import LazyImage from '../ui/LazyImage/LazyImage'
+import { generateUserQR } from '../../utils/QrUtils'
 import { useUserContext } from '../../stores/UserContext'
+import ErrorOccurred from '../../exceptions/ErrorOccurred'
 
+/**
+ * The component that displays user QR Card.
+ */
 const UserCard = () => {
   const { user } = useUserContext()
   const [qrData, setQrData] = useState<string>()
@@ -13,9 +17,11 @@ const UserCard = () => {
       setQrData(await generateUserQR(user!))
     }
 
-    getUserCode()
+    getUserCode().catch(() => {
+      throw new ErrorOccurred()
+    })
   }, [user])
-  
+
   return (
     <div className={classes.container}>
       <LazyImage url={qrData!} />
