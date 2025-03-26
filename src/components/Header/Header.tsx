@@ -6,6 +6,9 @@ import { getIconColor } from '../../utils/StylingUtils'
 import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import TappedComponent from '../animations/TappedComponent/TappedComponent'
 
+/**
+ * Application header.
+ */
 const Header = () => {
   const iconSize = 40
   const navigation = useNavigate()
@@ -14,11 +17,7 @@ const Header = () => {
   return (
     <header className={classes.container}>
       <TappedComponent className={classes['step-back']}>
-        <IoIosArrowBack
-          className={classes['step-back-icon']}
-          size={iconSize}
-          onClick={() => navigation(-1)}
-        />
+        <IoIosArrowBack className={classes['step-back-icon']} size={iconSize} onClick={() => navigation(-1)} />
       </TappedComponent>
 
       <img className={classes.banner} src={banner} alt="VapeShop" />
