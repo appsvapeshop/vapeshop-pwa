@@ -4,10 +4,10 @@ import CartContextProvider from './stores/CartContext'
 import AuthContextProvider from './stores/UserContext'
 import SettingsContextProvider from './stores/SettingsContext'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import AdminRoute from './components/routes/AdminRoute/AdminRoute'
+import AdminRoute from './routes/AdminRoute/AdminRoute'
 import RootLayout from './components/layouts/RootLayout/RootLayout'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import ProtectedRoute from './components/routes/ProtectedRoute/ProtectedRoute'
+import ProtectedRoute from './routes/ProtectedRoute/ProtectedRoute'
 import AnimatedLayout from './components/layouts/AnimatedLayout/AnimatedLayout'
 
 const theme = createTheme({
