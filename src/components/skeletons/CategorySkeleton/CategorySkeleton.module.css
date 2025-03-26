@@ -5,12 +5,8 @@
     gap: 5px;
 }
 
-.label {
-    width: 50%;
-    height: 1.1rem;
-}
-
-.input {
+.category {
     width: 100%;
-    height: 2rem !important;
+    min-height: 150px;
+    border-radius: 20px !important;
 }
