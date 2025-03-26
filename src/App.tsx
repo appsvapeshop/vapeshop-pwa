@@ -8,7 +8,7 @@ import AdminRoute from './routes/AdminRoute/AdminRoute'
 import RootLayout from './components/layouts/RootLayout/RootLayout'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import ProtectedRoute from './routes/ProtectedRoute/ProtectedRoute'
-import AnimatedLayout from './components/layouts/AnimatedLayout/AnimatedLayout'
+import PublicLayout from './components/layouts/PublicLayout/PublicLayout'
 
 const theme = createTheme({
   palette: {
@@ -67,7 +67,7 @@ const App = () => {
     },
     {
       path: '/p',
-      element: <AnimatedLayout />,
+      element: <PublicLayout />,
       errorElement: <Pages.ErrorOccurs />,
       children: [
         { path: '/p/login', element: <Pages.Login /> },
