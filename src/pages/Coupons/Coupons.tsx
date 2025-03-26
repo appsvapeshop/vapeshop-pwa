@@ -50,7 +50,7 @@ const Coupons = () => {
             {coupons.map((coupon) => (
               <TappedComponent key={coupon.id} onClick={() => navigation(`/product/${coupon.id}`)}>
                 <Product
-                  data={coupon}
+                  product={coupon}
                   context={ProductContext.Coupons}
                 />
               </TappedComponent>

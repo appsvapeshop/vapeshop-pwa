@@ -36,7 +36,7 @@ const ManageProducts = () => {
             <AddCard onClick={() => navigate('new')}/>
             {products?.map((product) => (
               <TappedComponent key={product.id} onClick={() => navigate(product.id)}>
-                <Product data={product} context={ProductContext.Manage} />
+                <Product product={product} context={ProductContext.Manage} />
               </TappedComponent>
             ))}
           </>

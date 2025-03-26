@@ -49,7 +49,7 @@ const Newspaper = () => {
 
         {!isLoading &&
           products?.map((product) => (
-            <Product key={product.id} data={product} context={ProductContext.Newspaper} />
+            <Product key={product.id} product={product} context={ProductContext.Newspaper} />
           ))}
       </div>
     </AnimatedPage>
