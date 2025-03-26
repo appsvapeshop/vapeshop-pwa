@@ -1,11 +1,12 @@
 .container {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 5px;
 }
 
-.category {
+.card {
     width: 100%;
     min-height: 150px;
     border-radius: 20px !important;

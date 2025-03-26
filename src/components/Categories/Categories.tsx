@@ -6,7 +6,7 @@ import { getProductsForContextAndGroupedByCategory } from '../../services/Produc
 
 import Category from '../Category/Category'
 import AnimatedPage from '../animations/AnimatedPage/AnimatedPage'
-import CategorySkeleton from '../skeletons/CategorySkeleton/CategorySkeleton'
+import CardSkeleton from '../skeletons/CardSkeleton/CardSkeleton'
 
 import ErrorOccurred from '../../exceptions/ErrorOccurred'
 import { Product as ProductType } from '../../types/Product'
@@ -48,9 +48,9 @@ const Categories = ({ context }: { context: CategoryContext }) => {
       <div className={classes.container}>
         {isLoading && (
           <>
-            <CategorySkeleton />
-            <CategorySkeleton />
-            <CategorySkeleton />
+            <CardSkeleton />
+            <CardSkeleton />
+            <CardSkeleton />
           </>
         )}
 
