@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import React, { FC } from 'react'
 import MaterialButton from '@mui/material/Button'
 import { OverridableStringUnion } from '@mui/types'
 import TappedComponent from '../../animations/TappedComponent/TappedComponent'
@@ -8,12 +8,21 @@ type Props = {
   styles?: React.CSSProperties
   containerStyle?: React.CSSProperties
   variant?: OverridableStringUnion<'text' | 'outlined' | 'contained'>
-  colorVariant?: OverridableStringUnion<
-    'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
-  >
+  colorVariant?: OverridableStringUnion<'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'>
   onClick: () => void
 }
 
+/**
+ * Button component with default animation and styles.
+ *
+ * @param children elements. Must not be null.
+ * @param styles button CSS styles. May not be null.
+ * @param containerStyle button container CSS styles. May not be null.
+ * @param variant "text" | "outlined" | "contained". Default "contained". May not be null.
+ * @param colorVariant "primary" | "secondary" | "success" | "error" | "info" | "warning". Default "primary". May not be null.
+ * @param colorVariant "primary" | "secondary" | "success" | "error" | "info" | "warning". Default "primary". May not be null.
+ * @param onClick onClick event handler. Must not be null.
+ */
 const Button: FC<Props> = ({
   children,
   styles = {},
@@ -40,12 +49,7 @@ const Button: FC<Props> = ({
 
   return (
     <TappedComponent styles={{ ...defaultContainerStyle, ...containerStyle }}>
-      <MaterialButton
-        color={colorVariant}
-        variant={variant}
-        style={{ ...defaultStyle, ...styles }}
-        onClick={onClick}
-      >
+      <MaterialButton color={colorVariant} variant={variant} style={{ ...defaultStyle, ...styles }} onClick={onClick}>
         {children}
       </MaterialButton>
     </TappedComponent>
