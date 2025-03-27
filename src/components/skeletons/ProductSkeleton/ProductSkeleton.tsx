@@ -1,5 +1,8 @@
 import classes from './ProductSkeleton.module.css'
 
+/**
+ * Skeleton component for Product component.
+ */
 const ProductSkeleton = () => {
   return (
     <div className={classes.container}>
