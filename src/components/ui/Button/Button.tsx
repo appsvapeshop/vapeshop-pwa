@@ -19,8 +19,7 @@ type Props = {
  * @param styles button CSS styles. May not be null.
  * @param containerStyle button container CSS styles. May not be null.
  * @param variant "text" | "outlined" | "contained". Default "contained". May not be null.
- * @param colorVariant "primary" | "secondary" | "success" | "error" | "info" | "warning". Default "primary". May not be null.
- * @param colorVariant "primary" | "secondary" | "success" | "error" | "info" | "warning". Default "primary". May not be null.
+ * @param colorVariant "primary" | "secondary" | "success" | "error" | "info" | "warning". Default "primary". May be null.
  * @param onClick onClick event handler. Must not be null.
  */
 const Button: FC<Props> = ({
