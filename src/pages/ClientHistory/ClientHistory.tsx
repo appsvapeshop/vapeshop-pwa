@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import classes from './ClientHistory.module.css'
 import { AnimatedPage } from '../Cart/cartComponents'
 import { Transaction } from '../../types/Transaction'
-import TransactionTableRow from '../../components/ui/TransactionTableRow/TransactionTableRow'
+import TransactionHistory from '../../components/ui/TransactionHistory/TransactionHistory'
 import { getUserTransactions } from '../../services/TransactionService'
 import TableSkeleton from '../../components/skeletons/TableSkeleton/TableSkeleton'
 
@@ -45,7 +45,7 @@ const ClientHistory = () => {
                 </Material.TableHead>
                 <Material.TableBody>
                   {transactions.map((transaction, index) => (
-                    <TransactionTableRow transaction={transaction} key={index} />
+                    <TransactionHistory transaction={transaction} key={index} />
                   ))}
                 </Material.TableBody>
               </Material.Table>

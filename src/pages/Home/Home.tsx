@@ -4,7 +4,7 @@ import News from '../../components/News/News'
 import { getNews } from '../../services/NewsService'
 import { News as NewsType } from '../../types/News'
 import UserPoints from '../../components/UserPoints/UserPoints'
-import LoadingNews from '../../components/skeletons/LoadingNews/LoadingNews'
+import CardSkeleton from "../../components/skeletons/CardSkeleton/CardSkeleton";
 import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
 
 const Home = () => {
@@ -24,9 +24,9 @@ const Home = () => {
 
         {isLoading && (
           <>
-            <LoadingNews />
-            <LoadingNews />
-            <LoadingNews />
+            <CardSkeleton containerStyles={{width: '80%'}}/>
+            <CardSkeleton containerStyles={{width: '80%'}}/>
+            <CardSkeleton containerStyles={{width: '80%'}}/>
           </>
         )}
 
@@ -34,7 +34,7 @@ const Home = () => {
           news !== undefined &&
           news.length !== 0 &&
           news.map((newsRecord) => (
-            <News key={newsRecord.id} data={newsRecord} onClick={() => {}} />
+            <News key={newsRecord.id} news={newsRecord} onClick={() => {}} />
           ))}
       </div>
     </AnimatedPage>

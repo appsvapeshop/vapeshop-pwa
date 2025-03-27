@@ -7,7 +7,7 @@ import { Product as ProductType } from '../../types/Product'
 import { CategoryContext } from '../../enums/CategoryContext'
 import Categories from '../../components/Categories/Categories'
 import { useSettingsContext } from '../../stores/SettingsContext'
-import LoadingProduct from '../../components/skeletons/LoadingProduct/LoadingProduct'
+import ProductSkeleton from '../../components/skeletons/ProductSkeleton/ProductSkeleton'
 import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
 import { getProductsByCategoryId, getNewspaperProducts } from '../../services/ProductService'
 
@@ -37,9 +37,9 @@ const Newspaper = () => {
       <div className={classes.container}>
         {isLoading && (
           <>
-            <LoadingProduct />
-            <LoadingProduct />
-            <LoadingProduct />
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
           </>
         )}
 
@@ -49,7 +49,7 @@ const Newspaper = () => {
 
         {!isLoading &&
           products?.map((product) => (
-            <Product key={product.id} data={product} context={ProductContext.Newspaper} />
+            <Product key={product.id} product={product} context={ProductContext.Newspaper} />
           ))}
       </div>
     </AnimatedPage>

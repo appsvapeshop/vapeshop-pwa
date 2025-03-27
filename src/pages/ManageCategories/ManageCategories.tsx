@@ -6,7 +6,7 @@ import Category from '../../components/Category/Category'
 import AddCard from '../../components/ui/AddCard/AddCard'
 import { getCategories } from '../../services/CategoryService'
 import { ProductCategory as CategoryType } from '../../types/ProductCategory'
-import LoadingCategory from '../../components/skeletons/LoadingCategory/LoadingCategory'
+import CardSkeleton from '../../components/skeletons/CardSkeleton/CardSkeleton'
 
 const ManageCategories = () => {
   const navigate = useNavigate()
@@ -28,9 +28,9 @@ const ManageCategories = () => {
       <div className={classes.container}>
         {isLoading && (
           <>
-            <LoadingCategory />
-            <LoadingCategory />
-            <LoadingCategory />
+            <CardSkeleton />
+            <CardSkeleton />
+            <CardSkeleton />
           </>
         )}
 

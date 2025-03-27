@@ -1,6 +1,7 @@
 import { Product as ProductType } from '../types/Product'
 
 /**
+ * TODO: refactor / new type
  * Group return map with a product Id as a key and another map with product variant as a key and product variant as a value.
  * If product doesn't have variant then assign product to variant.
  *

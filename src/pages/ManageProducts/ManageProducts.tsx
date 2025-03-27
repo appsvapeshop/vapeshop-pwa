@@ -7,7 +7,7 @@ import AddCard from '../../components/ui/AddCard/AddCard'
 import { getProducts } from '../../services/ProductService'
 import { ProductContext } from '../../enums/ProductContext'
 import { Product as ProductType } from '../../types/Product'
-import LoadingProduct from '../../components/skeletons/LoadingProduct/LoadingProduct'
+import ProductSkeleton from '../../components/skeletons/ProductSkeleton/ProductSkeleton'
 import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
 
 const ManageProducts = () => {
@@ -26,9 +26,9 @@ const ManageProducts = () => {
       <div className={classes.container}>
         {isLoading && (
           <>
-            <LoadingProduct />
-            <LoadingProduct />
-            <LoadingProduct />
+            <ProductSkeleton />
+            <ProductSkeleton />
+            <ProductSkeleton />
           </>
         )}
         {!isLoading && (
@@ -36,7 +36,7 @@ const ManageProducts = () => {
             <AddCard onClick={() => navigate('new')}/>
             {products?.map((product) => (
               <TappedComponent key={product.id} onClick={() => navigate(product.id)}>
-                <Product data={product} context={ProductContext.Manage} />
+                <Product product={product} context={ProductContext.Manage} />
               </TappedComponent>
             ))}
           </>

@@ -1,7 +1,10 @@
 import { Skeleton } from '@mui/material'
-import classes from './ListProductSkeleton.module.css'
+import classes from './CartSummary.module.css'
 
-const ListProductSkeleton = () => {
+/**
+ * Skeleton component for CartSummary component.
+ */
+const CartSummary = () => {
   return (
     <div className={classes.container}>
       <Skeleton className={classes.image} variant="rounded" />
@@ -14,4 +17,4 @@ const ListProductSkeleton = () => {
   )
 }
 
-export default ListProductSkeleton
+export default CartSummary

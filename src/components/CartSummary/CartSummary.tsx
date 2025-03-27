@@ -1,12 +1,14 @@
 import { FC } from 'react'
+import classes from './CartSummary.module.css'
+import { useCartContext } from '../../stores/CartContext'
+import { groupProductsByIdAndVariants } from '../../utils/ProductUtils'
+
 import { IoClose } from 'react-icons/io5'
-import classes from './ProductsList.module.css'
 import LazyImage from '../ui/LazyImage/LazyImage'
 import NumberField from '../ui/NumberField/NumberField'
-import { useCartContext } from '../../stores/CartContext'
-import { Product as ProductType } from '../../types/Product'
-import { groupProductsByIdAndVariants } from '../../utils/ProductUtils'
 import TappedComponent from '../animations/TappedComponent/TappedComponent'
+
+import { Product as ProductType } from '../../types/Product'
 
 type Props = {
   products: ProductType[]
@@ -14,7 +16,16 @@ type Props = {
   removeHandler?: (product: ProductType) => void
 }
 
-const ListProduct: FC<Props> = ({ products, removeHandler, readOnly = false }) => {
+/**
+ * The component is displayed in the cart as a summary and when finalizing the cart (for the seller).
+ * In Cart context ( ready only should be false ) then it should be possible to change the quantity of products.
+ * In Finalize context ( read only should be true ) then it shouldn't be possible to change the quantity of products.
+ *
+ * @param products list of products. Must not be null.
+ * @param removeHandler on remove event. if defined remove button will be displayed. May be null.
+ * @param readOnly should it be possible to change the quantity of products.
+ */
+const CartSummary: FC<Props> = ({ products, removeHandler, readOnly = false }) => {
   const groupedProducts = groupProductsByIdAndVariants(products)
   const { increaseQuantity, reduceQuantity } = useCartContext()
 
@@ -71,4 +82,4 @@ const ListProduct: FC<Props> = ({ products, removeHandler, readOnly = false }) =
     })
 }
 
-export default ListProduct
+export default CartSummary

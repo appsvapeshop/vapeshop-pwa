@@ -1,6 +1,9 @@
 import { Skeleton } from '@mui/material'
 import * as Material from '@mui/material'
 
+/**
+ * Skeleton component for tables.
+ */
 const TableSkeleton = ({ rows, columns }: { rows: number; columns: number }) => {
   return (
     <Material.TableContainer>

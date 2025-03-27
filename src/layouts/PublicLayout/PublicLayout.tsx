@@ -1,9 +1,12 @@
 import { cloneElement } from 'react'
 import { AnimatePresence } from 'framer-motion'
-import classes from './AnimatedLayout.module.css'
+import classes from './PublicLayout.module.css'
 import { useLocation, useOutlet } from 'react-router-dom'
 
-const AnimatedLayout = () => {
+/**
+ * Root component for all components that are public.
+ */
+const PublicLayout = () => {
   const outlet = useOutlet()
   const location = useLocation()
 
@@ -16,4 +19,4 @@ const AnimatedLayout = () => {
   )
 }
 
-export default AnimatedLayout
+export default PublicLayout
