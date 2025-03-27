@@ -1,55 +1,55 @@
 .container {
-  min-width: 100%;
-  border-radius: 20px;
-  background-color: var(--pulse-loading-color);
+    min-width: 100%;
+    border-radius: 20px;
+    background-color: var(--pulse-loading-color);
 }
 
 .pulse {
-  animation: pulse 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation: pulse 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .loaded {
-  display: flex;
-  justify-content: center;
-  background: transparent;
+    display: flex;
+    justify-content: center;
+    background: transparent;
 }
 
 .lazy-image {
-  width: 100%;
-  display: block;
-  border-radius: inherit;
-  opacity: 0;
-  object-fit: contain;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  pointer-events: none
+    width: 100%;
+    display: block;
+    border-radius: inherit;
+    opacity: 0;
+    object-fit: contain;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    pointer-events: none
 }
 
 .show {
-  opacity: 1;
-  animation-name: show;
-  animation-duration: 1s;
+    opacity: 1;
+    animation-name: show;
+    animation-duration: 1s;
 }
 
 @keyframes show {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 @keyframes pulse {
-  0%,
-  100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 1;
-  }
+    0%,
+    100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 1;
+    }
 }

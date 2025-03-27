@@ -1,13 +1,18 @@
 import { useState } from 'react'
 import * as Material from '@mui/material'
 import Collapse from '@mui/material/Collapse'
-import classes from './TransactionTableRow.module.css'
+import classes from './TransactionHistory.module.css'
 import { Transaction } from '../../../types/Transaction'
 import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io'
 import { TransactionMode } from '../../../enums/TransactionMode'
 import TappedComponent from '../../animations/TappedComponent/TappedComponent'
 
-const TransactionTableRow = ({ transaction }: { transaction: Transaction }) => {
+/**
+ * Component display transaction history for given transaction record.
+ *
+ * @param transaction record. Must not be null.
+ */
+const TransactionHistory = ({ transaction }: { transaction: Transaction }) => {
   const [isRowExpanded, setIsRowExpanded] = useState(false)
 
   return (
@@ -81,4 +86,4 @@ const TransactionTableRow = ({ transaction }: { transaction: Transaction }) => {
   )
 }
 
-export default TransactionTableRow
+export default TransactionHistory
