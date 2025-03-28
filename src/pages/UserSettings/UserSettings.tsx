@@ -7,7 +7,7 @@ import { IoPersonCircleOutline } from 'react-icons/io5'
 import { useUserContext } from '../../stores/UserContext'
 
 /**
- * Display all related settings / functionalities and date to user.
+ * Display all related settings / functionalities and date for user.
  */
 const UserSettings = () => {
   const navigate = useNavigate()
