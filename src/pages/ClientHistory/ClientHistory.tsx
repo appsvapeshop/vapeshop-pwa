@@ -1,18 +1,27 @@
-import * as Material from '@mui/material'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import classes from './ClientHistory.module.css'
-import { AnimatedPage } from '../Cart/cartComponents'
-import { Transaction } from '../../types/Transaction'
-import TransactionHistory from '../../components/ui/TransactionHistory/TransactionHistory'
 import { getUserTransactions } from '../../services/TransactionService'
-import TableSkeleton from '../../components/skeletons/TableSkeleton/TableSkeleton'
 
+import * as Material from '@mui/material'
+import { AnimatedPage } from '../Cart/cartComponents'
+import TableSkeleton from '../../components/skeletons/TableSkeleton/TableSkeleton'
+import TransactionHistory from '../../components/ui/TransactionHistory/TransactionHistory'
+
+import { Transaction } from '../../types/Transaction'
+import ErrorOccurred from '../../exceptions/ErrorOccurred'
+
+/**
+ * Display all transaction in table related to given user.
+ */
 const ClientHistory = () => {
   const { userId } = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const [transactions, setTransactions] = useState<Transaction[]>([])
 
+  /**
+   * Fetch all transaction for given User ID.
+   */
   useEffect(() => {
     const getTransactions = async () => {
       const transactions = await getUserTransactions(userId!)
@@ -20,8 +29,10 @@ const ClientHistory = () => {
       setIsLoading(false)
     }
 
-    if (!!userId) {
-      getTransactions()
+    if (userId) {
+      getTransactions().catch(() => {
+        throw new ErrorOccurred()
+      })
     }
   }, [userId])
 
