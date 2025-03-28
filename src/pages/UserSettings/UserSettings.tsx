@@ -1,15 +1,21 @@
 import { UserRole } from '../../enums/UserRole'
 import { useNavigate } from 'react-router-dom'
-import classes from './AccountSettings.module.css'
+import classes from './UserSettings.module.css'
 import { AnimatedPage } from '../Cart/cartComponents'
 import Button from '../../components/ui/Button/Button'
 import { IoPersonCircleOutline } from 'react-icons/io5'
 import { useUserContext } from '../../stores/UserContext'
 
-const AccountSettings = () => {
+/**
+ * Display all related settings / functionalities and date to user.
+ */
+const UserSettings = () => {
   const navigate = useNavigate()
   const { user, signOut } = useUserContext()
 
+  /**
+   * Sign out user and redirec to login page.
+   */
   const onSignOut = () => {
     signOut()
     navigate('/p/login')
@@ -33,7 +39,7 @@ const AccountSettings = () => {
                 navigate('/admin/panel')
               }}
             >
-              Panel administacyjny
+              Panel administracyjny
             </Button>
           )}
 
@@ -73,4 +79,4 @@ const AccountSettings = () => {
   )
 }
 
-export default AccountSettings
+export default UserSettings
