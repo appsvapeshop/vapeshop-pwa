@@ -26,13 +26,16 @@ const ClientHistory = () => {
     const getTransactions = async () => {
       const transactions = await getUserTransactions(userId!)
       setTransactions(transactions)
-      setIsLoading(false)
     }
 
     if (userId) {
-      getTransactions().catch(() => {
-        throw new ErrorOccurred()
-      })
+      getTransactions()
+        .catch(() => {
+          throw new ErrorOccurred()
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
     }
   }, [userId])
 
