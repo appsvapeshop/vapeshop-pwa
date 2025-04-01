@@ -12,7 +12,7 @@ import { collection, getDocs, orderBy, query, where } from 'firebase/firestore'
  */
 export const getUserTransactions = async (userId: string) => {
   const transactionsCollection = collection(firestore, 'transactions')
-  const transactionsQuery = query(transactionsCollection, where('userId', '==', userId), orderBy('timestamp', 'desc'))
+  const transactionsQuery = query(transactionsCollection, where('customerId', '==', userId), orderBy('transactionDate', 'desc'))
   const transactionsSnapshot = await getDocs(transactionsQuery)
 
   if (transactionsSnapshot.docs.length === 0) return []

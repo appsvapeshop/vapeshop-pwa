@@ -20,8 +20,8 @@ const TransactionHistory = ({ transaction }: { transaction: Transaction }) => {
       <Material.TableRow>
         <Material.TableCell>
           <TappedComponent onClick={() => setIsRowExpanded((prev) => !prev)}>
-            {transaction.transactionMode === TransactionMode.Sell ? 'Sprzedaż' : 'Wymiana'}
-            {transaction.transactionMode === TransactionMode.Exchange && (
+            {transaction.mode === TransactionMode.Sell ? 'Sprzedaż' : 'Wymiana'}
+            {transaction.mode === TransactionMode.Exchange && (
               <>{isRowExpanded ? <IoIosArrowUp /> : <IoIosArrowDown />}</>
             )}
           </TappedComponent>
@@ -41,7 +41,7 @@ const TransactionHistory = ({ transaction }: { transaction: Transaction }) => {
         </Material.TableCell>
       </Material.TableRow>
 
-      {transaction.transactionMode === TransactionMode.Exchange && (
+      {transaction.mode === TransactionMode.Exchange && (
         <Material.TableRow>
           <Material.TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={isRowExpanded} timeout="auto" unmountOnExit>

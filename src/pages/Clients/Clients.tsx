@@ -87,7 +87,7 @@ const Clients = () => {
     setTransactionSending(true)
 
     const transaction: Transaction = {
-      transactionMode: TransactionMode.Sell,
+      mode: TransactionMode.Sell,
       customerId: customer.id,
       transactionDate: Timestamp.now(),
       points: Math.trunc(amount / settings.amountForOnePoint),

@@ -120,7 +120,7 @@ export const createUser = async (email: string, password: string) => {
  * @param transaction data. Must not be null.
  */
 export const addTransaction = async (transaction: Transaction) => {
-  const points = transaction.transactionMode === TransactionMode.Exchange ? transaction.points * -1 : transaction.points
+  const points = transaction.mode === TransactionMode.Exchange ? transaction.points * -1 : transaction.points
 
   await updateDoc(doc(firestore, 'users', transaction.customerId), { points: increment(points) })
   await addDoc(collection(firestore, 'transactions'), transaction)
