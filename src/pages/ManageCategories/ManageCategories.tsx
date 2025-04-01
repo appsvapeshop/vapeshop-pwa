@@ -17,7 +17,7 @@ const ManageCategories = () => {
   const [categories, setCategories] = useState<CategoryType[]>()
 
   /**
-   * Fetch all categories.
+   * Fetch all Categories.
    */
   useEffect(() => {
     getCategories()

@@ -24,8 +24,8 @@ import ErrorOccurred from '../../exceptions/ErrorOccurred'
  * create new Category record.
  */
 const ManageCategory = () => {
-  const navigate = useNavigate()
   const { categoryId } = useParams()
+  const navigate = useNavigate()
   const imageRef = useRef<HTMLInputElement>(null)
 
   const [imageData, setImageData] = useState<Blob>()
@@ -77,8 +77,7 @@ const ManageCategory = () => {
   }
 
   /**
-   * Upload ( if needed ) image and upsert Category record.
-   * TODO: Remove image from database.
+   * Remove Category record and navigate to Manage Categories page.
    */
   const remove = async () => {
     setIsButtonLoading(true)
@@ -99,13 +98,6 @@ const ManageCategory = () => {
       .finally(() => {
         setIsButtonLoading(false)
       })
-  }
-
-  /**
-   * onClick handler which will display dialog for picking images.
-   */
-  const changeImage = () => {
-    imageRef.current?.click()
   }
 
   /**
@@ -134,7 +126,7 @@ const ManageCategory = () => {
               <input ref={imageRef} type="file" accept="image/*" onChange={onImageChange} hidden />
 
               {!!category?.img || !!imageData ? (
-                <TappedComponent styles={{ height: '100%' }} onClick={changeImage}>
+                <TappedComponent styles={{ height: '100%' }} onClick={() => imageRef.current?.click()}>
                   <LazyImage
                     containerStyles={{ height: '100%' }}
                     url={imageChanged ? URL.createObjectURL(imageData!) : category!.img}
@@ -142,7 +134,7 @@ const ManageCategory = () => {
                   />
                 </TappedComponent>
               ) : (
-                <AddCard onClick={changeImage} />
+                <AddCard onClick={() => imageRef.current?.click()} />
               )}
             </div>
             <TextField
