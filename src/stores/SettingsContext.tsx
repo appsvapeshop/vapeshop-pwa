@@ -53,7 +53,7 @@ const SettingsContextProvider = ({ children }: { children: React.ReactNode }) =>
     await updateDoc(doc(firestore, 'settings', settings.id as string), {
       categoriesForCoupons: settings.categoriesForCoupons,
       categoriesForNewspaper: settings.categoriesForNewspaper,
-      pointsPerAmount: settings.amountForOnePoint
+      amountForOnePoint: settings.amountForOnePoint
     })
 
     setSettings(settings)
