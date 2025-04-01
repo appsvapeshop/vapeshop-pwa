@@ -7,14 +7,14 @@ import { IoPersonCircleOutline } from 'react-icons/io5'
 import { useUserContext } from '../../stores/UserContext'
 
 /**
- * Display all related settings / functionalities and date for user.
+ * Display all related settings / functionalities and data for user.
  */
 const UserSettings = () => {
   const navigate = useNavigate()
   const { user, signOut } = useUserContext()
 
   /**
-   * Sign out user and redirec to login page.
+   * Sign out user and redirect to login page.
    */
   const onSignOut = () => {
     signOut()

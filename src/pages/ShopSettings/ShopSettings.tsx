@@ -1,24 +1,35 @@
 import { toast } from 'react-toastify'
 import { useState, useEffect } from 'react'
 import classes from './ShopSettings.module.css'
+import { useSettingsContext } from '../../stores/SettingsContext'
+
 import { AnimatedPage } from '../Cart/cartComponents'
 import Button from '../../components/ui/Button/Button'
 import { Checkbox, FormControlLabel } from '@mui/material'
-import { FetchStatus } from '../../enums/FetchStatus'
-import { ShopSettingsContext } from '../../types/ShopSettingsContext'
 import TextField from '../../components/ui/TextField/TextField'
-import { useSettingsContext } from '../../stores/SettingsContext'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
 
+import { FetchStatus } from '../../enums/FetchStatus'
+import { ShopSettingsContext } from '../../types/ShopSettingsContext'
+
+/**
+ * Display Shop configuration page.
+ */
 const ShopSettings = () => {
-  const settings = useSettingsContext()
   const [isLoading, setIsLoading] = useState(true)
+  const settings = useSettingsContext()
   const [temporarySettings, setTemporarySettings] = useState<ShopSettingsContext>({ ...settings })
 
+  /**
+   * Because all shop settings should be loaded when app is loaded, check fetch status.
+   */
   useEffect(() => {
     setIsLoading(!(settings.fetchStatus === FetchStatus.Completed))
   }, [settings.fetchStatus])
 
+  /**
+   * Validate data and save current settings.
+   */
   const onSave = async () => {
     if (!temporarySettings.settings.amountForOnePoint) {
       toast.dismiss()
@@ -55,7 +66,10 @@ const ShopSettings = () => {
               slotProps={{ input: { endAdornment: 'zł' } }}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const value: number = Number(event.target.value)
-                setTemporarySettings({...temporarySettings, settings: {...temporarySettings.settings, amountForOnePoint: value}});
+                setTemporarySettings({
+                  ...temporarySettings,
+                  settings: { ...temporarySettings.settings, amountForOnePoint: value }
+                })
               }}
             />
 
@@ -68,7 +82,13 @@ const ShopSettings = () => {
                   color="secondary"
                   checked={temporarySettings?.settings.categoriesForCoupons}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setTemporarySettings({...temporarySettings, settings: {...temporarySettings.settings, categoriesForCoupons: event.target.checked}});
+                    setTemporarySettings({
+                      ...temporarySettings,
+                      settings: {
+                        ...temporarySettings.settings,
+                        categoriesForCoupons: event.target.checked
+                      }
+                    })
                   }}
                 />
               }
@@ -82,7 +102,13 @@ const ShopSettings = () => {
                   color="secondary"
                   checked={temporarySettings?.settings.categoriesForNewspaper}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setTemporarySettings({...temporarySettings, settings: {...temporarySettings.settings, categoriesForNewspaper: event.target.checked}});
+                    setTemporarySettings({
+                      ...temporarySettings,
+                      settings: {
+                        ...temporarySettings.settings,
+                        categoriesForNewspaper: event.target.checked
+                      }
+                    })
                   }}
                 />
               }
