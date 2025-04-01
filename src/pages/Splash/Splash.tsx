@@ -2,6 +2,9 @@ import { motion } from 'framer-motion'
 import logo from '../../assets/logo.png'
 import classes from './Splash.module.css'
 
+/**
+ * Splash screen displayed when application is loading.
+ */
 const Splash = () => {
   return (
     <motion.div

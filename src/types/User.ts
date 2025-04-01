@@ -1,11 +1,32 @@
-export type User = {
-  id: string
-  email: string
-  role: UserRole
-  points: number
-}
+import { UserRole } from '../enums/UserRole'
+import { Timestamp } from 'firebase/firestore'
 
-export enum UserRole {
-  Admin = 'Admin',
-  Customer = 'Customer'
+/**
+ * User type
+ */
+export type User = {
+  /**
+   * User Id
+   */
+  id: string
+
+  /**
+   * User email
+   */
+  email: string
+
+  /**
+   * User role
+   */
+  role: UserRole
+
+  /**
+   * Points the user has
+   */
+  points: number
+
+  /**
+   * User registration date
+   */
+  createDate: Timestamp
 }

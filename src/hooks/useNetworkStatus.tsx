@@ -1,5 +1,14 @@
 import { useState, useEffect } from 'react'
 
+/**
+ * Custom Hook which checks if application working in offline mode or in online mode.
+ *
+ * @return
+ * <ul>
+ *   <li>isOnline status which may be undefined before app fully loaded.</li>
+ *   <li>reconnected status when the application is back online.</li>
+ * </ul>
+ */
 export const useNetworkStatus = () => {
   const [reconnected, setReconnected] = useState(false)
   const [isOnline, setIsOnline] = useState<boolean | undefined>()
@@ -8,12 +17,12 @@ export const useNetworkStatus = () => {
     setIsOnline(window.navigator.onLine)
 
     window.addEventListener('online', () => {
-        setIsOnline(true)
-        setReconnected(true)
+      setIsOnline(true)
+      setReconnected(true)
     })
     window.addEventListener('offline', () => {
-        setIsOnline(false)
-        setReconnected(false)
+      setIsOnline(false)
+      setReconnected(false)
     })
 
     return () => {

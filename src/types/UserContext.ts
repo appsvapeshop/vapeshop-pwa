@@ -1,25 +1,32 @@
 import { User } from './User'
-import { Transaction } from './Transaction'
+import { AuthStatus } from '../enums/AuthStatus'
 
+/**
+ * User context type
+ */
 export type UserContext = {
-  user: User | null
-  authStatus: AuthStatus
-  signIn: (email: string, password: string) => Promise<void> | undefined
-  signOut: () => void | undefined
-  createUser: (email: string, password: string) => Promise<void> | undefined
-  resetPassword: (email: string) => Promise<void> | undefined
-  refreshUser: () => Promise<void> | undefined
-  addTransaction: (transaction: Transaction) => Promise<void> | undefined
-  changePassword: (
-    oldPassword: string,
-    newPassword: string,
-    rePassword: string
-  ) => Promise<void> | undefined
-}
+  /**
+   * Instance of current user
+   */
+  user: User
 
-export enum AuthStatus {
-  NotStarted,
-  InProgress,
-  Authorized,
-  Unauthorized
+  /**
+   * User authentication status
+   */
+  authStatus: AuthStatus
+
+  /**
+   * Sign in user using email and password
+   */
+  signIn: (email: string, password: string) => Promise<void>
+
+  /**
+   * Logout user
+   */
+  signOut: () => void
+
+  /**
+   * Refresh user instance ( will refresh points that user has )
+   */
+  refreshUser: () => Promise<void>
 }

@@ -1,42 +1,42 @@
 .container {
-  height: 100%;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-radius: 20px;
-  background-color: var(--pulse-loading-color);
-  text-decoration: none;
-  color: var(--primary-font-color);
+    height: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 20px;
+    background-color: var(--pulse-loading-color);
+    text-decoration: none;
+    color: var(--primary-font-color);
 }
 
 .image-container {
-  height: 65%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
+    height: 65%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .description {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
 }
 
 .name {
-  font-weight: 600;
-  text-overflow: ellipsis;
-  overflow: hidden;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .count {
-  display: flex;
-  align-items: center;
-  gap: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .count-label {
-  opacity: 0.5;
-  font-weight: 500;
+    opacity: 0.5;
+    font-weight: 500;
 }

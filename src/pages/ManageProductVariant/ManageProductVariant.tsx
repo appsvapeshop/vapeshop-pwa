@@ -1,28 +1,37 @@
 import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
-import PulseLoader from 'react-spinners/PulseLoader'
-import Button from '../../components/ui/Button/Button'
 import classes from './ManageProductVariant.module.css'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ProductVariant } from '../../types/ProductVariant'
+import { deleteProductVariant, upsertProductVariant, getProductVariant } from '../../services/ProductService'
+
+import PulseLoader from 'react-spinners/PulseLoader'
+import Button from '../../components/ui/Button/Button'
 import TextField from '../../components/ui/TextField/TextField'
 import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
-import { deleteProductVariant, upsertProductVariant, getProductVariant } from '../../utils/productsHelper'
 
+import { ProductVariant } from '../../types/ProductVariant'
+
+/**
+ * Display Product Variant configuration page for given Product Variant ID or if Product Variant ID is equal "new",
+ * create new Product Variant record.
+ */
 const ManageProductVariant = () => {
-  const navigate = useNavigate()
   const { variantId, productId } = useParams()
+  const navigate = useNavigate()
+
   const [isLoading, setIsLoading] = useState(true)
   const [variant, setVariant] = useState<ProductVariant>()
   const [isButtonLoading, setIsButtonLoading] = useState(false)
 
+  /**
+   * If Product Variant ID is provided, fetch Product Variant record from database.
+   */
   useEffect(() => {
     if (variantId !== 'new') {
       getProductVariant(productId!, variantId!)
         .then((variantSnapshot) => setVariant(variantSnapshot))
-        .catch((error) => {
-          console.log(error)
+        .catch(() => {
           toast.dismiss()
           toast.error('Coś poszło nie tak')
         })
@@ -34,6 +43,9 @@ const ManageProductVariant = () => {
     }
   }, [variantId, productId])
 
+  /**
+   * Validate data and upsert Product Variant record.
+   */
   const save = () => {
     setIsButtonLoading(true)
     toast.dismiss()
@@ -54,6 +66,9 @@ const ManageProductVariant = () => {
       .finally(() => setIsButtonLoading(false))
   }
 
+  /**
+   * Remove Product Variant record.
+   */
   const remove = async () => {
     setIsButtonLoading(true)
     deleteProductVariant(productId!, variant!)

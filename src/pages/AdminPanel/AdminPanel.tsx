@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import Button from '../../components/ui/Button/Button'
 import { AnimatedPage } from '../Cart/cartComponents'
 
+/**
+ * Display all related settings / functionalities and date for admin users.
+ */
 const AdminPanel = () => {
   const navigate = useNavigate()
 
@@ -34,7 +37,9 @@ const AdminPanel = () => {
             styles={{ height: '3rem', fontWeight: '500' }}
             variant="outlined"
             colorVariant="secondary"
-            onClick={() => {navigate('manageNews')}}
+            onClick={() => {
+              navigate('manageNews')
+            }}
           >
             Zarządzaj wiadomościami
           </Button>

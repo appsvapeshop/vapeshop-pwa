@@ -4,15 +4,21 @@ import classes from './ManageCategories.module.css'
 import { AnimatedPage } from '../Cart/cartComponents'
 import Category from '../../components/Category/Category'
 import AddCard from '../../components/ui/AddCard/AddCard'
-import { getCategories } from '../../utils/categoriesUtils'
-import { Category as CategoryType } from '../../types/Category'
-import LoadingCategory from '../../components/skeletons/LoadingCategory/LoadingCategory'
+import { getCategories } from '../../services/CategoryService'
+import { ProductCategory as CategoryType } from '../../types/ProductCategory'
+import CardSkeleton from '../../components/skeletons/CardSkeleton/CardSkeleton'
 
+/**
+ * Display all available Categories and AddCard for creating new Category.
+ */
 const ManageCategories = () => {
   const navigate = useNavigate()
-  const [categories, setCategories] = useState<CategoryType[]>()
   const [isLoading, setIsLoading] = useState(true)
+  const [categories, setCategories] = useState<CategoryType[]>()
 
+  /**
+   * Fetch all Categories.
+   */
   useEffect(() => {
     getCategories()
       .then((snapshot) => {
@@ -28,9 +34,9 @@ const ManageCategories = () => {
       <div className={classes.container}>
         {isLoading && (
           <>
-            <LoadingCategory />
-            <LoadingCategory />
-            <LoadingCategory />
+            <CardSkeleton />
+            <CardSkeleton />
+            <CardSkeleton />
           </>
         )}
 

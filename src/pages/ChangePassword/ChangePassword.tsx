@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import classes from './ChangePassword.module.css'
+import { changePassword } from '../../services/UserService'
+
 import Input from '../../components/ui/Input/Input'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { AnimatedPage } from '../Cart/cartComponents'
 import Button from '../../components/ui/Button/Button'
-import { useUserContext } from '../../stores/UserContext'
 import PasswordValidator from '../../components/PasswordValidator/PasswordValidator'
 
 type Passwords = {
@@ -14,13 +15,18 @@ type Passwords = {
   rePassword?: string
 }
 
+/**
+ * The component allows the user to change the password
+ */
 const ChangePassword = () => {
-  const { changePassword } = useUserContext()
   const [isLoading, setIsLoading] = useState(false)
   const [passwords, setPasswords] = useState<Passwords>({})
 
+  /**
+   * Validate new password and if valid, save.
+   */
   const onSave = async () => {
-    if (!!!passwords?.oldPassword || !!!passwords?.newPassword || !!!passwords?.rePassword) {
+    if (!passwords?.oldPassword || !passwords?.newPassword || !passwords?.rePassword) {
       toast.dismiss()
       toast.error('Uzupełnij wszystkie pola')
       return
@@ -34,7 +40,7 @@ const ChangePassword = () => {
 
     setIsLoading(true)
     try {
-      await changePassword(passwords?.oldPassword!, passwords?.newPassword!, passwords?.rePassword!)
+      await changePassword(passwords?.oldPassword!, passwords?.newPassword!)
       toast.success('Hasło zostało zmienione')
     } catch (error) {
       toast.error((error as Error).message)

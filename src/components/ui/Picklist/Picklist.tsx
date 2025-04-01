@@ -9,6 +9,14 @@ type Props = {
   onChange: (event: any) => void
 }
 
+/**
+ * Picklist component.
+ *
+ * @param label. Must not be null.
+ * @param value. May be null.
+ * @param options all available options to pick. Must not be null.
+ * @param onChange event handler. Must not be null.
+ */
 const Picklist: FC<Props> = ({ label, value, options, onChange }) => {
   return (
     <FormControl color="secondary" className={classes.input}>

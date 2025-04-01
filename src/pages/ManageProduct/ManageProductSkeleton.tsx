@@ -2,7 +2,10 @@ import { Skeleton } from '@mui/material'
 import classes from './ManageProduct.module.css'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
 
-
+/**
+ * Skeleton component for Manage Products page.
+ * TODO should be moved to components/skeletons or to parent component.
+ */
 const ManageProductSkeleton = () => {
   return (
     <div className={classes.skeletons}>

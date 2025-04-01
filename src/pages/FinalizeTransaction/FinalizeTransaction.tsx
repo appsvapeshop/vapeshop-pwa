@@ -1,51 +1,74 @@
-import * as Types from './types'
 import { toast } from 'react-toastify'
-import * as Components from './components'
 import { useEffect, useState } from 'react'
 import { Timestamp } from 'firebase/firestore'
 import { AnimatePresence } from 'framer-motion'
-import { getUserById } from '../../utils/userUtils'
 import classes from './FinalizeTransaction.module.css'
-import { useUserContext } from '../../stores/UserContext'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { sumPoints, sumPrice } from '../../utils/cartHelper'
-import { getProductsWithVariants } from '../../utils/productsHelper'
-import { TransactionMode } from '../../enums/TransactionMode'
-import * as transactionUtils from '../../utils/transactionUtils'
-import { getDatabaseProducts } from '../../utils/transactionUtils'
+import { sumPoints, sumPrice } from '../../utils/ProductUtils'
+import { getProductsWithVariants } from '../../services/ProductService'
+import { getUserById, addTransaction } from '../../services/UserService'
+import {
+  validateQr,
+  validateProductsWithDatabase,
+  isAmountsValid,
+  getProductListFromQr
+} from '../../utils/TransactionUtils'
 
+import { TransactionMode } from '../../enums/TransactionMode'
+
+import * as Types from './types'
+import * as Components from './components'
+import ErrorOccurred from '../../exceptions/ErrorOccurred'
+
+/**
+ * Page where transaction is finalized by admin. All required data should be scanned from QR.
+ */
 const FinalizeTransaction = () => {
   const location = useLocation()
   const navigate = useNavigate()
-  const { addTransaction } = useUserContext()
+
   const [isLoading, setIsLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [qrData] = useState<Types.QrData>(location.state)
   const [databaseProducts, setDatabaseProducts] = useState<Types.Product[]>([])
 
+  /**
+   * <ul>
+   *     <li>Validate QR data.</li>
+   *     <li>If valid, query all related products with variants.</li>
+   *     <li>Validate if queried products are valid with QR data (products)</li>
+   * </ul>
+   */
   useEffect(() => {
     const prepareTransaction = async () => {
       try {
-        transactionUtils.validateQr(qrData)
+        validateQr(qrData)
       } catch (error) {
         toast.error((error as Error).message)
       }
 
       const retrievedProducts = await getProductsWithVariants(Object.keys(qrData.productsSummary!))
-      setDatabaseProducts(getDatabaseProducts(retrievedProducts, qrData));
+      setDatabaseProducts(getProductListFromQr(retrievedProducts, qrData))
 
       try {
-        transactionUtils.validateProductsWithDatabase(qrData, retrievedProducts)
+        validateProductsWithDatabase(qrData, retrievedProducts)
       } catch (error) {
         toast.error((error as Error).message)
       }
-
-      setIsLoading(false)
     }
 
     prepareTransaction()
+      .catch(() => {
+        throw new ErrorOccurred()
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }, [qrData])
 
+  /**
+   * Check if user have enough points and if yes, save transaction.
+   */
   const onFinalize = async () => {
     try {
       const retrievedCustomer = await getUserById(qrData.userId!)
@@ -58,9 +81,9 @@ const FinalizeTransaction = () => {
       }
 
       const transaction: Types.Transaction = {
-        mode: TransactionMode.Exchange,
-        userId: qrData.userId!,
-        timestamp: Timestamp.now(),
+        transactionMode: TransactionMode.Exchange,
+        customerId: qrData.userId!,
+        transactionDate: Timestamp.now(),
         points: totalPoints,
         price: totalAmount,
         products: databaseProducts
@@ -78,9 +101,7 @@ const FinalizeTransaction = () => {
     <Components.AnimatedPage>
       <div className={classes.container}>
         {isLoading &&
-          [...Array(3)].map((element, index) => (
-            <Components.ListProductSkeleton key={index} {...element} />
-          ))}
+          [...Array(3)].map((element, index) => <Components.ListProductSkeleton key={index} {...element} />)}
 
         {!isLoading && databaseProducts && (
           <>
@@ -125,9 +146,7 @@ const FinalizeTransaction = () => {
         {isModalOpen && (
           <Components.Modal onClose={() => setIsModalOpen(false)}>
             <Components.Confirmation
-              warning={
-                transactionUtils.isAmountsValid(databaseProducts, qrData) ? '' : 'Kwoty są różne'
-              }
+              message={isAmountsValid(databaseProducts, qrData) ? '' : 'Kwoty są różne'}
               onConfirmation={onFinalize}
               onCancel={async () => setIsModalOpen(false)}
             />

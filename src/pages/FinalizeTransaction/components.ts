@@ -1,6 +1,6 @@
-export { default as ProductsList } from '../../components/ProductsList/ProductsList'
+export { default as ProductsList } from '../../components/CartSummary/CartSummary'
 export { default as AnimatedPage } from '../../components/animations/AnimatedPage/AnimatedPage'
 export { default as Button } from '../../components/ui/Button/Button'
 export { default as Modal } from '../../components/ui/Modal/Modal'
 export { default as Confirmation } from '../../components/Confirmation/Confirmation'
-export { default as ListProductSkeleton } from '../../components/skeletons/ListProductSkeleton/ListProductSkeleton'
+export { default as ListProductSkeleton } from '../../components/skeletons/CartSummarySkeleton/CartSummary'

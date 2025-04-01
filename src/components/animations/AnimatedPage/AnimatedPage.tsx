@@ -1,5 +1,9 @@
+import React from 'react'
 import { motion } from 'framer-motion'
 
+/**
+ * The component animates the transition from page to page
+ */
 const AnimatedPage = ({ children }: { children: React.ReactNode }) => {
   return (
     <motion.div

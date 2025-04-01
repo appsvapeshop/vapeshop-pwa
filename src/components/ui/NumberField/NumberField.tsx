@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import React, { FC } from 'react'
 import classes from './NumberField.module.css'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
 import { TextField as MuiTextField } from '@mui/material'
@@ -15,6 +15,18 @@ type Props = {
   decrementHandler?: () => void
 }
 
+/**
+ * Number input which allow increase and decrese value by clicking "-" or "+" icons
+ *
+ * @param label. May be null.
+ * @param value. May be null.
+ * @param slotProps The props used for each slot inside. May be null.
+ * @param styles input CSS styles. May be null.
+ * @param readOnly Can the value be changed, default false. May be null.
+ * @param onChange event handler, when value is inserted. May be null.
+ * @param incrementHandler event handler, when value is increased. May be null.
+ * @param decrementHandler event handler, when value is decreased. May be null.
+ */
 const NumberField: FC<Props> = ({
   label,
   value,

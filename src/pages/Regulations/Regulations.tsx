@@ -9,6 +9,18 @@ type Props = {
   publicAccess?: boolean
 }
 
+/**
+ * Page display regulation file assigned to current shop. Runs in 2 contexts:
+ *
+ * <ul>
+ *     <li>If public access equal false, is displayed without "back" icon
+ *     ( this functionality is provided by Header component )</li>
+ *     <li>If public access equal true, is displayed with "back" icon</li>
+ * </ul>
+ *
+ * TODO: When a public layout is created, a "back" icon should be provided by the layout.
+ * TODO: Content should be loaded dynamically from the file
+ */
 const Regulations: FC<Props> = ({ publicAccess = false }) => {
   const navigation = useNavigate()
 

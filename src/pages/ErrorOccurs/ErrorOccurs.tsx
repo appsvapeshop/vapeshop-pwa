@@ -1,6 +1,9 @@
 import classes from './ErrorOccurs.module.css'
 import angryCloud from '../../assets/angry_cloud.png'
 
+/**
+ * Page for displaying generic Error.
+ */
 const ErrorOccurs = () => {
   return (
     <div className={classes.container}>

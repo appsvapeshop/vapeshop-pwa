@@ -1,12 +1,12 @@
 .container {
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
 }
 
 .add-card {
-  min-height: 150px;
-  width: 80%;
+    min-height: 150px;
+    width: 80%;
 }
