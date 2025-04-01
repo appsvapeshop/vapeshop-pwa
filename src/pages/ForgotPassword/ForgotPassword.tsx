@@ -1,23 +1,29 @@
-import logo from '../../assets/logo.png'
-import 'react-toastify/dist/ReactToastify.css'
-import classes from './ForgotPassword.module.css'
-
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import 'react-toastify/dist/ReactToastify.css'
+import classes from './ForgotPassword.module.css'
+import { resetPassword } from '../../services/UserService'
+import { ToastContainer, Zoom, toast } from 'react-toastify'
+
+import logo from '../../assets/logo.png'
 import { IoIosArrowBack } from 'react-icons/io'
 import Input from '../../components/ui/Input/Input'
 import Button from '../../components/ui/Button/Button'
 import PropagateLoader from 'react-spinners/PropagateLoader'
-import { ToastContainer, Zoom, toast } from 'react-toastify'
 import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
 import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
-import { resetPassword } from '../../services/UserService'
 
+/**
+ * Component allows to remind forgotten password.
+ */
 const ForgotPassword = () => {
   const [email, setEmail] = useState<string>('')
   const navigation = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
 
+  /**
+   * Validate if email have valid format and if yes, send reset password email.
+   */
   const onReset = async () => {
     setIsLoading(true)
 
@@ -37,20 +43,10 @@ const ForgotPassword = () => {
 
   return (
     <AnimatedPage>
-      <ToastContainer
-        position="top-center"
-        toastClassName="toastify"
-        autoClose={3000}
-        closeOnClick
-        transition={Zoom}
-      />
+      <ToastContainer position="top-center" toastClassName="toastify" autoClose={3000} closeOnClick transition={Zoom} />
 
       <TappedComponent>
-        <IoIosArrowBack
-          className={classes['step-back-icon']}
-          size={40}
-          onClick={() => navigation(-1)}
-        />
+        <IoIosArrowBack className={classes['step-back-icon']} size={40} onClick={() => navigation(-1)} />
       </TappedComponent>
 
       <form className={classes.container}>
@@ -64,11 +60,7 @@ const ForgotPassword = () => {
           autoComplete="email"
           onChange={(event) => setEmail((event.target as HTMLInputElement).value)}
         />
-        <Button
-          onClick={onReset}
-          styles={{ height: '2.5rem', width: '70%' }}
-          colorVariant="secondary"
-        >
+        <Button onClick={onReset} styles={{ height: '2.5rem', width: '70%' }} colorVariant="secondary">
           {isLoading ? (
             <PropagateLoader
               size=".6rem"

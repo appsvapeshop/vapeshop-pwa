@@ -2,14 +2,20 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import classes from './Cart.module.css'
 import 'react-toastify/dist/ReactToastify.css'
-import { AnimatePresence } from 'framer-motion'
 import { generateCartQR } from '../../utils/QrUtils'
 import { useUserContext } from '../../stores/UserContext'
 import { useCartContext } from '../../stores/CartContext'
 import { sumPrice, sumPoints } from '../../utils/ProductUtils'
+
+import { AnimatePresence } from 'framer-motion'
 import LazyImage from '../../components/ui/LazyImage/LazyImage'
 import { Button, Modal, ProductsList, AnimatedPage } from './cartComponents'
 
+import UnauthorizedUser from '../../exceptions/UnauthorizedUser'
+
+/**
+ * Display user Cart with all products.
+ */
 const Cart = () => {
   const { user } = useUserContext()
   const [qrData, setQrData] = useState<string>()
@@ -17,7 +23,7 @@ const Cart = () => {
   const { products, removeProduct, clearCart } = useCartContext()
 
   const onFinalize = async () => {
-    if (!!!user) throw new Error('Unauthorized user')
+    if (!user) throw new UnauthorizedUser()
 
     if (user.points < sumPoints(products)) {
       toast.dismiss()

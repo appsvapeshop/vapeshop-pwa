@@ -1,31 +1,41 @@
 import { toast } from 'react-toastify'
+import classes from './ManageNewsItem.module.css'
+import { uploadFile } from '../../services/FileService'
+import { useParams, useNavigate } from 'react-router-dom'
+import React, { useState, useEffect, useRef } from 'react'
+import { getNewsById, upsertNews, deleteNews } from '../../services/NewsService'
+
 import { Skeleton } from '@mui/material'
 import TextField from '@mui/material/TextField'
-import classes from './ManageNewsItem.module.css'
-import { useState, useEffect, useRef } from 'react'
-import { News as NewsType } from '../../types/News'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { AnimatedPage } from '../Cart/cartComponents'
-import { uploadFile } from '../../services/FileService'
 import Button from '../../components/ui/Button/Button'
-import { useParams, useNavigate } from 'react-router-dom'
 import AddCard from '../../components/ui/AddCard/AddCard'
-import ValidationException from '../../exceptions/ValidationException'
 import LazyImage from '../../components/ui/LazyImage/LazyImage'
-import { getNewsById, upsertNews, deleteNews } from '../../services/NewsService'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
 import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
 
+import { News as NewsType } from '../../types/News'
+import ValidationException from '../../exceptions/ValidationException'
+
+/**
+ * Display News configuration page for given News ID or if News ID is equal "new",
+ * create new News record.
+ */
 const ManageNewsItem = () => {
   const { newsId } = useParams()
   const navigate = useNavigate()
-  const [news, setNews] = useState<NewsType>()
   const imageRef = useRef<HTMLInputElement>(null)
+
+  const [news, setNews] = useState<NewsType>()
   const [isLoading, setIsLoading] = useState(true)
   const [imageData, setImageData] = useState<Blob>()
   const [imageChanged, setImageChanged] = useState(false)
   const [isButtonLoading, setIsButtonLoading] = useState(false)
 
+  /**
+   * If News ID is provided, fetch News record from database.
+   */
   useEffect(() => {
     if (newsId !== 'new') {
       getNewsById(newsId!)
@@ -40,6 +50,9 @@ const ManageNewsItem = () => {
     }
   }, [newsId])
 
+  /**
+   * Upload ( if needed ) image and upsert News record.
+   */
   const save = async () => {
     setIsButtonLoading(true)
     toast.dismiss()
@@ -51,6 +64,7 @@ const ManageNewsItem = () => {
       } else {
         await upsertNews(news!)
       }
+
       toast.success('Zapisano')
       navigate('/admin/panel/manageNews')
     } catch (error) {
@@ -64,6 +78,9 @@ const ManageNewsItem = () => {
     setIsButtonLoading(false)
   }
 
+  /**
+   * Remove News record and navigate to Manage News page.
+   */
   const remove = async () => {
     setIsButtonLoading(true)
     toast.dismiss()
@@ -81,6 +98,9 @@ const ManageNewsItem = () => {
       })
   }
 
+  /**
+   * When image is changed for Category, set "imageData" and "imageChanged".
+   */
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length === 1) {
       setImageData(event.target.files[0])
@@ -106,16 +126,11 @@ const ManageNewsItem = () => {
               <input ref={imageRef} type="file" accept="image/*" onChange={onImageChange} hidden />
 
               {!!news?.img || !!imageData ? (
-                <TappedComponent
-                  styles={{ height: '100%' }}
-                  onClick={() => imageRef.current?.click()}
-                >
+                <TappedComponent styles={{ height: '100%' }} onClick={() => imageRef.current?.click()}>
                   <LazyImage
                     containerStyles={{ height: '100%' }}
                     url={imageChanged ? URL.createObjectURL(imageData!) : news!.img}
-                    cacheProperties={
-                      imageChanged ? undefined : { cacheStorageName: 'products-image' }
-                    }
+                    cacheProperties={imageChanged ? undefined : { cacheStorageName: 'products-image' }}
                   />
                 </TappedComponent>
               ) : (
@@ -139,20 +154,12 @@ const ManageNewsItem = () => {
 
             <div className={classes.buttons}>
               <Button onClick={save} colorVariant="primary" styles={{ height: '2.5rem' }}>
-                {isButtonLoading ? (
-                  <PulseLoader size=".6rem" color="var(--primary-font-color)" />
-                ) : (
-                  'Zapisz'
-                )}
+                {isButtonLoading ? <PulseLoader size=".6rem" color="var(--primary-font-color)" /> : 'Zapisz'}
               </Button>
 
               {newsId !== 'new' && (
                 <Button onClick={remove} colorVariant="error" styles={{ height: '2.5rem' }}>
-                  {isButtonLoading ? (
-                    <PulseLoader size=".6rem" color="var(--primary-font-color)" />
-                  ) : (
-                    'Usuń'
-                  )}
+                  {isButtonLoading ? <PulseLoader size=".6rem" color="var(--primary-font-color)" /> : 'Usuń'}
                 </Button>
               )}
             </div>

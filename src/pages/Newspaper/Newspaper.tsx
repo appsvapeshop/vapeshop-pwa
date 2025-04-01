@@ -1,24 +1,42 @@
 import { useEffect, useState } from 'react'
 import classes from './Newspaper.module.css'
 import { useParams } from 'react-router-dom'
+import { useSettingsContext } from '../../stores/SettingsContext'
+import { getProductsByCategoryId, getNewspaperProducts } from '../../services/ProductService'
+
 import Product from '../../components/Product/Product'
+import Categories from '../../components/Categories/Categories'
+import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
+import ProductSkeleton from '../../components/skeletons/ProductSkeleton/ProductSkeleton'
+
 import { ProductContext } from '../../enums/ProductContext'
 import { Product as ProductType } from '../../types/Product'
 import { CategoryContext } from '../../enums/CategoryContext'
-import Categories from '../../components/Categories/Categories'
-import { useSettingsContext } from '../../stores/SettingsContext'
-import ProductSkeleton from '../../components/skeletons/ProductSkeleton/ProductSkeleton'
-import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
-import { getProductsByCategoryId, getNewspaperProducts } from '../../services/ProductService'
 
+/**
+ * Display all available Newspaper products. Is launched in two modes:
+ *
+ * <ul>
+ *     <li>When categories are enabled for Newspaper, it displays all available Newspaper product categories.
+ *     If a category is selected, it will display all products related to it</li>
+ *     <li>when categories are disabled for Newspaper, it displays all available Newspaper products.</li>
+ * </ul>
+ */
 const Newspaper = () => {
   const { categoryId } = useParams()
-  const [isLoading, setIsLoading] = useState(true)
   const { settings } = useSettingsContext()
+
+  const [isLoading, setIsLoading] = useState(true)
   const [products, setProducts] = useState<ProductType[]>()
 
+  /**
+   * <ul>
+   *     <li>If categoryId is empty and categoriesForNewspaper is false, then query all products</li>
+   *     <li>If categoryId is not empty, then query products related to this category</li>
+   * </ul>
+   */
   useEffect(() => {
-    if (categoryId === undefined && !settings.categoriesForNewspaper) {
+    if (!categoryId && !settings.categoriesForNewspaper) {
       getNewspaperProducts()
         .then((productsSnapshot) => setProducts(productsSnapshot))
         .finally(() => setIsLoading(false))
@@ -29,8 +47,7 @@ const Newspaper = () => {
     }
   }, [categoryId, settings.categoriesForNewspaper])
 
-  if (settings.categoriesForNewspaper && categoryId === undefined)
-    return <Categories context={CategoryContext.Newspaper} />
+  if (settings.categoriesForNewspaper && !categoryId) return <Categories context={CategoryContext.Newspaper} />
 
   return (
     <AnimatedPage>
@@ -43,14 +60,10 @@ const Newspaper = () => {
           </>
         )}
 
-        {!isLoading && products?.length === 0 && (
-          <span className={classes['no-products']}>Brak produktów</span>
-        )}
+        {!isLoading && products?.length === 0 && <span className={classes['no-products']}>Brak produktów</span>}
 
         {!isLoading &&
-          products?.map((product) => (
-            <Product key={product.id} product={product} context={ProductContext.Newspaper} />
-          ))}
+          products?.map((product) => <Product key={product.id} product={product} context={ProductContext.Newspaper} />)}
       </div>
     </AnimatedPage>
   )

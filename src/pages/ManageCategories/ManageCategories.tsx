@@ -8,11 +8,17 @@ import { getCategories } from '../../services/CategoryService'
 import { ProductCategory as CategoryType } from '../../types/ProductCategory'
 import CardSkeleton from '../../components/skeletons/CardSkeleton/CardSkeleton'
 
+/**
+ * Display all available Categories and AddCard for creating new Category.
+ */
 const ManageCategories = () => {
   const navigate = useNavigate()
-  const [categories, setCategories] = useState<CategoryType[]>()
   const [isLoading, setIsLoading] = useState(true)
+  const [categories, setCategories] = useState<CategoryType[]>()
 
+  /**
+   * Fetch all Categories.
+   */
   useEffect(() => {
     getCategories()
       .then((snapshot) => {

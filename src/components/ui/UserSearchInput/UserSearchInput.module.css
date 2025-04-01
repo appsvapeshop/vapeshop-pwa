@@ -1,0 +1,9 @@
+.autocomplete {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+}
+
+.autocomplete > div > div {
+    border-radius: 20px;
+}

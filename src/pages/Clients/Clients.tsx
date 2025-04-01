@@ -1,22 +1,34 @@
 import { toast } from 'react-toastify'
-import { User } from '../../types/User'
 import classes from './Clients.module.css'
 import { Timestamp } from 'firebase/firestore'
-import TextField from '@mui/material/TextField'
 import { useState, useRef, useEffect } from 'react'
-import { getUserById, searchUsers } from '../../services/UserService'
-import PulseLoader from 'react-spinners/PulseLoader'
-import { Transaction } from '../../types/Transaction'
-import Autocomplete from '@mui/material/Autocomplete'
-import { AnimatedPage } from '../Cart/cartComponents'
-import { QrData } from '../../types/QrData'
-import Button from '../../components/ui/Button/Button'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { TransactionMode } from '../../enums/TransactionMode'
 import { useSettingsContext } from '../../stores/SettingsContext'
-import { addTransaction } from '../../services/UserService'
+import { getUserById, addTransaction } from '../../services/UserService'
+
+import TextField from '@mui/material/TextField'
+import PulseLoader from 'react-spinners/PulseLoader'
+import { AnimatedPage } from '../Cart/cartComponents'
+import Button from '../../components/ui/Button/Button'
+import UserSearchInput from '../../components/ui/UserSearchInput/UserSearchInput'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
 
+import { User } from '../../types/User'
+import { QrData } from '../../types/QrData'
+import { Transaction } from '../../types/Transaction'
+import ErrorOccurred from '../../exceptions/ErrorOccurred'
+import { TransactionMode } from '../../enums/TransactionMode'
+
+/**
+ * Display admin panel for managing user (clients) where you add transactions or check their history.
+ * This component is fired in two modes:
+ *
+ * <ul>
+ *     <li>By manually entering the administration panel.</li>
+ *     <li>Or by scanning the QR code from Cart.</li>
+ * </ul>
+ *
+ */
 const Clients = () => {
   const location = useLocation()
   const navigate = useNavigate()
@@ -25,39 +37,34 @@ const Clients = () => {
   const [qrData] = useState<QrData>(location.state)
   const { settings } = useSettingsContext()
   const [isLoading, setIsLoading] = useState(false)
-  const [customers, setCustomers] = useState<User[]>([])
   const [customer, setCustomer] = useState<User | null>()
   const [transactionSending, setTransactionSending] = useState(false)
-  const [noOptionText, setNoOptionText] = useState<string>('Wprowadź min 3 znaki')
 
+  /**
+   * If QR code scanned data are not null then query user from database.
+   */
   useEffect(() => {
     const prepareClient = async () => {
-      setIsLoading(true)
       const retrievedCustomer = await getUserById(qrData.userId!)
       setCustomer(retrievedCustomer)
-      setIsLoading(false)
     }
 
-    if (qrData !== null) {
+    if (qrData) {
+      setIsLoading(true)
+
       prepareClient()
+        .catch(() => {
+          throw new ErrorOccurred()
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
     }
   }, [qrData])
 
-  const onSearch = async (event: React.KeyboardEvent) => {
-    if ((event.target as HTMLInputElement).value.length < 3) {
-      setNoOptionText('Wprowadź 5 pierwszych znaków')
-      return
-    }
-
-    const users = await searchUsers((event.target as HTMLInputElement).value)
-    if (users.length === 0) {
-      setNoOptionText('Nie znaleziono')
-      return
-    }
-
-    setCustomers(users)
-  }
-
+  /**
+   * Validate data and if valid, add points to user account ( create new transaction ).
+   */
   const onAddPoints = async () => {
     if (!customer || !customer.id) {
       toast.dismiss()
@@ -71,7 +78,7 @@ const Clients = () => {
       return
     }
 
-    if(!settings.amountForOnePoint){
+    if (!settings.amountForOnePoint) {
       toast.dismiss()
       toast.error('Stawka za 1 punkt nie może być 0 zł')
       return
@@ -94,19 +101,24 @@ const Clients = () => {
         ...(prevState as User),
         points: prevState!.points + transaction.points
       }))
-      clearAfterCommit()
+      clearFields()
     } catch (_error) {
       toast.error('Coś poszło nie tak')
     }
     setTransactionSending(false)
   }
 
-  const clearAfterCommit = () => {
+  /**
+   * Clear all fields.
+   */
+  const clearFields = () => {
     setAmount(0)
     amountRef.current!.querySelector('input')!.value = ''
-    setCustomers([])
   }
 
+  /**
+   * When button "Show history" is clicked, redirect to history page.
+   */
   const onShowHistory = () => {
     if (!customer?.id) {
       toast.error('Wybierz klienta')
@@ -129,29 +141,7 @@ const Clients = () => {
 
         {!isLoading && (
           <>
-            <Autocomplete
-              autoHighlight
-              clearOnBlur
-              className={classes['autocomplete']}
-              disablePortal
-              onChange={(_event, option) => {
-                setCustomer(option?.value)
-              }}
-              noOptionsText={noOptionText}
-              options={customers.map((customer) => {
-                return { label: customer.email, value: customer }
-              })}
-              renderInput={(params) => (
-                <TextField
-                  className={classes.search}
-                  color="secondary"
-                  label="Klient"
-                  {...params}
-                />
-              )}
-              onKeyUp={onSearch}
-            />
-
+            <UserSearchInput onUserSelect={(user) => setCustomer(user)} />
             <TextField
               label="Punkty"
               value={customer?.points || ''}

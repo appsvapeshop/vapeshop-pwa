@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import classes from './ChangePassword.module.css'
+import { changePassword } from '../../services/UserService'
+
 import Input from '../../components/ui/Input/Input'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { AnimatedPage } from '../Cart/cartComponents'
 import Button from '../../components/ui/Button/Button'
 import PasswordValidator from '../../components/PasswordValidator/PasswordValidator'
-import { changePassword } from '../../services/UserService'
 
 type Passwords = {
   oldPassword?: string
@@ -14,10 +15,16 @@ type Passwords = {
   rePassword?: string
 }
 
+/**
+ * The component allows the user to change the password
+ */
 const ChangePassword = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [passwords, setPasswords] = useState<Passwords>({})
 
+  /**
+   * Validate new password and if valid, save.
+   */
   const onSave = async () => {
     if (!passwords?.oldPassword || !passwords?.newPassword || !passwords?.rePassword) {
       toast.dismiss()
