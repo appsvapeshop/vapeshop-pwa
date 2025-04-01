@@ -1,12 +1,21 @@
-import * as Types from './types'
 import { toast } from 'react-toastify'
-import * as Components from './components'
 import { useEffect, useState } from 'react'
 import classes from './ManageProduct.module.css'
+import { uploadFile } from '../../services/FileService'
 import { useParams, useNavigate } from 'react-router-dom'
-import ManageProductSkeleton from './ManageProductSkeleton'
-import { uploadFile, getCategories, getProductsById, upsertProduct, deleteProduct } from './utils'
+import { getCategories } from '../../services/CategoryService'
+import { getProductsById, upsertProduct, deleteProduct } from '../../services/ProductService'
 
+import * as Components from './components'
+import ManageProductSkeleton from './ManageProductSkeleton'
+
+import { Product as ProductType } from '../../types/Product'
+import { ProductCategory as CategoryType } from '../../types/ProductCategory'
+
+/**
+ * Display Product configuration page for given Product ID or if Product ID is equal "new",
+ * create new Product record.
+ */
 const ManageProduct = () => {
   const navigate = useNavigate()
   const { productId } = useParams()
@@ -15,9 +24,13 @@ const ManageProduct = () => {
   const [isButtonLoading, setIsButtonLoading] = useState(false)
 
   const [changedImage, setChangedImage] = useState<Blob>()
-  const [product, setProduct] = useState<Types.ProductType>()
-  const [categories, setCategories] = useState<Types.CategoryType[]>()
+  const [product, setProduct] = useState<ProductType>()
+  const [categories, setCategories] = useState<CategoryType[]>()
 
+  /**
+   * If Category ID is provided, fetch Category record from database and all categories.
+   * If not provided then just fetch all categories.
+   */
   useEffect(() => {
     if (productId !== 'new') {
       getProductsById([productId!])
@@ -42,16 +55,21 @@ const ManageProduct = () => {
     }
   }, [productId])
 
+  /**
+   * Upload ( if needed ) image and upsert Product record.
+   */
   const save = async () => {
     setIsButtonLoading(true)
     toast.dismiss()
+
     try {
       if (!!changedImage) {
         const dataUrl = await uploadFile(changedImage, `products/${Date.now()}`)
-        await upsertProduct({ ...product, img: dataUrl } as Types.ProductType)
+        await upsertProduct({ ...product, img: dataUrl } as ProductType)
       } else {
         await upsertProduct(product!)
       }
+
       toast.success('Zapisano')
       navigate('/admin/panel/manageProducts')
     } catch (error) {
@@ -61,10 +79,13 @@ const ManageProduct = () => {
     setIsButtonLoading(false)
   }
 
+  /**
+   * Remove Category record and navigate to Manage Products page.
+   */
   const remove = async () => {
     setIsButtonLoading(true)
     toast.dismiss()
-    
+
     deleteProduct(product!)
       .then(() => {
         toast.success('Produkt usunięty')
@@ -96,7 +117,7 @@ const ManageProduct = () => {
               value={product?.brand}
               onChange={(event) =>
                 setProduct((prev) => {
-                  return { ...prev, brand: event.target.value } as Types.ProductType
+                  return { ...prev, brand: event.target.value } as ProductType
                 })
               }
             />
@@ -106,7 +127,7 @@ const ManageProduct = () => {
               value={product?.name}
               onChange={(event) =>
                 setProduct((prev) => {
-                  return { ...prev, name: event.target.value } as Types.ProductType
+                  return { ...prev, name: event.target.value } as ProductType
                 })
               }
             />
@@ -123,7 +144,7 @@ const ManageProduct = () => {
               }
               onChange={(event) =>
                 setProduct((prev) => {
-                  return { ...prev, category: event.target.value || '' } as Types.ProductType
+                  return { ...prev, category: event.target.value || '' } as ProductType
                 })
               }
             />
@@ -146,7 +167,7 @@ const ManageProduct = () => {
               slotProps={{ input: { endAdornment: 'pkt' } }}
               onChange={(event) =>
                 setProduct((prev) => {
-                  return { ...prev, points: Number(event.target.value) } as Types.ProductType
+                  return { ...prev, points: Number(event.target.value) } as ProductType
                 })
               }
             />
@@ -158,7 +179,7 @@ const ManageProduct = () => {
               slotProps={{ input: { endAdornment: 'zł' } }}
               onChange={(event) =>
                 setProduct((prev) => {
-                  return { ...prev, price: Number(event.target.value) } as Types.ProductType
+                  return { ...prev, price: Number(event.target.value) } as ProductType
                 })
               }
             />
@@ -170,7 +191,7 @@ const ManageProduct = () => {
               slotProps={{ input: { endAdornment: 'zł' } }}
               onChange={(event) =>
                 setProduct((prev) => {
-                  return { ...prev, promoPrice: Number(event.target.value) } as Types.ProductType
+                  return { ...prev, promoPrice: Number(event.target.value) } as ProductType
                 })
               }
             />
@@ -182,7 +203,7 @@ const ManageProduct = () => {
               slotProps={{ input: { endAdornment: 'zł' } }}
               onChange={(event) =>
                 setProduct((prev) => {
-                  return { ...prev, mixedPrice: Number(event.target.value) } as Types.ProductType
+                  return { ...prev, mixedPrice: Number(event.target.value) } as ProductType
                 })
               }
             />
@@ -192,7 +213,7 @@ const ManageProduct = () => {
               checked={!!product?.coupon}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setProduct((prev) => {
-                  return { ...prev, coupon: event.target.checked } as Types.ProductType
+                  return { ...prev, coupon: event.target.checked } as ProductType
                 })
               }}
             />
@@ -202,7 +223,7 @@ const ManageProduct = () => {
               checked={!!product?.newspaper}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setProduct((prev) => {
-                  return { ...prev, newspaper: event.target.checked } as Types.ProductType
+                  return { ...prev, newspaper: event.target.checked } as ProductType
                 })
               }}
             />

@@ -1,18 +1,24 @@
 import { Skeleton } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
 import classes from './ManageProductVariants.module.css'
+import { useParams, useNavigate } from 'react-router-dom'
 import AddCard from '../../components/ui/AddCard/AddCard'
 import { ProductVariant } from '../../types/ProductVariant'
 import { getProductVariants } from '../../services/ProductService'
 import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
 
+/**
+ * Display all available Product Variants for given Product ID and AddCard for creating new Category.
+ */
 const ManageProductVariants = () => {
   const { productId } = useParams()
   const navigation = useNavigate()
   const [isLoading, setIsLoading] = useState(true)
   const [variants, setVariants] = useState<ProductVariant[]>([])
 
+  /**
+   * Fetch all Product Variants for given Product ID.
+   */
   useEffect(() => {
     getProductVariants(productId!)
       .then((variantsSnapshot) => setVariants(variantsSnapshot))
