@@ -1,3 +1,6 @@
+/**
+ * Validate all required fields during user registration.
+ */
 export const validateRegistration = (email: string, password: string, rePassword: string) => {
   if (email === '') throw new Error('Pole email nie może być puste')
   if (password === '') throw new Error('Pole hasło nie może być puste')

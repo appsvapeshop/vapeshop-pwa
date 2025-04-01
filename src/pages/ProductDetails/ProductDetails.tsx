@@ -1,23 +1,32 @@
-import classes from './ProductDetails.module.css'
-import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { useEffect, useState } from 'react'
-import { Product as ProductType } from '../../types/Product'
-import { getProductById, getProductVariants } from '../../services/ProductService'
-import LazyImage from '../../components/ui/LazyImage/LazyImage'
-import { Skeleton } from '@mui/material'
+import { useParams } from 'react-router-dom'
+import classes from './ProductDetails.module.css'
 import { useCartContext } from '../../stores/CartContext'
+import { getProductById, getProductVariants } from '../../services/ProductService'
+
+import { Skeleton } from '@mui/material'
 import Button from '../../components/ui/Button/Button'
 import Picklist from '../../components/ui/Picklist/Picklist'
-import { ProductVariant } from '../../types/ProductVariant'
-import {toast} from 'react-toastify'
+import LazyImage from '../../components/ui/LazyImage/LazyImage'
 
+import { ProductVariant } from '../../types/ProductVariant'
+import { Product as ProductType } from '../../types/Product'
+
+/**
+ * Display selected Product details e.g. available variants. It also gives ability to add product to the cart.
+ */
 const ProductDetails = () => {
   const { productId } = useParams()
   const { addProduct } = useCartContext()
+
   const [isLoading, setIsLoading] = useState(true)
   const [product, setProduct] = useState<ProductType>()
   const [variants, setVariants] = useState<ProductVariant[]>([])
 
+  /**
+   * Fetch Product record and available variants for given Product Id.
+   */
   useEffect(() => {
     getProductById(productId!)
       .then((productSnapshot) => {
@@ -30,15 +39,18 @@ const ProductDetails = () => {
       .finally(() => setIsLoading(false))
   }, [productId])
 
+  /**
+   * Validate data and add product to cart.
+   */
   const onAdd = () => {
-    if(variants && variants.length > 0 && (!product?.variant || !product.variant.name )){
+    if (variants && variants.length > 0 && (!product?.variant || !product.variant.name)) {
       toast.error('Wybierz wariant')
       return
     }
 
     toast.dismiss()
     toast.success('Produkt dodany')
-    addProduct(product!);
+    addProduct(product!)
   }
 
   return (
@@ -86,12 +98,15 @@ const ProductDetails = () => {
               label="Wariant"
               value={product?.variant?.id}
               options={variants?.map((variant) => {
-                return { name: variant.name, value: variant.id}
+                return { name: variant.name, value: variant.id }
               })}
               onChange={(event) =>
                 setProduct((prev) => {
-                  const variant = variants.find(e => e.id === event.target.value)
-                  return { ...prev, variant: {id: event.target.value, name: variant?.name} } as ProductType
+                  const variant = variants.find((e) => e.id === event.target.value)
+                  return {
+                    ...prev,
+                    variant: { id: event.target.value, name: variant?.name }
+                  } as ProductType
                 })
               }
             />

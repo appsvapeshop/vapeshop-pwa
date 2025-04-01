@@ -1,27 +1,33 @@
-import logo from '../../assets/logo.png'
-import 'react-toastify/dist/ReactToastify.css'
-import classes from './Registration.module.css'
-
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import 'react-toastify/dist/ReactToastify.css'
+import classes from './Registration.module.css'
 import { createUser } from '../../services/UserService'
+import { ToastContainer, Zoom, toast } from 'react-toastify'
+import { validateRegistration } from '../../utils/RegistrationUtils'
+
+import logo from '../../assets/logo.png'
 import { IoIosArrowBack } from 'react-icons/io'
 import Input from '../../components/ui/Input/Input'
 import Button from '../../components/ui/Button/Button'
-import Checkbox from '../../components/ui/Checkbox/Checkbox'
 import PropagateLoader from 'react-spinners/PropagateLoader'
-import { ToastContainer, Zoom, toast } from 'react-toastify'
-import { validateRegistration } from './validateRegistration'
+import Checkbox from '../../components/ui/Checkbox/Checkbox'
 import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
 import PasswordValidator from '../../components/PasswordValidator/PasswordValidator'
 import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
 
+/**
+ * Registration page allows new user to create account.
+ */
 const Registration = () => {
   const navigation = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const [regulationsAccepted, setRegulationsAccepted] = useState(false)
   const [credentials, setCredentials] = useState({ email: '', password: '', rePassword: '' })
 
+  /**
+   * Validate all required data and create user.
+   */
   const onRegister = async () => {
     setIsLoading(true)
     toast.dismiss()
@@ -37,7 +43,6 @@ const Registration = () => {
       await createUser(credentials.email, credentials.password)
       navigation('/')
     } catch (error) {
-      console.error(error)
       setIsLoading(false)
       toast.error((error as Error).message)
     }
@@ -58,7 +63,12 @@ const Registration = () => {
           variant="outlined"
           colorVariant="secondary"
           autoComplete="email"
-          onChange={(event) => setCredentials({ ...credentials, email: (event.target as HTMLInputElement).value })}
+          onChange={(event) =>
+            setCredentials({
+              ...credentials,
+              email: (event.target as HTMLInputElement).value
+            })
+          }
         />
         <Input
           label="Hasło"
@@ -67,7 +77,12 @@ const Registration = () => {
           variant="outlined"
           colorVariant="secondary"
           autoComplete="current-password"
-          onChange={(event) => setCredentials({ ...credentials, password: (event.target as HTMLInputElement).value })}
+          onChange={(event) =>
+            setCredentials({
+              ...credentials,
+              password: (event.target as HTMLInputElement).value
+            })
+          }
         />
         <PasswordValidator className={classes['password-validator']} password={credentials.password} />
         <Input
@@ -77,7 +92,12 @@ const Registration = () => {
           variant="outlined"
           colorVariant="secondary"
           autoComplete="new-password"
-          onChange={(event) => setCredentials({ ...credentials, rePassword: (event.target as HTMLInputElement).value })}
+          onChange={(event) =>
+            setCredentials({
+              ...credentials,
+              rePassword: (event.target as HTMLInputElement).value
+            })
+          }
         />
 
         <div className={classes.regulations}>
