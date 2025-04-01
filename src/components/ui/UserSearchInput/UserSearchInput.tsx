@@ -6,7 +6,7 @@ import { searchUsers } from '../../../services/UserService'
 import classes from './UserSearchInput.module.css'
 
 type Props = {
-  onUserSelect: (user: User) => void
+  onUserSelect: (user: User | undefined) => void
 }
 
 /**
@@ -48,7 +48,7 @@ const UserSearchInput: FC<Props> = ({ onUserSelect }) => {
       onKeyUp={onSearch}
       onBlur={() => setCustomers([])}
       onChange={(_event, option) => {
-        onUserSelect(option!.value)
+        onUserSelect(option?.value)
       }}
     />
   )
