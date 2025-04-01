@@ -7,7 +7,7 @@ import { useUserContext } from '../../stores/UserContext'
  */
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useUserContext()
-  return user === null ? <Navigate to="/p/login" /> : <>{children}</>
+  return !user ? <Navigate to="/p/login" /> : <>{children}</>
 }
 
 export default ProtectedRoute
