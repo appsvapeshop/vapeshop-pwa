@@ -8,6 +8,7 @@ import Product from '../../components/Product/Product'
 import Categories from '../../components/Categories/Categories'
 import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
 import ProductSkeleton from '../../components/skeletons/ProductSkeleton/ProductSkeleton'
+import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
 
 import { ProductContext } from '../../enums/ProductContext'
 import { Product as ProductType } from '../../types/Product'
@@ -27,7 +28,7 @@ const Newspaper = () => {
   const { settings } = useSettingsContext()
 
   const [isLoading, setIsLoading] = useState(true)
-  const [products, setProducts] = useState<ProductType[]>()
+  const [products, setProducts] = useState<ProductType[]>([])
 
   /**
    * <ul>
@@ -62,8 +63,15 @@ const Newspaper = () => {
 
         {!isLoading && products?.length === 0 && <span className={classes['no-products']}>Brak produktów</span>}
 
-        {!isLoading &&
-          products?.map((product) => <Product key={product.id} product={product} context={ProductContext.Newspaper} />)}
+        {!isLoading && (
+          <>
+            {products.map((product) => (
+              <TappedComponent key={product.id}>
+                <Product product={product} context={ProductContext.Newspaper} />
+              </TappedComponent>
+            ))}
+          </>
+        )}
       </div>
     </AnimatedPage>
   )
