@@ -1,16 +1,22 @@
 import classes from './Home.module.css'
 import { useEffect, useState } from 'react'
 import News from '../../components/News/News'
-import { getNews } from '../../utils/newsHelper'
 import { News as NewsType } from '../../types/News'
+import { getNews } from '../../services/NewsService'
 import UserPoints from '../../components/UserPoints/UserPoints'
-import LoadingNews from '../../components/skeletons/LoadingNews/LoadingNews'
+import CardSkeleton from "../../components/skeletons/CardSkeleton/CardSkeleton";
 import AnimatedPage from '../../components/animations/AnimatedPage/AnimatedPage'
 
+/**
+ * Home page displaye user points and all news.
+ */
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [news, setNews] = useState<NewsType[]>()
 
+  /**
+   * Load all news.
+   */
   useEffect(() => {
     getNews()
       .then((newsSnapshot) => setNews(newsSnapshot))
@@ -24,17 +30,17 @@ const Home = () => {
 
         {isLoading && (
           <>
-            <LoadingNews />
-            <LoadingNews />
-            <LoadingNews />
+            <CardSkeleton containerStyles={{width: '80%'}}/>
+            <CardSkeleton containerStyles={{width: '80%'}}/>
+            <CardSkeleton containerStyles={{width: '80%'}}/>
           </>
         )}
 
         {!isLoading &&
-          news !== undefined &&
+          news &&
           news.length !== 0 &&
           news.map((newsRecord) => (
-            <News key={newsRecord.id} data={newsRecord} onClick={() => {}} />
+            <News key={newsRecord.id} news={newsRecord} onClick={() => {}} />
           ))}
       </div>
     </AnimatedPage>

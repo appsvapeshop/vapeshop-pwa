@@ -1,27 +1,41 @@
-import * as Material from '@mui/material'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import classes from './ClientHistory.module.css'
-import { AnimatedPage } from '../Cart/cartComponents'
-import { Transaction } from '../../types/Transaction'
-import TransactionTableRow from '../../components/ui/TransactionTableRow/TransactionTableRow'
-import { getUserTransactions } from '../../utils/transactionUtils'
-import TableSkeleton from '../../components/skeletons/TableSkeleton/TableSkeleton'
+import { getUserTransactions } from '../../services/TransactionService'
 
+import * as Material from '@mui/material'
+import { AnimatedPage } from '../Cart/cartComponents'
+import TableSkeleton from '../../components/skeletons/TableSkeleton/TableSkeleton'
+import TransactionHistory from '../../components/ui/TransactionHistory/TransactionHistory'
+
+import { Transaction } from '../../types/Transaction'
+import ErrorOccurred from '../../exceptions/ErrorOccurred'
+
+/**
+ * Display all transaction in table related to given user.
+ */
 const ClientHistory = () => {
   const { userId } = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const [transactions, setTransactions] = useState<Transaction[]>([])
 
+  /**
+   * Fetch all transaction for given User ID.
+   */
   useEffect(() => {
     const getTransactions = async () => {
       const transactions = await getUserTransactions(userId!)
       setTransactions(transactions)
-      setIsLoading(false)
     }
 
-    if (!!userId) {
+    if (userId) {
       getTransactions()
+        .catch(() => {
+          throw new ErrorOccurred()
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
     }
   }, [userId])
 
@@ -45,7 +59,7 @@ const ClientHistory = () => {
                 </Material.TableHead>
                 <Material.TableBody>
                   {transactions.map((transaction, index) => (
-                    <TransactionTableRow transaction={transaction} key={index} />
+                    <TransactionHistory transaction={transaction} key={index} />
                   ))}
                 </Material.TableBody>
               </Material.Table>

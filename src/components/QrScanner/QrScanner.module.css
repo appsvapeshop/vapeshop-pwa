@@ -1,6 +1,20 @@
-.scanner-container {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-container {
+    width: 90%;
+    height: 90%;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.video {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 }

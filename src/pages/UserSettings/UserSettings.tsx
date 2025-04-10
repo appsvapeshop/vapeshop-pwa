@@ -1,0 +1,82 @@
+import { UserRole } from '../../enums/UserRole'
+import { useNavigate } from 'react-router-dom'
+import classes from './UserSettings.module.css'
+import { AnimatedPage } from '../Cart/cartComponents'
+import Button from '../../components/ui/Button/Button'
+import { IoPersonCircleOutline } from 'react-icons/io5'
+import { useUserContext } from '../../stores/UserContext'
+
+/**
+ * Display all related settings / functionalities and data for user.
+ */
+const UserSettings = () => {
+  const navigate = useNavigate()
+  const { user, signOut } = useUserContext()
+
+  /**
+   * Sign out user and redirect to login page.
+   */
+  const onSignOut = () => {
+    signOut()
+    navigate('/p/login')
+  }
+
+  return (
+    <AnimatedPage>
+      <div className={classes.container}>
+        <IoPersonCircleOutline size={180} color="var(--inactive-icon-color)" />
+        <span>{user?.email.split('@')[0]}</span>
+        <span>{user?.points}</span>
+        <span>Zdobyte punkty</span>
+
+        <div className={classes['buttons-container']}>
+          {user?.role === UserRole.Admin && (
+            <Button
+              styles={{ height: '3rem', fontWeight: '500' }}
+              variant="outlined"
+              colorVariant="secondary"
+              onClick={() => {
+                navigate('/admin/panel')
+              }}
+            >
+              Panel administracyjny
+            </Button>
+          )}
+
+          <Button
+            styles={{ height: '3rem', fontWeight: '500' }}
+            variant="outlined"
+            colorVariant="secondary"
+            onClick={() => {
+              navigate('changePassword')
+            }}
+          >
+            Zmień hasło
+          </Button>
+
+          <Button
+            styles={{ height: '3rem', fontWeight: '500' }}
+            variant="outlined"
+            colorVariant="secondary"
+            onClick={() => {
+              navigate('/regulations')
+            }}
+          >
+            Regulamin
+          </Button>
+
+          <Button
+            styles={{ height: '3rem', fontWeight: '500' }}
+            variant="outlined"
+            colorVariant="secondary"
+            onClick={onSignOut}
+          >
+            Wyloguj
+          </Button>
+        </div>
+      </div>
+    </AnimatedPage>
+  )
+}
+
+export default UserSettings

@@ -1,39 +1,39 @@
 .container {
-  width: 80%;
-  height: 8.5rem;
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  border-radius: 20px;
-  background-color: var(--primary-color);
+    width: 80%;
+    height: 8.5rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 20px;
+    background-color: var(--primary-color);
 
-  -webkit-box-shadow: 0px 4px 10px -4px rgba(66, 68, 90, 1);
-  -moz-box-shadow: 0px 4px 10px -4px rgba(66, 68, 90, 1);
-  box-shadow: 0px 4px 10px -4px rgba(66, 68, 90, 1);
+    -webkit-box-shadow: 0 4px 10px -4px rgba(66, 68, 90, 1);
+    -moz-box-shadow: 0 4px 10px -4px rgba(66, 68, 90, 1);
+    box-shadow: 0 4px 10px -4px rgba(66, 68, 90, 1);
 }
 
 .container:has(.loader) {
-  justify-content: center;
+    justify-content: center;
 }
 
 .greetings {
-  margin-bottom: 10px;
-  align-self: flex-start;
-  font-size: 1rem;
-  font-weight: 500;
+    margin-bottom: 10px;
+    align-self: flex-start;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 .your-points {
-  font-size: 1rem;
-  font-weight: 500;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 .points {
-  font-weight: 700;
-  font-size: 2.5rem;
+    font-weight: 700;
+    font-size: 2.5rem;
 }
 
 .loader {
-  align-self: center;
+    align-self: center;
 }

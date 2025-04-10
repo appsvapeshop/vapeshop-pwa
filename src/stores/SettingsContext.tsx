@@ -1,53 +1,67 @@
-import { useUserContext } from './UserContext'
-import { AuthStatus } from '../types/UserContext'
-import { firestore } from '../configs/firebaseConfig'
-import { createContext, useState, useContext, useEffect } from 'react'
-import { collection, getDocs, updateDoc, doc } from 'firebase/firestore'
-import { SettingsContext as SettingsContextType, SettingStatus } from '../types/SettingsContext'
+import { AuthStatus } from '../enums/AuthStatus'
+import { FetchStatus } from '../enums/FetchStatus'
+import { ShopSettings } from '../types/ShopSettings'
+import { ShopSettingsContext as SettingsContextType } from '../types/ShopSettingsContext'
 
+import ErrorOccurred from '../exceptions/ErrorOccurred'
+
+import { useUserContext } from './UserContext'
+import { updateDoc, doc } from 'firebase/firestore'
+import { firestore } from '../configs/firebaseConfig'
+import { getSettings } from '../services/SettingsService'
+import React, { createContext, useState, useContext, useEffect } from 'react'
+
+/**
+ * Shop Settings Context. Is null before initialization
+ */
 const SettingsContext = createContext<SettingsContextType | null>(null)
 
+/**
+ * Shop Settings Context Provider. Provides the currently shop setting and useful shop settings management functions
+ */
 const SettingsContextProvider = ({ children }: { children: React.ReactNode }) => {
   const { authStatus } = useUserContext()
-  const [settingsStatus, setSettingsStatus] = useState<SettingStatus>(SettingStatus.NotStarted)
-  const [settings, setSettings] = useState<SettingsContextType>()
+  const [settings, setSettings] = useState<ShopSettings>()
+  const [settingsStatus, setSettingsStatus] = useState<FetchStatus>(FetchStatus.NotStarted)
 
+  /**
+   * When current user is authorized then select shop settings
+   */
   useEffect(() => {
-    setSettingsStatus(SettingStatus.InProgress)
+    setSettingsStatus(FetchStatus.InProgress)
 
     if (authStatus === AuthStatus.Authorized) {
       getSettings()
+        .then((settings) => {
+          setSettings(settings)
+          setSettingsStatus(FetchStatus.Completed)
+        })
+        .catch(() => {
+          throw new ErrorOccurred()
+        })
     }
   }, [authStatus])
 
-  const getSettings = async () => {
-    const settingsCollection = collection(firestore, 'settings')
-    const settingsSnapshot = await getDocs(settingsCollection)
+  /**
+   * Update Shop Settings for given data
+   *
+   * @param settings updates Shop Settings. Must not be null.
+   */
+  const updateSettings = async (settings: ShopSettings) => {
+    if (!settings) throw new ErrorOccurred()
 
-    if (settingsSnapshot.docs.length !== 1) throw new Error('Wrong app settings size')
-
-    setSettings({
-      ...settingsSnapshot.docs[0].data(),
-      settingsId: settingsSnapshot.docs[0].id
-    } as SettingsContextType)
-    setSettingsStatus(SettingStatus.Completed)
-  }
-
-  const updateSettings = async (updatedSettings: SettingsContextType) => {
-    await updateDoc(doc(firestore, 'settings', updatedSettings.settingsId as string), {
-      categoriesForCoupons: updatedSettings.categoriesForCoupons,
-      categoriesForNewspaper: updatedSettings.categoriesForNewspaper,
-      pointsPerAmount: updatedSettings.pointsPerAmount
+    await updateDoc(doc(firestore, 'settings', settings.id as string), {
+      categoriesForCoupons: settings.categoriesForCoupons,
+      categoriesForNewspaper: settings.categoriesForNewspaper,
+      amountForOnePoint: settings.amountForOnePoint
     })
-    setSettings(updatedSettings)
+
+    setSettings(settings)
   }
 
-  const contextValue = {
-    settingsId: settings?.settingsId,
-    pointsPerAmount: settings?.pointsPerAmount,
-    categoriesForCoupons: settings?.categoriesForCoupons,
-    categoriesForNewspaper: settings?.categoriesForNewspaper,
-    settingsStatus: settingsStatus,
+  const contextValue: SettingsContextType = {
+    settings: settings!,
+    fetchStatus: settingsStatus,
     updateSettings: updateSettings
   }
 
@@ -56,6 +70,9 @@ const SettingsContextProvider = ({ children }: { children: React.ReactNode }) =>
 
 export default SettingsContextProvider
 
+/**
+ * Custom hook for Shop Settings Context
+ */
 export const useSettingsContext = () => {
   const context = useContext(SettingsContext)
   if (!context) {

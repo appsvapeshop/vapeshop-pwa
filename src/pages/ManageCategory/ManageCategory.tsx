@@ -1,31 +1,42 @@
 import { toast } from 'react-toastify'
+import classes from './ManageCategory.module.css'
+import { uploadFile } from '../../services/FileService'
+import { useParams, useNavigate } from 'react-router-dom'
+import React, { useState, useEffect, useRef } from 'react'
+import { getCategory, upsertCategory, deleteCategory } from '../../services/CategoryService'
+
 import { Skeleton } from '@mui/material'
 import TextField from '@mui/material/TextField'
-import classes from './ManageCategory.module.css'
-import { useState, useEffect, useRef } from 'react'
 import PulseLoader from 'react-spinners/PulseLoader'
 import { AnimatedPage } from '../Cart/cartComponents'
 import Button from '../../components/ui/Button/Button'
-import { uploadFile } from '../../utils/filesUploader'
-import { useParams, useNavigate } from 'react-router-dom'
 import AddCard from '../../components/ui/AddCard/AddCard'
-import ValidationError from '../../exceptions/ValidationError'
 import LazyImage from '../../components/ui/LazyImage/LazyImage'
-import { Category as CategoryType } from '../../types/Category'
 import InputSkeleton from '../../components/skeletons/InputSkeleton/InputSkeleton'
-import { getCategory, upsertCategory, deleteCategory } from '../../utils/categoriesUtils'
 import TappedComponent from '../../components/animations/TappedComponent/TappedComponent'
 
+import ValidationException from '../../exceptions/ValidationException'
+import { ProductCategory as CategoryType } from '../../types/ProductCategory'
+import ErrorOccurred from '../../exceptions/ErrorOccurred'
+
+/**
+ * Display Category configuration page for given Category ID or if Category ID is equal "new",
+ * create new Category record.
+ */
 const ManageCategory = () => {
-  const navigate = useNavigate()
   const { categoryId } = useParams()
+  const navigate = useNavigate()
   const imageRef = useRef<HTMLInputElement>(null)
-  const [isButtonLoading, setIsButtonLoading] = useState(false)
+
   const [imageData, setImageData] = useState<Blob>()
   const [isLoading, setIsLoading] = useState(true)
   const [imageChanged, setImageChanged] = useState(false)
   const [category, setCategory] = useState<CategoryType>()
+  const [isButtonLoading, setIsButtonLoading] = useState(false)
 
+  /**
+   * If Category ID is provided, fetch Category record from database.
+   */
   useEffect(() => {
     const fetchCategory = async () => {
       const category = await getCategory(categoryId as string)
@@ -34,12 +45,17 @@ const ManageCategory = () => {
     }
 
     if (categoryId !== 'new') {
-      fetchCategory()
+      fetchCategory().catch(() => {
+        throw new ErrorOccurred()
+      })
     } else {
       setIsLoading(false)
     }
   }, [categoryId])
 
+  /**
+   * Upload ( if needed ) image and upsert Category record.
+   */
   const save = async () => {
     setIsButtonLoading(true)
     toast.dismiss()
@@ -60,6 +76,9 @@ const ManageCategory = () => {
     setIsButtonLoading(false)
   }
 
+  /**
+   * Remove Category record and navigate to Manage Categories page.
+   */
   const remove = async () => {
     setIsButtonLoading(true)
     toast.dismiss()
@@ -70,7 +89,7 @@ const ManageCategory = () => {
         navigate('/admin/panel/manageCategories')
       })
       .catch((error) => {
-        if (error instanceof ValidationError) {
+        if (error instanceof ValidationException) {
           toast.error(error.message)
         } else {
           toast.error('Coś poszło nie tak')
@@ -81,10 +100,9 @@ const ManageCategory = () => {
       })
   }
 
-  const changeImage = () => {
-    imageRef.current?.click()
-  }
-
+  /**
+   * When image is changed for Category, set "imageData" and "imageChanged".
+   */
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length === 1) {
       setImageData(event.target.files[0])
@@ -108,17 +126,15 @@ const ManageCategory = () => {
               <input ref={imageRef} type="file" accept="image/*" onChange={onImageChange} hidden />
 
               {!!category?.img || !!imageData ? (
-                <TappedComponent styles={{ height: '100%' }} onClick={changeImage}>
+                <TappedComponent styles={{ height: '100%' }} onClick={() => imageRef.current?.click()}>
                   <LazyImage
                     containerStyles={{ height: '100%' }}
                     url={imageChanged ? URL.createObjectURL(imageData!) : category!.img}
-                    cacheProperties={
-                      imageChanged ? undefined : { cacheStorageName: 'category-image' }
-                    }
+                    cacheProperties={imageChanged ? undefined : { cacheStorageName: 'category-image' }}
                   />
                 </TappedComponent>
               ) : (
-                <AddCard onClick={changeImage} />
+                <AddCard onClick={() => imageRef.current?.click()} />
               )}
             </div>
             <TextField
@@ -140,20 +156,12 @@ const ManageCategory = () => {
 
       <div className={classes.buttons}>
         <Button onClick={save} colorVariant="primary" styles={{ height: '2.5rem' }}>
-          {isButtonLoading ? (
-            <PulseLoader size=".6rem" color="var(--primary-font-color)" />
-          ) : (
-            'Zapisz'
-          )}
+          {isButtonLoading ? <PulseLoader size=".6rem" color="var(--primary-font-color)" /> : 'Zapisz'}
         </Button>
 
         {categoryId !== 'new' && (
           <Button onClick={remove} colorVariant="error" styles={{ height: '2.5rem' }}>
-            {isButtonLoading ? (
-              <PulseLoader size=".6rem" color="var(--primary-font-color)" />
-            ) : (
-              'Usuń'
-            )}
+            {isButtonLoading ? <PulseLoader size=".6rem" color="var(--primary-font-color)" /> : 'Usuń'}
           </Button>
         )}
       </div>

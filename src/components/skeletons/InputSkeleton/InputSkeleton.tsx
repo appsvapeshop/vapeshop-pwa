@@ -1,6 +1,9 @@
 import { Skeleton } from '@mui/material'
 import classes from './InputSkeleton.module.css'
 
+/**
+ * Skeleton component for inputs.
+ */
 const InputSkeleton = () => {
   return (
     <div className={classes.container}>
