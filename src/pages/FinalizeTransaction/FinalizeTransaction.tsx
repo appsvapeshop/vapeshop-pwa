@@ -29,6 +29,7 @@ const FinalizeTransaction = () => {
 
   const [isLoading, setIsLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [customer, setCustomer] = useState<Types.User>()
   const [qrData] = useState<Types.QrData>(location.state)
   const [databaseProducts, setDatabaseProducts] = useState<Types.Product[]>([])
 
@@ -51,6 +52,7 @@ const FinalizeTransaction = () => {
       setDatabaseProducts(getProductListFromQr(retrievedProducts, qrData))
 
       try {
+        setCustomer(await getUserById(qrData.userId!))
         validateProductsWithDatabase(qrData, retrievedProducts)
       } catch (error) {
         toast.error((error as Error).message)
@@ -70,12 +72,16 @@ const FinalizeTransaction = () => {
    * Check if user have enough points and if yes, save transaction.
    */
   const onFinalize = async () => {
+    if (!customer) {
+      toast.error('Użytkownik nie znaleziony')
+      return;
+    }
+
     try {
-      const retrievedCustomer = await getUserById(qrData.userId!)
       const totalPoints = sumPoints(databaseProducts)
       const totalAmount = sumPrice(databaseProducts)
 
-      if (totalPoints > retrievedCustomer.points) {
+      if (totalPoints > customer.points) {
         toast.error('Klient nie ma wystarczająco punktów')
         return
       }
@@ -109,6 +115,10 @@ const FinalizeTransaction = () => {
               <Components.ProductsList products={databaseProducts} readOnly={true} />
             </div>
 
+            <div className={classes.user}>
+              <span>{customer?.email}</span>
+              <b>Użytkownik</b>
+            </div>
             <div className={classes['summary-container']}>
               <div className={classes.summary}>
                 <span>Baza danych</span>
@@ -142,6 +152,7 @@ const FinalizeTransaction = () => {
         )}
       </div>
 
+      {/*@ts-ignore*/}
       <AnimatePresence mode="wait">
         {isModalOpen && (
           <Components.Modal onClose={() => setIsModalOpen(false)}>
